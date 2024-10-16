@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.11.35312.102
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tabloulet", "Tabloulet.csproj", "{E40202CC-D705-424F-B920-39D456898B90}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		ExportDebug|Any CPU = ExportDebug|Any CPU
+		ExportRelease|Any CPU = ExportRelease|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{E40202CC-D705-424F-B920-39D456898B90}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E40202CC-D705-424F-B920-39D456898B90}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E40202CC-D705-424F-B920-39D456898B90}.ExportDebug|Any CPU.ActiveCfg = ExportDebug|Any CPU
+		{E40202CC-D705-424F-B920-39D456898B90}.ExportDebug|Any CPU.Build.0 = ExportDebug|Any CPU
+		{E40202CC-D705-424F-B920-39D456898B90}.ExportRelease|Any CPU.ActiveCfg = ExportRelease|Any CPU
+		{E40202CC-D705-424F-B920-39D456898B90}.ExportRelease|Any CPU.Build.0 = ExportRelease|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {CE9FEEE0-A62E-41C1-AE11-61FDC0063B23}
+	EndGlobalSection
+EndGlobal
