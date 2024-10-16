@@ -14,6 +14,10 @@ config/name="Tabloulet"
 config/features=PackedStringArray("4.3", "C#", "Forward Plus")
 config/icon="res://icon.svg"
 
+[autoload]
+
+Database="*res://Database/Database.cs"
+
 [dotnet]
 
 project/assembly_name="Tabloulet"

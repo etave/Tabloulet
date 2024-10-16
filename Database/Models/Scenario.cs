@@ -2,10 +2,10 @@
 using SQLite;
 using Tabloulet.Helpers;
 
-namespace Tabloulet.Scenes.Database.Models
+namespace Tabloulet.Database.Models
 {
     [Table(Constants.ScenarioTable)]
-    public class Scenario
+    public class Scenario : IDatabaseModel
     {
         [PrimaryKey]
         public Guid Id { get; set; }
