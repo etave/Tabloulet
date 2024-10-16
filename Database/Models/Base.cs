@@ -1,9 +1,9 @@
 ﻿using System;
 using SQLite;
 
-namespace Tabloulet.Scenes.Database.Models
+namespace Tabloulet.Database.Models
 {
-    public class Base
+    public class Base : IDatabaseModel
     {
         [PrimaryKey]
         public Guid Id { get; set; }
