@@ -17,7 +17,13 @@ config/icon="res://icon.svg"
 [autoload]
 
 Database="*res://Database/Database.cs"
+InputManager="*res://GDTIM/InputManager.gd"
+InputEventH="*res://Helpers/InputEventHelper.gd"
 
 [dotnet]
 
 project/assembly_name="Tabloulet"
+
+[input_devices]
+
+pointing/emulate_touch_from_mouse=true

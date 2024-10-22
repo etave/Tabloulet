@@ -1,7 +1,7 @@
 ﻿using System;
 using SQLite;
 
-namespace Tabloulet.Database.Models
+namespace Tabloulet.DatabaseNS.Models
 {
     public class Base : IDatabaseModel
     {

@@ -2,10 +2,10 @@ using System;
 using System.Collections.Generic;
 using Godot;
 using SQLite;
-using Tabloulet.Database.Models;
+using Tabloulet.DatabaseNS.Models;
 using Tabloulet.Helpers;
 
-namespace Tabloulet.Database
+namespace Tabloulet.DatabaseNS
 {
     public partial class Database : Node
     {

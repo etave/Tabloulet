@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Tabloulet.Database.Models
+namespace Tabloulet.DatabaseNS.Models
 {
     public interface IDatabaseModel
     {
