@@ -2,10 +2,10 @@ using System;
 using System.Collections.Generic;
 using Godot;
 using SQLite;
-using Tabloulet.Database.Models;
+using Tabloulet.DatabaseNS.Models;
 using Tabloulet.Helpers;
 
-namespace Tabloulet.Database
+namespace Tabloulet.DatabaseNS
 {
     public partial class Database : Node
     {
@@ -75,6 +75,21 @@ namespace Tabloulet.Database
             try
             {
                 return _connection.Table<T>().FirstOrDefault(x => x.Id == guid);
+            }
+            catch (SQLiteException e)
+            {
+                GD.PrintErr($"Error getting object by id: {e.Message}");
+                // TODO: Inform the user about the error in a more user-friendly way
+                return null;
+            }
+        }
+
+        public SQLite.TableQuery<T> GetAllByType<T>()
+            where T : IDatabaseModel, new()
+        {
+            try
+            {
+                return _connection.Table<T>();
             }
             catch (SQLiteException e)
             {

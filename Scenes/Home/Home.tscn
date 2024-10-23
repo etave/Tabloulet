@@ -1,3 +1,93 @@
-[gd_scene format=3 uid="uid://dxqo13a3yn4q4"]
+[gd_scene load_steps=7 format=3 uid="uid://dxqo13a3yn4q4"]
 
-[node name="Home" type="Node2D"]
+[ext_resource type="Script" path="res://Scenes/Home/Home.cs" id="1_q6al0"]
+[ext_resource type="Texture2D" uid="uid://cc3njq7jqs73n" path="res://Assets/Home/AdminLogo.png" id="2_cmbqb"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_y3ak2"]
+font_size = 100
+font_color = Color(0, 0, 0, 1)
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_h3ddw"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_rfq0p"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ys0e4"]
+
+[node name="Home" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_q6al0")
+
+[node name="Background" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(1, 0.964706, 0.968627, 1)
+
+[node name="MarginTitle" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_top = 40
+
+[node name="Title" type="Label" parent="MarginTitle"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 0
+text = "TABLOULET"
+label_settings = SubResource("LabelSettings_y3ak2")
+
+[node name="MarginList" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_top = 280
+theme_override_constants/margin_bottom = 80
+
+[node name="ScrollList" type="ScrollContainer" parent="MarginList"]
+custom_minimum_size = Vector2(1400, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+
+[node name="MarginScroll" type="MarginContainer" parent="MarginList/ScrollList"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/margin_left = 15
+theme_override_constants/margin_right = 15
+
+[node name="ListScenario" type="VBoxContainer" parent="MarginList/ScrollList/MarginScroll"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 20
+
+[node name="MarginAdmin" type="MarginContainer" parent="."]
+layout_mode = 1
+offset_right = 89.0
+offset_bottom = 80.0
+theme_override_constants/margin_left = 40
+theme_override_constants/margin_top = 40
+
+[node name="AdminButton" type="Button" parent="MarginAdmin"]
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+theme_override_constants/icon_max_width = 140
+theme_override_styles/hover = SubResource("StyleBoxEmpty_h3ddw")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_rfq0p")
+theme_override_styles/normal = SubResource("StyleBoxEmpty_ys0e4")
+icon = ExtResource("2_cmbqb")

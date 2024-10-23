@@ -18,6 +18,12 @@ config/icon="res://icon.svg"
 
 Database="*res://Database/Database.cs"
 
+[display]
+
+window/size/viewport_width=1920
+window/size/viewport_height=1080
+window/size/mode=3
+
 [dotnet]
 
 project/assembly_name="Tabloulet"

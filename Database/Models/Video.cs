@@ -1,7 +1,7 @@
 ﻿using SQLite;
 using Tabloulet.Helpers;
 
-namespace Tabloulet.Database.Models
+namespace Tabloulet.DatabaseNS.Models
 {
     [Table(Constants.VideoTable)]
     public class Video : Base
