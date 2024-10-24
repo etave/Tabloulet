@@ -1,77 +1,112 @@
 using Godot;
+using Tabloulet.DatabaseNS.Models;
+using Tabloulet.Helpers;
+using Tabloulet.Helpers.CustomInputEvents;
 
 namespace Tabloulet.Scenes.Components.BaseNS
 {
-    public partial class Base(Control node) : Node
+    public partial class Base(Control node, bool IsMovable) : Node
     {
-        private Node _inputEventHelper;
         private Control _child = node;
+        private InputHandler _inputHandler;
+
+        private InputEvent _pinch;
+        private InputEvent _twist;
 
         // Called when the node enters the scene tree for the first time.
         public override void _Ready()
         {
             base._Ready();
-            _inputEventHelper = GetNode<Node>("/root/InputEventH");
+
+            _inputHandler = GetNode<InputHandler>("/root/InputHandler");
+
             if (_child != null)
             {
+                _child.GuiInput += ChildGuiInput;
                 AddChild(_child);
             }
         }
 
-        // Called every frame. 'delta' is the elapsed time since the previous frame.
-        public override void _Process(double delta) { }
-
-        public void UpdateFromInputEvent(InputEvent @event)
+        public void UpdateChildFromInputEvent(InputEvent @event)
         {
-            if (_child == null)
+            switch (@event)
+            {
+                case InputEventScreenDrag drag:
+                    DragChild(drag);
+                    break;
+                case InputEventScreenTouch touch:
+                    break;
+                case InputEventPinch pinch:
+                    PinchChild(pinch);
+                    break;
+                case InputEventTwist twist:
+                    TwistChild(twist);
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        public void DragChild(InputEventScreenDrag drag)
+        {
+            _child.Position += drag.ScreenRelative;
+        }
+
+        public void PinchChild(InputEventPinch pinch)
+        {
+            float newScaleX = _child.Scale.X * pinch.Factor;
+            float newScaleY = _child.Scale.Y * pinch.Factor;
+
+            newScaleX = Mathf.Max(newScaleX, 0.25f);
+            newScaleY = Mathf.Max(newScaleY, 0.25f);
+
+            _child.PivotOffset = _child.Size / 2;
+
+            _child.Scale = new Vector2(newScaleX, newScaleY);
+        }
+
+        public void TwistChild(InputEventTwist twist)
+        {
+            _child.PivotOffset = _child.Size / 2;
+
+            _child.RotationDegrees += twist.Angle * Mathf.RadToDeg(0.05f);
+        }
+
+        private void ChildGuiInput(InputEvent @event)
+        {
+            if (!IsMovable)
             {
                 return;
             }
-            if (!_child.GetRect().HasPoint(_child.GetGlobalMousePosition()))
+            if (_pinch != null)
+            {
+                UpdateChildFromInputEvent(_pinch);
+                _pinch = null;
+                return;
+            }
+            else if (_twist != null)
+            {
+                UpdateChildFromInputEvent(_twist);
+                _twist = null;
+                return;
+            }
+            UpdateChildFromInputEvent(@event);
+        }
+
+        public override void _Input(InputEvent @event)
+        {
+            base._Input(@event);
+            if (!IsMovable)
             {
                 return;
             }
-            int eventType = (int)_inputEventHelper.Call("_get_event_type", @event);
-            switch (eventType)
+            if (@event is InputEventPinch)
             {
-                case 0:
-                    GD.Print(0);
-                    break;
-                case 1:
-                    GD.Print(1);
-                    break;
-                case 2:
-                    GD.Print(2);
-                    break;
-                case 3:
-                    GD.Print(3);
-                    break;
-                case 4:
-                    GD.Print(4);
-                    break;
-                case 5:
-                    GD.Print(5);
-                    break;
-                case 6:
-                    GD.Print(6);
-                    break;
-                case 7:
-                    GD.Print(7);
-                    break;
-                case 8:
-                    GD.Print(8);
-                    break;
-                case 9:
-                    GD.Print(9);
-                    break;
-                case 10:
-                    GD.Print(10);
-                    break;
-                case 11:
-                    GD.Print(11);
-                    break;
-                case -1:
-                    break;
+                _pinch = @event;
+            }
+            else if (@event is InputEventTwist)
+            {
+                _twist = @event;
             }
         }
     }

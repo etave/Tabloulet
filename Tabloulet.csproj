@@ -15,7 +15,9 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="GDTIM\" />
+    <Folder Include="Helpers\CustomInputEvents\" />
     <Folder Include="Scenes\Components\Base\" />
+    <Folder Include="Scenes\Components\Image\" />
     <Folder Include="Scenes\Home\" />
   </ItemGroup>
 </Project>

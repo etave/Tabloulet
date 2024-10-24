@@ -17,8 +17,7 @@ config/icon="res://icon.svg"
 [autoload]
 
 Database="*res://Database/Database.cs"
-InputManager="*res://GDTIM/InputManager.gd"
-InputEventH="*res://Helpers/InputEventHelper.gd"
+InputHandler="*res://Helpers/InputHandler.cs"
 
 [dotnet]
 
@@ -27,3 +26,4 @@ project/assembly_name="Tabloulet"
 [input_devices]
 
 pointing/emulate_touch_from_mouse=true
+pointing/android/enable_pan_and_scale_gestures=true
