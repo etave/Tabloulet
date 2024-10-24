@@ -9,17 +9,21 @@ namespace Tabloulet.Scenes.HomeNS
     public partial class Home : Control
     {
         private Database _database;
-
         private List<Godot.Button> buttons = new List<Godot.Button>();
 
-        // Called when the node enters the scene tree for the first time.
         public override void _Ready()
         {
-            GD.Print("Hello, World!");
             _database = GetNode<Database>("/root/Database");
             addScenarioButtons();
+
+            // Add the event to the close button
+            Godot.Button cancelButton = GetNode<Godot.Button>(
+                "MarginPopUp/PanelPopUp/MarginInsidePopUp/VBoxPopUp/MarginButtonPopUp/HBoxPopUp/CancelButton"
+            );
+            cancelButton.Pressed += closePopUp;
         }
 
+        // Add the scenario buttons to the list
         public void addScenarioButtons()
         {
             VBoxContainer listScenarioNode = GetNode<VBoxContainer>(
@@ -54,6 +58,7 @@ namespace Tabloulet.Scenes.HomeNS
                 scenarioButton.CustomMinimumSize = new Vector2(0, 90);
                 scenarioButton.Theme = theme;
                 scenarioButton.ClipText = true;
+                scenarioButton.Pressed += () => displayPopUpScenario(scenario.Id.ToString());
 
                 // Add StyleBox to the button
                 scenarioButton.AddThemeStyleboxOverride("normal", styleBox);
@@ -107,6 +112,7 @@ namespace Tabloulet.Scenes.HomeNS
             }
         }
 
+        // Change the page into the admin page
         public void changeToAdmin()
         {
             foreach (Godot.Button button in buttons)
@@ -115,7 +121,28 @@ namespace Tabloulet.Scenes.HomeNS
             }
         }
 
-        // Called every frame. 'delta' is the elapsed time since the previous frame.
+        // Display the pop up with the scenario description
+        public void displayPopUpScenario(String idScenario)
+        {
+            Label title = GetNode<Label>("MarginPopUp/PanelPopUp/TitlePopUp");
+            Label description = GetNode<Label>(
+                "MarginPopUp/PanelPopUp/MarginInsidePopUp/VBoxPopUp/DescriptionPopUp"
+            );
+            Scenario scenario = (Scenario)_database.GetById<Scenario>(Guid.Parse(idScenario));
+            title.Text = scenario.Name;
+            description.Text = scenario.Description;
+
+            MarginContainer marginPopUp = GetNode<MarginContainer>("MarginPopUp");
+            marginPopUp.Visible = true;
+        }
+
+        // Close the pop up
+        public void closePopUp()
+        {
+            MarginContainer marginPopUp = GetNode<MarginContainer>("MarginPopUp");
+            marginPopUp.Visible = false;
+        }
+
         public override void _Process(double delta) { }
     }
 }
