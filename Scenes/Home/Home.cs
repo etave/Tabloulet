@@ -16,11 +16,24 @@ namespace Tabloulet.Scenes.HomeNS
             _database = GetNode<Database>("/root/Database");
             addScenarioButtons();
 
-            // Add the event to the close button
+            // Add the event to buttons
             Godot.Button cancelButton = GetNode<Godot.Button>(
                 "MarginPopUp/PanelPopUp/MarginInsidePopUp/VBoxPopUp/MarginButtonPopUp/HBoxPopUp/CancelButton"
             );
             cancelButton.Pressed += closePopUp;
+
+            Godot.Button createButton = GetNode<Godot.Button>("MarginAdmin/HBoxAdmin/CreateButton");
+            createButton.Pressed += displayPopUpCreateScenario;
+
+            Godot.Button cancelCreation = GetNode<Godot.Button>(
+                "MarginCreate/PanelCreate/MarginInsideCreate/VBoxCreate/HBoxCreate/CancelCreationButton"
+            );
+            cancelCreation.Pressed += closePopUpCreateScenario;
+
+            Godot.Button validateCreationButton = GetNode<Godot.Button>(
+                "MarginCreate/PanelCreate/MarginInsideCreate/VBoxCreate/HBoxCreate/ValidateCreationButton"
+            );
+            validateCreationButton.Pressed += validateCreation;
         }
 
         // Add the scenario buttons to the list
@@ -119,6 +132,8 @@ namespace Tabloulet.Scenes.HomeNS
             {
                 button.Visible = true;
             }
+            Godot.Button createButton = GetNode<Godot.Button>("MarginAdmin/HBoxAdmin/CreateButton");
+            createButton.Visible = true;
         }
 
         // Display the pop up with the scenario description
@@ -136,11 +151,46 @@ namespace Tabloulet.Scenes.HomeNS
             marginPopUp.Visible = true;
         }
 
-        // Close the pop up
+        // Close the pop up with the scenario description
         public void closePopUp()
         {
             MarginContainer marginPopUp = GetNode<MarginContainer>("MarginPopUp");
             marginPopUp.Visible = false;
+        }
+
+        // Display the pop up to create a scenario
+        public void displayPopUpCreateScenario()
+        {
+            MarginContainer marginCreate = GetNode<MarginContainer>("MarginCreate");
+            marginCreate.Visible = true;
+        }
+
+        // Close the pop up to create a scenario
+        public void closePopUpCreateScenario()
+        {
+            MarginContainer marginCreate = GetNode<MarginContainer>("MarginCreate");
+            marginCreate.Visible = false;
+        }
+
+        // Validate the creation of a scenario
+        public void validateCreation()
+        {
+            TextEdit nameEdit = GetNode<TextEdit>(
+                "MarginCreate/PanelCreate/MarginInsideCreate/VBoxCreate/TextEditName"
+            );
+            TextEdit descriptionEdit = GetNode<TextEdit>(
+                "MarginCreate/PanelCreate/MarginInsideCreate/VBoxCreate/TextEditDescription"
+            );
+
+            Page page = new Page();
+            Scenario scenario = new Scenario();
+            scenario.Name = nameEdit.Text;
+            scenario.Description = descriptionEdit.Text;
+            scenario.PageId = page.Id;
+
+            _database.Insert(page);
+            _database.Insert(scenario);
+            closePopUpCreateScenario();
         }
 
         public override void _Process(double delta) { }
