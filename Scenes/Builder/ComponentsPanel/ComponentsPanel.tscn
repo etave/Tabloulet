@@ -1,0 +1,239 @@
+[gd_scene load_steps=10 format=3 uid="uid://cydpdu71586wm"]
+
+[ext_resource type="Script" path="res://Scenes/Builder/ComponentsPanel/ComponentsPanel.cs" id="1_1ksya"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_nvgwx"]
+bg_color = Color(1, 1, 1, 1)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0, 0, 0, 1)
+corner_radius_top_left = 30
+corner_radius_top_right = 30
+corner_radius_bottom_right = 30
+corner_radius_bottom_left = 30
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_i6lyw"]
+bg_color = Color(0.6, 0.6, 0.6, 0)
+draw_center = false
+border_width_bottom = 3
+border_color = Color(0, 0, 0, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ynsne"]
+content_margin_left = 9.0
+bg_color = Color(0.6, 0.6, 0.6, 0)
+draw_center = false
+border_width_left = 3
+border_color = Color(0, 0, 0, 1)
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_i22fh"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_4oqyo"]
+bg_color = Color(0.254902, 0.411765, 0.882353, 1)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0, 0, 0, 1)
+corner_radius_top_left = 30
+corner_radius_top_right = 30
+corner_radius_bottom_right = 30
+corner_radius_bottom_left = 30
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_dpo87"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_kvuja"]
+draw_center = false
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_l2em5"]
+draw_center = false
+
+[node name="ComponentsPanel" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = -1520.0
+offset_bottom = -280.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(1.00742, 1)
+mouse_filter = 2
+script = ExtResource("1_1ksya")
+
+[node name="OpenPanel" type="Panel" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_nvgwx")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="OpenPanel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(1.00133, 1)
+
+[node name="PanelContainer" type="PanelContainer" parent="OpenPanel/VBoxContainer"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_i6lyw")
+
+[node name="MarginContainer" type="MarginContainer" parent="OpenPanel/VBoxContainer/PanelContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 60
+
+[node name="Label" type="Label" parent="OpenPanel/VBoxContainer/PanelContainer/MarginContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 35
+text = "Composants"
+
+[node name="MarginContainer2" type="MarginContainer" parent="OpenPanel/VBoxContainer/PanelContainer"]
+layout_mode = 2
+size_flags_horizontal = 8
+theme_override_constants/margin_right = 15
+
+[node name="PanelContainer" type="PanelContainer" parent="OpenPanel/VBoxContainer/PanelContainer/MarginContainer2"]
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_styles/panel = SubResource("StyleBoxFlat_ynsne")
+
+[node name="Button" type="Button" parent="OpenPanel/VBoxContainer/PanelContainer/MarginContainer2/PanelContainer"]
+layout_mode = 2
+size_flags_horizontal = 8
+focus_mode = 0
+theme_override_colors/font_color = Color(1, 0, 0, 1)
+theme_override_font_sizes/font_size = 30
+text = "🗙"
+flat = true
+
+[node name="HSeparator" type="HSeparator" parent="OpenPanel/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 30
+theme_override_styles/separator = SubResource("StyleBoxEmpty_i22fh")
+
+[node name="TextMarginContainer" type="MarginContainer" parent="OpenPanel/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_right = 10
+
+[node name="PanelContainer" type="PanelContainer" parent="OpenPanel/VBoxContainer/TextMarginContainer"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_4oqyo")
+
+[node name="GridContainer" type="GridContainer" parent="OpenPanel/VBoxContainer/TextMarginContainer/PanelContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+columns = 3
+
+[node name="Label" type="Label" parent="OpenPanel/VBoxContainer/TextMarginContainer/PanelContainer/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_font_sizes/font_size = 30
+text = "TEXTE"
+
+[node name="VSeparator" type="VSeparator" parent="OpenPanel/VBoxContainer/TextMarginContainer/PanelContainer/GridContainer"]
+layout_mode = 2
+theme_override_constants/separation = 80
+theme_override_styles/separator = SubResource("StyleBoxEmpty_dpo87")
+
+[node name="MarginContainer" type="MarginContainer" parent="OpenPanel/VBoxContainer/TextMarginContainer/PanelContainer/GridContainer"]
+layout_mode = 2
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_bottom = 5
+
+[node name="Button" type="Button" parent="OpenPanel/VBoxContainer/TextMarginContainer/PanelContainer/GridContainer/MarginContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 25
+text = "Insérer"
+
+[node name="HSeparator2" type="HSeparator" parent="OpenPanel/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 30
+theme_override_styles/separator = SubResource("StyleBoxEmpty_i22fh")
+
+[node name="ImageMarginContainer" type="MarginContainer" parent="OpenPanel/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_right = 10
+
+[node name="PanelContainer" type="PanelContainer" parent="OpenPanel/VBoxContainer/ImageMarginContainer"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_4oqyo")
+
+[node name="GridContainer" type="GridContainer" parent="OpenPanel/VBoxContainer/ImageMarginContainer/PanelContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+columns = 3
+
+[node name="Label" type="Label" parent="OpenPanel/VBoxContainer/ImageMarginContainer/PanelContainer/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_font_sizes/font_size = 30
+text = "IMAGE"
+
+[node name="VSeparator" type="VSeparator" parent="OpenPanel/VBoxContainer/ImageMarginContainer/PanelContainer/GridContainer"]
+layout_mode = 2
+theme_override_constants/separation = 80
+theme_override_styles/separator = SubResource("StyleBoxEmpty_dpo87")
+
+[node name="MarginContainer" type="MarginContainer" parent="OpenPanel/VBoxContainer/ImageMarginContainer/PanelContainer/GridContainer"]
+layout_mode = 2
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_bottom = 5
+
+[node name="Button" type="Button" parent="OpenPanel/VBoxContainer/ImageMarginContainer/PanelContainer/GridContainer/MarginContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 25
+text = "Insérer"
+
+[node name="ClosePanel" type="Panel" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 0.175
+anchor_bottom = 0.087
+offset_bottom = 0.399994
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_nvgwx")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="ClosePanel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="PanelContainer" type="PanelContainer" parent="ClosePanel/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 6
+theme_override_styles/panel = SubResource("StyleBoxFlat_kvuja")
+
+[node name="MarginContainer" type="MarginContainer" parent="ClosePanel/VBoxContainer/PanelContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="PanelContainer" type="PanelContainer" parent="ClosePanel/VBoxContainer/PanelContainer/MarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_styles/panel = SubResource("StyleBoxFlat_l2em5")
+
+[node name="Button" type="Button" parent="ClosePanel/VBoxContainer/PanelContainer/MarginContainer/PanelContainer"]
+layout_mode = 2
+size_flags_horizontal = 8
+focus_mode = 0
+theme_override_colors/font_color = Color(1, 0, 0, 1)
+theme_override_font_sizes/font_size = 30
+text = "📂"
+flat = true

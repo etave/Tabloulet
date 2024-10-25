@@ -1,10 +1,11 @@
 using Godot;
 using Tabloulet.Helpers;
 using Tabloulet.Helpers.CustomInputEvents;
+using Tabloulet.Scenes.BuilderNS;
 
 namespace Tabloulet.Scenes.Components.BaseNS
 {
-    public partial class Base(Control node, bool IsMovable) : Node
+    public partial class Base(Control node, bool isMovable, bool inBuilderMode) : Control
     {
         private Control _child = node;
         private InputHandler _inputHandler;
@@ -12,12 +13,19 @@ namespace Tabloulet.Scenes.Components.BaseNS
         private InputEvent _pinch;
         private InputEvent _twist;
 
+        private Builder _builder;
+
         // Called when the node enters the scene tree for the first time.
         public override void _Ready()
         {
             base._Ready();
 
             _inputHandler = GetNode<InputHandler>("/root/InputHandler");
+
+            if (inBuilderMode)
+            {
+                _builder = GetNode<Builder>("/root/Builder");
+            }
 
             if (_child != null)
             {
@@ -73,9 +81,13 @@ namespace Tabloulet.Scenes.Components.BaseNS
 
         private void ChildGuiInput(InputEvent @event)
         {
-            if (!IsMovable)
+            if (!isMovable)
             {
                 return;
+            }
+            if (inBuilderMode)
+            {
+                _builder.componentsPanel.CloseButtonPressed(false);
             }
             if (_pinch != null)
             {
@@ -95,7 +107,7 @@ namespace Tabloulet.Scenes.Components.BaseNS
         public override void _Input(InputEvent @event)
         {
             base._Input(@event);
-            if (!IsMovable)
+            if (!isMovable)
             {
                 return;
             }
@@ -106,6 +118,10 @@ namespace Tabloulet.Scenes.Components.BaseNS
             else if (@event is InputEventTwist)
             {
                 _twist = @event;
+            }
+            else if (inBuilderMode && !_builder.componentsPanel.closeByUser)
+            {
+                _builder.componentsPanel.OpenButtonPressed(false);
             }
         }
     }

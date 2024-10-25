@@ -1,0 +1,40 @@
+[gd_scene load_steps=3 format=3 uid="uid://duy6rbl3spnb0"]
+
+[ext_resource type="Script" path="res://Scenes/Builder/Builder.cs" id="1_o7hen"]
+[ext_resource type="PackedScene" uid="uid://cydpdu71586wm" path="res://Scenes/Builder/ComponentsPanel/ComponentsPanel.tscn" id="2_hxg7v"]
+
+[node name="Builder" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_o7hen")
+
+[node name="Blueprint" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Background" type="ColorRect" parent="Blueprint"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ComponentsPanel" parent="." instance=ExtResource("2_hxg7v")]
+layout_mode = 2
+anchors_preset = 0
+anchor_right = 0.0
+anchor_bottom = 0.0
+offset_left = 20.0
+offset_top = 20.0
+offset_right = 420.0
+offset_bottom = 820.0
+scale = Vector2(1, 1)
