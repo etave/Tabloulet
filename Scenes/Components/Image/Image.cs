@@ -1,8 +1,6 @@
 using System;
 using Godot;
 using Tabloulet.Helpers;
-using Tabloulet.Helpers.CustomInputEvents;
-using Tabloulet.Scenes.Components.BaseNS;
 using GDImage = Godot.Image;
 
 namespace Tabloulet.Scenes.Components.ImageNS
@@ -16,7 +14,6 @@ namespace Tabloulet.Scenes.Components.ImageNS
         float RotationDeg
     ) : TextureRect
     {
-        private Base _base;
         private InputHandler _inputHandler;
 
         // Called when the node enters the scene tree for the first time.
@@ -24,20 +21,34 @@ namespace Tabloulet.Scenes.Components.ImageNS
         {
             base._Ready();
 
-            _base = GetParent<Base>();
             _inputHandler = GetNode<InputHandler>("/root/InputHandler");
 
-            if (Path != null)
+            if (!string.IsNullOrEmpty(Path))
             {
-                GDImage image = new();
-                Error loadError = image.Load(Path);
-                if (loadError != Error.Ok)
-                {
-                    GD.PrintErr($"Error loading image: {loadError}");
-                    // TODO: Inform the user about the error in a more user-friendly way
-                    QueueFree();
-                    return;
-                }
+                LoadImage(Path);
+            }
+            else
+            {
+                SetPlaceholderTexture();
+            }
+
+            Position = new Vector2(PositionX, PositionY);
+            PivotOffset = Size / 2;
+            RotationDegrees = RotationDeg;
+        }
+
+        private void LoadImage(string path)
+        {
+            GDImage image = new();
+            Error loadError = image.Load(path);
+            if (loadError != Error.Ok)
+            {
+                GD.PrintErr($"Error loading image: {path}");
+                // TODO: Inform the user about the error in a more user-friendly way
+                SetPlaceholderTexture();
+            }
+            else
+            {
                 ImageTexture imageTexture = new();
                 imageTexture.SetImage(image);
                 Texture = imageTexture;
@@ -48,13 +59,12 @@ namespace Tabloulet.Scenes.Components.ImageNS
                 float ratio = Math.Min(widthRatio, heightRatio);
                 Size = new Vector2(image.GetWidth() * ratio, image.GetHeight() * ratio);
             }
-            else
-            {
-                Texture = new PlaceholderTexture2D();
-                Size = new Vector2(Width, Height);
-            }
-            Position = new Vector2(PositionX, PositionY);
-            RotationDegrees = RotationDeg;
+        }
+
+        private void SetPlaceholderTexture()
+        {
+            Texture = new PlaceholderTexture2D();
+            Size = new Vector2(Width, Height);
         }
     }
 }
