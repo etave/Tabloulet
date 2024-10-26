@@ -5,7 +5,8 @@ using Tabloulet.Scenes.BuilderNS;
 
 namespace Tabloulet.Scenes.Components.BaseNS
 {
-    public partial class Base(Control node, bool isMovable, bool inBuilderMode) : Control
+    public partial class Base(Control node, bool isMovable, bool inBuilderMode, Builder builder)
+        : Control
     {
         private Control _child = node;
         private InputHandler _inputHandler;
@@ -24,7 +25,7 @@ namespace Tabloulet.Scenes.Components.BaseNS
 
             if (inBuilderMode)
             {
-                _builder = GetNode<Builder>("/root/Builder");
+                _builder = builder;
             }
 
             if (_child != null)

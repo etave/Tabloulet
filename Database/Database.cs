@@ -69,7 +69,7 @@ namespace Tabloulet.DatabaseNS
             }
         }
 
-        public IDatabaseModel GetById<T>(Guid guid)
+        public T GetById<T>(Guid guid)
             where T : IDatabaseModel, new()
         {
             try
@@ -80,8 +80,14 @@ namespace Tabloulet.DatabaseNS
             {
                 GD.PrintErr($"Error getting object by id: {e.Message}");
                 // TODO: Inform the user about the error in a more user-friendly way
-                return null;
+                return default;
             }
+        }
+
+        public TableQuery<T> GetTableComponentsByPageId<T>(Guid pageId)
+            where T : IDatabaseModelComponent, new()
+        {
+            return _connection.Table<T>().Where(x => x.PageId == pageId);
         }
 
         public bool Update(IDatabaseModel obj)

@@ -3,7 +3,7 @@ using SQLite;
 
 namespace Tabloulet.DatabaseNS.Models
 {
-    public class Base : IDatabaseModel
+    public class Base : IDatabaseModel, IDatabaseModelComponent
     {
         [PrimaryKey]
         public Guid Id { get; set; }

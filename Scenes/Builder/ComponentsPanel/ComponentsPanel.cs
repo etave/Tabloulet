@@ -21,9 +21,7 @@ namespace Tabloulet.Scenes.BuilderNS.ComponentsPanelNS
             _closeButton = _openPanel.GetNode<Button>(
                 "VBoxContainer/PanelContainer/MarginContainer2/PanelContainer/Button"
             );
-            _openButton = _closePanel.GetNode<Button>(
-                "VBoxContainer/PanelContainer/MarginContainer/PanelContainer/Button"
-            );
+            _openButton = _closePanel.GetNode<Button>("PanelContainer/Button");
 
             _closeButton.Pressed += () => CloseButtonPressed(true);
             _openButton.Pressed += () => OpenButtonPressed(true);
