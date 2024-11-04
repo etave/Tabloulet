@@ -14,35 +14,35 @@ namespace Tabloulet.Scenes.HomeNS
         public override void _Ready()
         {
             _database = GetNode<Database>("/root/Database");
-            addScenarioButtons();
+            AddScenarioButtons();
 
             // Add the event to buttons
             Godot.Button cancelButton = GetNode<Godot.Button>(
                 "MarginPopUp/PanelPopUp/MarginInsidePopUp/VBoxPopUp/MarginButtonPopUp/HBoxPopUp/CancelButton"
             );
-            cancelButton.Pressed += closePopUp;
+            cancelButton.Pressed += ClosePopUp;
 
             Godot.Button createButton = GetNode<Godot.Button>("MarginAdmin/HBoxAdmin/CreateButton");
-            createButton.Pressed += displayPopUpCreateScenario;
+            createButton.Pressed += DisplayPopUpCreateScenario;
 
             Godot.Button cancelCreation = GetNode<Godot.Button>(
                 "MarginCreate/PanelCreate/MarginInsideCreate/VBoxCreate/HBoxCreate/CancelCreationButton"
             );
-            cancelCreation.Pressed += closePopUpCreateScenario;
+            cancelCreation.Pressed += ClosePopUpCreateScenario;
 
             Godot.Button validateCreationButton = GetNode<Godot.Button>(
                 "MarginCreate/PanelCreate/MarginInsideCreate/VBoxCreate/HBoxCreate/ValidateCreationButton"
             );
-            validateCreationButton.Pressed += validateCreation;
+            validateCreationButton.Pressed += ValidateCreation;
 
             Godot.Button cancelDelete = GetNode<Godot.Button>(
                 "MarginDelete/PanelDelete/MarginInsideDelete/VBoxDelete/HBoxDelete/CancelDeleteButton"
             );
-            cancelDelete.Pressed += closePopUpDelete;
+            cancelDelete.Pressed += ClosePopUpDelete;
         }
 
         // Add the scenario buttons to the list
-        public void addScenarioButtons()
+        public void AddScenarioButtons()
         {
             VBoxContainer listScenarioNode = GetNode<VBoxContainer>(
                 "MarginList/ScrollList/MarginScroll/ListScenario"
@@ -53,31 +53,36 @@ namespace Tabloulet.Scenes.HomeNS
             Theme theme = new() { DefaultFontSize = 35 };
 
             //Create a styleBox for the buttons
-            StyleBoxFlat styleBox = new StyleBoxFlat();
-            styleBox.CornerRadiusTopLeft = 12;
-            styleBox.CornerRadiusTopRight = 12;
-            styleBox.CornerRadiusBottomLeft = 12;
-            styleBox.CornerRadiusBottomRight = 12;
-            styleBox.BorderWidthTop = 0;
-            styleBox.BorderWidthBottom = 0;
-            styleBox.BorderWidthLeft = 0;
-            styleBox.BorderWidthRight = 0;
-            styleBox.BgColor = new Color(0.126f, 0.286f, 0.412f);
+            StyleBoxFlat styleBox =
+                new()
+                {
+                    CornerRadiusTopLeft = 12,
+                    CornerRadiusTopRight = 12,
+                    CornerRadiusBottomLeft = 12,
+                    CornerRadiusBottomRight = 12,
+                    BorderWidthTop = 0,
+                    BorderWidthBottom = 0,
+                    BorderWidthLeft = 0,
+                    BorderWidthRight = 0,
+                    BgColor = new Color(0.126f, 0.286f, 0.412f),
+                };
 
             // Create a styleBox for the buttons
-            StyleBoxFlat normalStyleBox = new StyleBoxFlat();
-            normalStyleBox.BgColor = new Color(1, 1, 1, 0);
+            StyleBoxFlat normalStyleBox = new() { BgColor = new Color(1, 1, 1, 0) };
 
             foreach (Scenario scenario in scenarios)
             {
                 // Create a button to display the scenario
-                Godot.Button scenarioButton = new Godot.Button();
-                scenarioButton.Text = scenario.Name;
-                scenarioButton.Name = "ScenarioButton" + scenario.Id;
-                scenarioButton.CustomMinimumSize = new Vector2(0, 90);
-                scenarioButton.Theme = theme;
-                scenarioButton.ClipText = true;
-                scenarioButton.Pressed += () => displayPopUpScenario(scenario.Id.ToString());
+                Godot.Button scenarioButton =
+                    new()
+                    {
+                        Text = scenario.Name,
+                        Name = "ScenarioButton" + scenario.Id,
+                        CustomMinimumSize = new Vector2(0, 90),
+                        Theme = theme,
+                        ClipText = true,
+                    };
+                scenarioButton.Pressed += () => DisplayPopUpScenario(scenario.Id.ToString());
 
                 // Add StyleBox to the button
                 scenarioButton.AddThemeStyleboxOverride("normal", styleBox);
@@ -85,20 +90,22 @@ namespace Tabloulet.Scenes.HomeNS
                 scenarioButton.AddThemeStyleboxOverride("pressed", styleBox);
 
                 // Create a margin container
-                MarginContainer marginContainer = new MarginContainer();
+                MarginContainer marginContainer = new();
                 marginContainer.AddThemeConstantOverride("margin_right", 30);
                 marginContainer.SetAnchorsPreset(Control.LayoutPreset.FullRect);
 
                 // Create a HBoxContainer to align the buttons
-                HBoxContainer hBoxContainer = new HBoxContainer();
-                hBoxContainer.Alignment = BoxContainer.AlignmentMode.End;
+                HBoxContainer hBoxContainer = new() { Alignment = BoxContainer.AlignmentMode.End };
                 hBoxContainer.AddThemeConstantOverride("separation", 10);
 
                 // Create the edit button
-                Godot.Button editButton = new Godot.Button();
-                editButton.CustomMinimumSize = new Vector2(60, 60);
-                editButton.Name = "EditButton" + scenario.Id;
-                editButton.Visible = false;
+                Godot.Button editButton =
+                    new()
+                    {
+                        CustomMinimumSize = new Vector2(60, 60),
+                        Name = "EditButton" + scenario.Id,
+                        Visible = false,
+                    };
                 Texture2D EditButtonIcon = (Texture2D)
                     ResourceLoader.Load("res://Assets/Home/EditLogo.png");
                 editButton.Icon = EditButtonIcon;
@@ -109,9 +116,13 @@ namespace Tabloulet.Scenes.HomeNS
                 buttons.Add(editButton);
 
                 // Create the delete button
-                Godot.Button deleteButton = new Godot.Button();
-                deleteButton.CustomMinimumSize = new Vector2(60, 60);
-                deleteButton.Name = "DeleteButton" + scenario.Id;
+                Godot.Button deleteButton =
+                    new()
+                    {
+                        CustomMinimumSize = new Vector2(60, 60),
+                        Name = "DeleteButton" + scenario.Id,
+                        Visible = false,
+                    };
                 //deleteButton.Visible = false;
                 Texture2D deleteButtonIcon = (Texture2D)
                     ResourceLoader.Load("res://Assets/Home/DeleteLogo.png");
@@ -120,7 +131,7 @@ namespace Tabloulet.Scenes.HomeNS
                 deleteButton.AddThemeStyleboxOverride("normal", normalStyleBox);
                 deleteButton.AddThemeStyleboxOverride("hover", normalStyleBox);
                 deleteButton.AddThemeStyleboxOverride("pressed", normalStyleBox);
-                deleteButton.Pressed += () => displayPopUpDelete(scenario.Id);
+                deleteButton.Pressed += () => DisplayPopUpDelete(scenario.Id);
                 buttons.Add(deleteButton);
 
                 // Add the children to the parent nodes
@@ -133,7 +144,7 @@ namespace Tabloulet.Scenes.HomeNS
         }
 
         // Change the page into the admin page
-        public void changeToAdmin()
+        public void ChangeToAdmin()
         {
             foreach (Godot.Button button in buttons)
             {
@@ -144,7 +155,7 @@ namespace Tabloulet.Scenes.HomeNS
         }
 
         // Display the pop up with the scenario description
-        public void displayPopUpScenario(String idScenario)
+        public void DisplayPopUpScenario(String idScenario)
         {
             Label title = GetNode<Label>("MarginPopUp/PanelPopUp/TitlePopUp");
             Label description = GetNode<Label>(
@@ -159,28 +170,28 @@ namespace Tabloulet.Scenes.HomeNS
         }
 
         // Close the pop up with the scenario description
-        public void closePopUp()
+        public void ClosePopUp()
         {
             MarginContainer marginPopUp = GetNode<MarginContainer>("MarginPopUp");
             marginPopUp.Visible = false;
         }
 
         // Display the pop up to create a scenario
-        public void displayPopUpCreateScenario()
+        public void DisplayPopUpCreateScenario()
         {
             MarginContainer marginCreate = GetNode<MarginContainer>("MarginCreate");
             marginCreate.Visible = true;
         }
 
         // Close the pop up to create a scenario
-        public void closePopUpCreateScenario()
+        public void ClosePopUpCreateScenario()
         {
             MarginContainer marginCreate = GetNode<MarginContainer>("MarginCreate");
             marginCreate.Visible = false;
         }
 
         // Validate the creation of a scenario
-        public void validateCreation()
+        public void ValidateCreation()
         {
             TextEdit nameEdit = GetNode<TextEdit>(
                 "MarginCreate/PanelCreate/MarginInsideCreate/VBoxCreate/TextEditName"
@@ -189,45 +200,50 @@ namespace Tabloulet.Scenes.HomeNS
                 "MarginCreate/PanelCreate/MarginInsideCreate/VBoxCreate/TextEditDescription"
             );
 
-            Page page = new Page();
-            page.Id = Guid.NewGuid();
-            Scenario scenario = new Scenario();
-            scenario.Id = Guid.NewGuid();
-            scenario.Name = nameEdit.Text;
-            scenario.Description = descriptionEdit.Text;
-            scenario.PageId = page.Id;
-            ScenarioPage scenarioPage = new ScenarioPage();
-            scenarioPage.Id = Guid.NewGuid();
-            scenarioPage.ScenarioId = scenario.Id;
-            scenarioPage.PageId = page.Id;
+            Page page = new() { Id = Guid.NewGuid() };
+            Scenario scenario =
+                new()
+                {
+                    Id = Guid.NewGuid(),
+                    Name = nameEdit.Text,
+                    Description = descriptionEdit.Text,
+                    PageId = page.Id,
+                };
+            ScenarioPage scenarioPage =
+                new()
+                {
+                    Id = Guid.NewGuid(),
+                    ScenarioId = scenario.Id,
+                    PageId = page.Id,
+                };
             GD.Print(scenarioPage.ScenarioId);
 
             _database.Insert(page);
             _database.Insert(scenario);
             _database.Insert(scenarioPage);
-            closePopUpCreateScenario();
+            ClosePopUpCreateScenario();
         }
 
         // Display the pop up to delete a scenario
-        public void displayPopUpDelete(Guid scenarioId)
+        public void DisplayPopUpDelete(Guid scenarioId)
         {
             MarginContainer marginDelete = GetNode<MarginContainer>("MarginDelete");
             marginDelete.Visible = true;
             Godot.Button validateDelete = GetNode<Godot.Button>(
                 "MarginDelete/PanelDelete/MarginInsideDelete/VBoxDelete/HBoxDelete/ValidateDeleteButton"
             );
-            validateDelete.Pressed += () => deleteScenario(scenarioId);
+            validateDelete.Pressed += () => DeleteScenario(scenarioId);
         }
 
         // Close the pop up to delete a scenario
-        public void closePopUpDelete()
+        public void ClosePopUpDelete()
         {
             MarginContainer marginDelete = GetNode<MarginContainer>("MarginDelete");
             marginDelete.Visible = false;
         }
 
         // Delete a scenario
-        public void deleteScenario(Guid scenarioId)
+        public void DeleteScenario(Guid scenarioId)
         {
             List<Page> pages = _database.GetPagesByScenario(scenarioId);
             List<IDatabaseModel> elements = [];
@@ -235,10 +251,12 @@ namespace Tabloulet.Scenes.HomeNS
             {
                 elements.AddRange(_database.GetElementsByPage(page.Id));
             }
+            // Delete all the elements of the scenario
             foreach (IDatabaseModel element in elements)
             {
                 _database.Delete(element);
             }
+            // Delete the pages of the scenario, but not the first one
             Scenario scenario = (Scenario)_database.GetById<Scenario>(scenarioId);
             Page firstPage = _database.GetById<Page>(scenario.PageId);
             ScenarioPage firstScenarioPage = _database.GetScenarioPageByPage(firstPage.Id);
@@ -252,6 +270,7 @@ namespace Tabloulet.Scenes.HomeNS
                 _database.Delete(scenarioPage);
                 _database.Delete(page);
             }
+            // Delete the first page and the scenario
             _database.Delete(firstScenarioPage);
             _database.Delete(scenario);
             _database.Delete(firstPage);
@@ -259,7 +278,7 @@ namespace Tabloulet.Scenes.HomeNS
                 "MarginList/ScrollList/MarginScroll/ListScenario/ScenarioButton" + scenarioId
             );
             button.QueueFree();
-            closePopUpDelete();
+            ClosePopUpDelete();
         }
 
         public override void _Process(double delta) { }
