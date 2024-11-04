@@ -14,7 +14,10 @@
     <PackageReference Include="SQLitePCLRaw.provider.e_sqlite3" Version="2.1.2" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Scenes\" />
+    <Folder Include="GDTIM\" />
+    <Folder Include="Helpers\CustomInputEvents\" />
+    <Folder Include="Scenes\Components\Base\" />
+    <Folder Include="Scenes\Components\Image\" />
     <Folder Include="Scenes\Home\" />
   </ItemGroup>
 </Project>

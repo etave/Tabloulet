@@ -31,7 +31,7 @@ namespace Tabloulet.Helpers
         public const string CreateButtonTable =
             $"CREATE TABLE IF NOT EXISTS {ButtonTable} (Id TEXT PRIMARY KEY, PageId TEXT NOT NULL, Content TEXT NOT NULL, Color TEXT NOT NULL, Height REAL NOT NULL, Width REAL NOT NULL, PositionX REAL NOT NULL, PositionY REAL NOT NULL, Rotation REAL NOT NULL, IsMovable BOOLEAN NOT NULL, FOREIGN KEY(PageId) REFERENCES {PageTable}(Id))";
         public const string CreateTextTable =
-            $"CREATE TABLE IF NOT EXISTS {TextTable} (Id TEXT PRIMARY KEY, PageId TEXT NOT NULL, Content TEXT NOT NULL, Font TEXT NOT NULL, FontSize REAL NOT NULL, Color TEXT NOT NULL, Height REAL NOT NULL, Width REAL NOT NULL, PositionX REAL NOT NULL, PositionY REAL NOT NULL, Rotation REAL NOT NULL, IsMovable BOOLEAN NOT NULL, FOREIGN KEY(PageId) REFERENCES {PageTable}(Id))";
+            $"CREATE TABLE IF NOT EXISTS {TextTable} (Id TEXT PRIMARY KEY, PageId TEXT NOT NULL, Content TEXT NOT NULL, Font TEXT, FontSize INTEGER NOT NULL, Height REAL NOT NULL, Width REAL NOT NULL, PositionX REAL NOT NULL, PositionY REAL NOT NULL, Rotation REAL NOT NULL, IsMovable BOOLEAN NOT NULL, FOREIGN KEY(PageId) REFERENCES {PageTable}(Id))";
         public const string CreateImageTable =
             $"CREATE TABLE IF NOT EXISTS {ImageTable} (Id TEXT PRIMARY KEY, PageId TEXT NOT NULL, Path TEXT NOT NULL, Height REAL NOT NULL, Width REAL NOT NULL, PositionX REAL NOT NULL, PositionY REAL NOT NULL, Rotation REAL NOT NULL, IsMovable BOOLEAN NOT NULL, FOREIGN KEY(PageId) REFERENCES {PageTable}(Id))";
         public const string CreateVideoTable =

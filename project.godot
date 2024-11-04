@@ -17,6 +17,7 @@ config/icon="res://icon.svg"
 [autoload]
 
 Database="*res://Database/Database.cs"
+InputHandler="*res://Helpers/InputHandler.cs"
 
 [display]
 
@@ -27,3 +28,8 @@ window/size/mode=3
 [dotnet]
 
 project/assembly_name="Tabloulet"
+
+[input_devices]
+
+pointing/emulate_touch_from_mouse=true
+pointing/android/enable_pan_and_scale_gestures=true
