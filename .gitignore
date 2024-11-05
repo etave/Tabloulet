@@ -19,3 +19,4 @@ mono_crash.*.json
 Properties/
 *Backup.csproj
 .env
+*.tmp
