@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://di6ho5hexn154"
-path="res://.godot/imported/image-removebg-preview.png-0e7871bebdb30b7e3f0bb59a8035bf7e.ctex"
+uid="uid://bl1jqn6ccup3a"
+path="res://.godot/imported/Mountain.png-a61379af945736e4a51621b389a9e51b.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Scenes/Home/LoginPanel/AssetsLoginPanel/image-removebg-preview.png"
-dest_files=["res://.godot/imported/image-removebg-preview.png-0e7871bebdb30b7e3f0bb59a8035bf7e.ctex"]
+source_file="res://Assets/LoginPanel/Mountain.png"
+dest_files=["res://.godot/imported/Mountain.png-a61379af945736e4a51621b389a9e51b.ctex"]
 
 [params]
 

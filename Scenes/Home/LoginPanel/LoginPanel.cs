@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using DotNetEnv;
 using Godot;
+using Tabloulet.Scenes.HomeNS;
 
 public partial class LoginPanel : Control
 {
@@ -12,7 +13,7 @@ public partial class LoginPanel : Control
     Button loginButton;
     Button backspaceButton;
     Button deleteAllButton;
-    List<Button> numberButtons = new List<Button>();
+    List<Button> numberButtons = [];
     Color originalTextColor;
     Button quitButton;
 
@@ -53,7 +54,6 @@ public partial class LoginPanel : Control
 
         Env.Load(); // Charger le fichier .env
         string myPassword = Env.GetString("PASSWORD"); // Récupérer la valeur du mot de passe
-        GD.Print("Password: ", myPassword);
 
         // Connecter le bouton "BACKSPACE" à la méthode de gestion
         backspaceButton.Pressed += () => Backspace();
@@ -122,7 +122,9 @@ public partial class LoginPanel : Control
             // Restaurer la couleur d'origine (par défaut)
             loginError.AddThemeColorOverride("font_color", originalTextColor);
 
-            GD.Print("Login success");
+            Visible = false;
+            var home = GetParent<Control>() as Home;
+            home.ChangeToAdmin();
         }
         else
         {
@@ -149,6 +151,6 @@ public partial class LoginPanel : Control
 
     private void OnQuitButtonPressed()
     {
-        myPanel.Visible = false;
+        Visible = false;
     }
 }

@@ -1,9 +1,9 @@
 [gd_scene load_steps=19 format=3 uid="uid://enai0nx8jrw8"]
 
 [ext_resource type="Script" path="res://Scenes/Home/LoginPanel/LoginPanel.cs" id="1_iy2m1"]
-[ext_resource type="Texture2D" uid="uid://bl1jqn6ccup3a" path="res://Scenes/Home/LoginPanel/AssetsLoginPanel/montagne.png" id="2_41kld"]
-[ext_resource type="Texture2D" uid="uid://di6ho5hexn154" path="res://Scenes/Home/LoginPanel/AssetsLoginPanel/image-removebg-preview.png" id="2_lwjnw"]
-[ext_resource type="Texture2D" uid="uid://dv4ds1ctg4y6r" path="res://Scenes/Home/LoginPanel/AssetsLoginPanel/utilisateur.png" id="3_jtcrg"]
+[ext_resource type="Texture2D" uid="uid://bl1jqn6ccup3a" path="res://Assets/LoginPanel/Mountain.png" id="2_41kld"]
+[ext_resource type="Texture2D" uid="uid://di6ho5hexn154" path="res://Assets/LoginPanel/NFCLogo.png" id="2_lwjnw"]
+[ext_resource type="Texture2D" uid="uid://dv4ds1ctg4y6r" path="res://Assets/LoginPanel/UserLogo.png" id="3_jtcrg"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_4uau8"]
 bg_color = Color(0.905882, 0.92549, 0.929412, 1)

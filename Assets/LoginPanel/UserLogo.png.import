@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://dv4ds1ctg4y6r"
-path="res://.godot/imported/utilisateur.png-e36d64fbedc0f2c9e7822e69cc027df5.ctex"
+path="res://.godot/imported/UserLogo.png-f71c1af29765fa7f8d96fea8a570f4e9.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Scenes/Home/LoginPanel/AssetsLoginPanel/utilisateur.png"
-dest_files=["res://.godot/imported/utilisateur.png-e36d64fbedc0f2c9e7822e69cc027df5.ctex"]
+source_file="res://Assets/LoginPanel/UserLogo.png"
+dest_files=["res://.godot/imported/UserLogo.png-f71c1af29765fa7f8d96fea8a570f4e9.ctex"]
 
 [params]
 

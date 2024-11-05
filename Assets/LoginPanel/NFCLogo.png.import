@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bl1jqn6ccup3a"
-path="res://.godot/imported/montagne.png-f9a513c3e20a90e91ee52abdfcf3c646.ctex"
+uid="uid://di6ho5hexn154"
+path="res://.godot/imported/NFCLogo.png-a0e646730b9155765900231e4dd256c7.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Scenes/Home/LoginPanel/AssetsLoginPanel/montagne.png"
-dest_files=["res://.godot/imported/montagne.png-f9a513c3e20a90e91ee52abdfcf3c646.ctex"]
+source_file="res://Assets/LoginPanel/NFCLogo.png"
+dest_files=["res://.godot/imported/NFCLogo.png-a0e646730b9155765900231e4dd256c7.ctex"]
 
 [params]
 

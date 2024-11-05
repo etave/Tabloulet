@@ -1,8 +1,9 @@
-[gd_scene load_steps=22 format=3 uid="uid://dxqo13a3yn4q4"]
+[gd_scene load_steps=23 format=3 uid="uid://dxqo13a3yn4q4"]
 
 [ext_resource type="Script" path="res://Scenes/Home/Home.cs" id="1_q6al0"]
 [ext_resource type="Texture2D" uid="uid://cc3njq7jqs73n" path="res://Assets/Home/AdminLogo.png" id="2_cmbqb"]
 [ext_resource type="Texture2D" uid="uid://byb1e76h7ghm8" path="res://Assets/Home/AddLogo.png" id="3_y7qdc"]
+[ext_resource type="PackedScene" uid="uid://enai0nx8jrw8" path="res://Scenes/Home/LoginPanel/LoginPanel.tscn" id="4_yfxbf"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_y3ak2"]
 font_size = 100
@@ -198,6 +199,7 @@ theme_override_styles/normal = SubResource("StyleBoxEmpty_ys0e4")
 icon = ExtResource("2_cmbqb")
 
 [node name="CreateButton" type="Button" parent="MarginAdmin/HBoxAdmin"]
+visible = false
 custom_minimum_size = Vector2(90, 90)
 layout_mode = 2
 focus_mode = 0
@@ -444,3 +446,7 @@ theme_override_styles/hover = SubResource("StyleBoxFlat_f7hgk")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_oyxs1")
 theme_override_styles/normal = SubResource("StyleBoxFlat_uhh7q")
 text = "Non"
+
+[node name="LoginPanel" parent="." instance=ExtResource("4_yfxbf")]
+visible = false
+layout_mode = 1

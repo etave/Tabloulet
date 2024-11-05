@@ -39,6 +39,9 @@ namespace Tabloulet.Scenes.HomeNS
                 "MarginDelete/PanelDelete/MarginInsideDelete/VBoxDelete/HBoxDelete/CancelDeleteButton"
             );
             cancelDelete.Pressed += ClosePopUpDelete;
+
+            Godot.Button adminButton = GetNode<Godot.Button>("MarginAdmin/HBoxAdmin/AdminButton");
+            adminButton.Pressed += displayAdmin;
         }
 
         // Add the scenario buttons to the list
@@ -113,6 +116,7 @@ namespace Tabloulet.Scenes.HomeNS
                 editButton.AddThemeStyleboxOverride("normal", normalStyleBox);
                 editButton.AddThemeStyleboxOverride("hover", normalStyleBox);
                 editButton.AddThemeStyleboxOverride("pressed", normalStyleBox);
+                editButton.FocusMode = Control.FocusModeEnum.None;
                 buttons.Add(editButton);
 
                 // Create the delete button
@@ -132,6 +136,7 @@ namespace Tabloulet.Scenes.HomeNS
                 deleteButton.AddThemeStyleboxOverride("hover", normalStyleBox);
                 deleteButton.AddThemeStyleboxOverride("pressed", normalStyleBox);
                 deleteButton.Pressed += () => DisplayPopUpDelete(scenario.Id);
+                deleteButton.FocusMode = Control.FocusModeEnum.None;
                 buttons.Add(deleteButton);
 
                 // Add the children to the parent nodes
@@ -216,7 +221,6 @@ namespace Tabloulet.Scenes.HomeNS
                     ScenarioId = scenario.Id,
                     PageId = page.Id,
                 };
-            GD.Print(scenarioPage.ScenarioId);
 
             _database.Insert(page);
             _database.Insert(scenario);
@@ -279,6 +283,12 @@ namespace Tabloulet.Scenes.HomeNS
             );
             button.QueueFree();
             ClosePopUpDelete();
+        }
+
+        public void displayAdmin()
+        {
+            Control loginPanel = GetNode<Control>("LoginPanel");
+            loginPanel.Visible = true;
         }
 
         public override void _Process(double delta) { }
