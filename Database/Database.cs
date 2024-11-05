@@ -105,6 +105,21 @@ namespace Tabloulet.DatabaseNS
             }
         }
 
+        public bool Update(IDatabaseModelComponent obj)
+        {
+            try
+            {
+                int result = _connection.Update(obj);
+                return result > 0;
+            }
+            catch (SQLiteException e)
+            {
+                GD.PrintErr($"Error updating object: {e.Message}");
+                // TODO: Inform the user about the error in a more user-friendly way
+                return false;
+            }
+        }
+
         private void CreateTables()
         {
             var createTableStatements = new List<string>()

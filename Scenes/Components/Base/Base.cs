@@ -16,6 +16,16 @@ namespace Tabloulet.Scenes.Components.BaseNS
 
         private Builder _builder;
 
+        private bool _isMovable = isMovable;
+
+        private bool _isBeingPressed = false;
+
+        public bool IsMovable
+        {
+            get => _isMovable;
+            set => _isMovable = value;
+        }
+
         // Called when the node enters the scene tree for the first time.
         public override void _Ready()
         {
@@ -43,6 +53,7 @@ namespace Tabloulet.Scenes.Components.BaseNS
                     DragChild(drag);
                     break;
                 case InputEventScreenTouch touch:
+                    TouchChild(touch);
                     break;
                 case InputEventPinch pinch:
                     PinchChild(pinch);
@@ -58,6 +69,18 @@ namespace Tabloulet.Scenes.Components.BaseNS
         public void DragChild(InputEventScreenDrag drag)
         {
             _child.Position += drag.ScreenRelative;
+        }
+
+        public void TouchChild(InputEventScreenTouch touch)
+        {
+            _isBeingPressed = touch.Pressed;
+            if (!_isBeingPressed)
+            {
+                if (inBuilderMode && !_builder.componentsPanel.closeByUser)
+                {
+                    _builder.componentsPanel.OpenButtonPressed(false);
+                }
+            }
         }
 
         public void PinchChild(InputEventPinch pinch)
@@ -82,13 +105,27 @@ namespace Tabloulet.Scenes.Components.BaseNS
 
         private void ChildGuiInput(InputEvent @event)
         {
-            if (!isMovable)
+            if (!_isMovable)
             {
                 return;
             }
             if (inBuilderMode)
             {
                 _builder.componentsPanel.CloseButtonPressed(false);
+                switch (_child)
+                {
+                    case IComponent component:
+                        component.UpdateSizePositionRotationParameters(
+                            _child.Scale.Y,
+                            _child.Scale.X,
+                            _child.Size.X,
+                            _child.Size.Y,
+                            _child.Position.X,
+                            _child.Position.Y,
+                            _child.RotationDegrees
+                        );
+                        break;
+                }
             }
             if (_pinch != null)
             {
@@ -108,7 +145,7 @@ namespace Tabloulet.Scenes.Components.BaseNS
         public override void _Input(InputEvent @event)
         {
             base._Input(@event);
-            if (!isMovable)
+            if (!_isMovable)
             {
                 return;
             }

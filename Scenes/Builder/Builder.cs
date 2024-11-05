@@ -1,8 +1,10 @@
 using System;
+using System.Collections.Generic;
 using Godot;
 using SQLite;
 using Tabloulet.DatabaseNS;
 using Tabloulet.DatabaseNS.Models;
+using Tabloulet.Helpers;
 using Tabloulet.Scenes.BuilderNS.ComponentsPanelNS;
 using Base = Tabloulet.Scenes.Components.BaseNS.Base;
 using Button = Godot.Button;
@@ -17,7 +19,8 @@ namespace Tabloulet.Scenes.BuilderNS
     {
         private Database _database;
 
-        private Guid idScenario;
+        private Guid _idScenario;
+        private Guid _currentPage;
 
         private Control _blueprint;
         public ComponentsPanel componentsPanel;
@@ -25,6 +28,8 @@ namespace Tabloulet.Scenes.BuilderNS
 
         private Button _addTextButton;
         private Button _addImageButton;
+
+        private Dictionary<Guid, Dictionary<Guid, Control>> _pages;
 
         // Called when the node enters the scene tree for the first time.
         public override void _Ready()
@@ -49,18 +54,21 @@ namespace Tabloulet.Scenes.BuilderNS
 
             _addTextButton.Pressed += AddTextButtonPressed;
             _addImageButton.Pressed += AddImageButtonPressed;
+
+            _pages = [];
         }
 
         public void Init(Guid idScenario)
         {
-            this.idScenario = idScenario;
+            this._idScenario = idScenario;
             LoadScenario();
         }
 
         private void LoadScenario()
         {
-            Scenario scenario = _database.GetById<Scenario>(idScenario);
+            Scenario scenario = _database.GetById<Scenario>(_idScenario);
             Page firstPage = _database.GetById<Page>(scenario.PageId);
+            _currentPage = firstPage.Id;
 
             LoadPage(firstPage);
         }
@@ -112,17 +120,22 @@ namespace Tabloulet.Scenes.BuilderNS
             TextModel text =
                 new()
                 {
+                    Id = Guid.NewGuid(),
+                    PageId = _currentPage,
                     Content = $"[color=#000000]{LoremNET.Lorem.Words(30, true)}[/color]",
                     Font = null,
                     FontSize = 20,
-                    Width = 200,
-                    Height = 200,
+                    ScaleX = 1,
+                    ScaleY = 1,
+                    SizeX = 200,
+                    SizeY = 200,
                     PositionX = GetRect().Size.X / 2,
                     PositionY = GetRect().Size.Y / 2,
                     Rotation = 0,
                     IsMovable = true,
                 };
             CreateTextComponent(text);
+            _database.Insert(text);
         }
 
         private void AddImageButtonPressed()
@@ -130,15 +143,20 @@ namespace Tabloulet.Scenes.BuilderNS
             ImageModel image =
                 new()
                 {
+                    Id = Guid.NewGuid(),
+                    PageId = _currentPage,
                     Path = "",
-                    Width = 200,
-                    Height = 200,
+                    ScaleX = 1,
+                    ScaleY = 1,
+                    SizeX = 200,
+                    SizeY = 200,
                     PositionX = GetRect().Size.X / 2,
                     PositionY = GetRect().Size.Y / 2,
                     Rotation = 0,
                     IsMovable = true,
                 };
             CreateImageComponent(image);
+            _database.Insert(image);
         }
 
         private static Base CreateBase(
@@ -158,14 +176,17 @@ namespace Tabloulet.Scenes.BuilderNS
                     text.Content,
                     text.Font,
                     text.FontSize,
-                    text.Width,
-                    text.Height,
+                    text.ScaleX,
+                    text.ScaleY,
+                    text.SizeX,
+                    text.SizeY,
                     text.PositionX,
                     text.PositionY,
-                    text.Rotation
+                    text.Rotation,
+                    text.IsMovable
                 );
             Base textBase = CreateBase(textComponent, text.IsMovable, true, this);
-            AddComponent(textBase);
+            AddComponent(text.Id, textBase, textComponent);
         }
 
         private void CreateImageComponent(ImageModel image)
@@ -173,19 +194,27 @@ namespace Tabloulet.Scenes.BuilderNS
             ImageComponent imageComponent =
                 new(
                     image.Path,
-                    image.Width,
-                    image.Height,
+                    image.ScaleX,
+                    image.ScaleY,
+                    image.SizeX,
+                    image.SizeY,
                     image.PositionX,
                     image.PositionY,
-                    image.Rotation
+                    image.Rotation,
+                    image.IsMovable
                 );
             Base imageBase = CreateBase(imageComponent, image.IsMovable, true, this);
-            AddComponent(imageBase);
+            AddComponent(image.Id, imageBase, imageComponent);
         }
 
-        private void AddComponent(Base component)
+        private void AddComponent(Guid id, Base baseComponent, Control component)
         {
-            _blueprint.AddChild(component);
+            _blueprint.AddChild(baseComponent);
+            if (!_pages.ContainsKey(_currentPage))
+            {
+                _pages[_currentPage] = [];
+            }
+            _pages[_currentPage][id] = component;
         }
 
         private void ExitButtonPressed()
