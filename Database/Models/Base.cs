@@ -15,6 +15,7 @@ namespace Tabloulet.DatabaseNS.Models
         public float PositionX { get; set; }
         public float PositionY { get; set; }
         public float Rotation { get; set; }
+        public int ZIndex { get; set; }
         public bool IsMovable { get; set; }
     }
 }

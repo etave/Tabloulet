@@ -15,6 +15,7 @@ namespace Tabloulet.Scenes.Components.ImageNS
         float positionX,
         float positionY,
         float rotationDeg,
+        int index,
         bool isMovable
     ) : TextureRect, IComponent
     {
@@ -28,6 +29,7 @@ namespace Tabloulet.Scenes.Components.ImageNS
         private float _positionX = positionX;
         private float _positionY = positionY;
         private float _rotationDeg = rotationDeg;
+        private int _index = index;
         private bool _isMovable = isMovable;
 
         public string Path
@@ -78,6 +80,12 @@ namespace Tabloulet.Scenes.Components.ImageNS
             set => _rotationDeg = value;
         }
 
+        public int Index
+        {
+            get => _index;
+            set => _index = value;
+        }
+
         public bool IsMovable
         {
             get => _isMovable;
@@ -109,6 +117,7 @@ namespace Tabloulet.Scenes.Components.ImageNS
             PivotOffset = Size / 2;
             RotationDegrees = _rotationDeg;
             Size = new Vector2(_sizeX, _sizeY);
+            ZIndex = _index;
         }
 
         private void LoadImage(string path)
@@ -149,7 +158,8 @@ namespace Tabloulet.Scenes.Components.ImageNS
             float sizeY,
             float positionX,
             float positionY,
-            float rotationDeg
+            float rotationDeg,
+            int index
         )
         {
             ScaleX = scaleX;
@@ -159,6 +169,7 @@ namespace Tabloulet.Scenes.Components.ImageNS
             PositionX = positionX;
             PositionY = positionY;
             RotationDeg = rotationDeg;
+            Index = index;
         }
     }
 }

@@ -1,9 +1,9 @@
 using System;
 using Godot;
 
-namespace Tabloulet.Scenes.BuilderNS.ComponentsPanelNS
+namespace Tabloulet.Scenes.BuilderNS.ComponentPanelsNS
 {
-    public partial class ComponentsPanel : Control
+    public partial class CreateComponentPanel : Control
     {
         private Panel _openPanel;
         private Panel _closePanel;

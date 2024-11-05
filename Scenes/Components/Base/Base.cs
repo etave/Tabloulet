@@ -76,9 +76,9 @@ namespace Tabloulet.Scenes.Components.BaseNS
             _isBeingPressed = touch.Pressed;
             if (!_isBeingPressed)
             {
-                if (inBuilderMode && !_builder.componentsPanel.closeByUser)
+                if (inBuilderMode && !_builder.createComponentPanel.closeByUser)
                 {
-                    _builder.componentsPanel.OpenButtonPressed(false);
+                    _builder.createComponentPanel.OpenButtonPressed(false);
                 }
             }
         }
@@ -111,7 +111,7 @@ namespace Tabloulet.Scenes.Components.BaseNS
             }
             if (inBuilderMode)
             {
-                _builder.componentsPanel.CloseButtonPressed(false);
+                _builder.createComponentPanel.CloseButtonPressed(false);
                 switch (_child)
                 {
                     case IComponent component:
@@ -122,7 +122,8 @@ namespace Tabloulet.Scenes.Components.BaseNS
                             _child.Size.Y,
                             _child.Position.X,
                             _child.Position.Y,
-                            _child.RotationDegrees
+                            _child.RotationDegrees,
+                            _child.ZIndex
                         );
                         break;
                 }
@@ -157,9 +158,9 @@ namespace Tabloulet.Scenes.Components.BaseNS
             {
                 _twist = @event;
             }
-            else if (inBuilderMode && !_builder.componentsPanel.closeByUser)
+            else if (inBuilderMode && !_builder.createComponentPanel.closeByUser)
             {
-                _builder.componentsPanel.OpenButtonPressed(false);
+                _builder.createComponentPanel.OpenButtonPressed(false);
             }
         }
     }

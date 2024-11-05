@@ -9,6 +9,7 @@
         float PositionX { get; set; }
         float PositionY { get; set; }
         float RotationDeg { get; set; }
+        int Index { get; set; }
         void UpdateSizePositionRotationParameters(
             float scaleX,
             float scaleY,
@@ -16,7 +17,8 @@
             float sizeY,
             float positionX,
             float positionY,
-            float rotationDeg
+            float rotationDeg,
+            int index
         );
     }
 }

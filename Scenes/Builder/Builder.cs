@@ -2,7 +2,9 @@ using System;
 using System.Collections.Generic;
 using Godot;
 using Tabloulet.DatabaseNS;
-using Tabloulet.Scenes.BuilderNS.ComponentsPanelNS;
+using Tabloulet.DatabaseNS.Models;
+using Tabloulet.Helpers;
+using Tabloulet.Scenes.BuilderNS.ComponentPanelsNS;
 using Base = Tabloulet.Scenes.Components.BaseNS.Base;
 using Button = Godot.Button;
 using ImageModel = Tabloulet.DatabaseNS.Models.Image;
@@ -18,7 +20,7 @@ namespace Tabloulet.Scenes.BuilderNS
         private Guid _currentPage;
 
         public Control _blueprint;
-        public ComponentsPanel componentsPanel;
+        public CreateComponentPanel createComponentPanel;
         private Button _exitButton;
 
         private Button _addTextButton;
@@ -37,15 +39,15 @@ namespace Tabloulet.Scenes.BuilderNS
 
             _blueprint = GetNode<Control>("Blueprint");
 
-            componentsPanel = GetNode<ComponentsPanel>("ComponentsPanel");
+            createComponentPanel = GetNode<CreateComponentPanel>("CreateComponentPanel");
             _exitButton = GetNode<Button>("ExitPanel/MarginContainer/Button");
 
             _exitButton.Pressed += ExitButtonPressed;
 
-            _addTextButton = componentsPanel.GetNode<Button>(
+            _addTextButton = createComponentPanel.GetNode<Button>(
                 "OpenPanel/VBoxContainer/TextMarginContainer/PanelContainer/GridContainer/MarginContainer/Button"
             );
-            _addImageButton = componentsPanel.GetNode<Button>(
+            _addImageButton = createComponentPanel.GetNode<Button>(
                 "OpenPanel/VBoxContainer/ImageMarginContainer/PanelContainer/GridContainer/MarginContainer/Button"
             );
 
@@ -80,6 +82,7 @@ namespace Tabloulet.Scenes.BuilderNS
                     PositionX = GetRect().Size.X / 2,
                     PositionY = GetRect().Size.Y / 2,
                     Rotation = 0,
+                    ZIndex = 1,
                     IsMovable = true,
                 };
             _scenarioLoader.CreateTextComponent(text);
@@ -101,6 +104,7 @@ namespace Tabloulet.Scenes.BuilderNS
                     PositionX = GetRect().Size.X / 2,
                     PositionY = GetRect().Size.Y / 2,
                     Rotation = 0,
+                    ZIndex = 1,
                     IsMovable = true,
                 };
             _scenarioLoader.CreateImageComponent(image);

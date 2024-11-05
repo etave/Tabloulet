@@ -95,6 +95,7 @@ namespace Tabloulet.Scenes
                     text.PositionX,
                     text.PositionY,
                     text.Rotation,
+                    text.ZIndex,
                     text.IsMovable
                 );
             BaseComponent textBase = CreateBase(textComponent, text.IsMovable, display);
@@ -113,6 +114,7 @@ namespace Tabloulet.Scenes
                     image.PositionX,
                     image.PositionY,
                     image.Rotation,
+                    image.ZIndex,
                     image.IsMovable
                 );
             BaseComponent imageBase = CreateBase(imageComponent, image.IsMovable, display);

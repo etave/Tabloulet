@@ -35,6 +35,7 @@ namespace Tabloulet.Helpers
                 PositionX = component.PositionX,
                 PositionY = component.PositionY,
                 Rotation = component.RotationDeg,
+                ZIndex = component.Index,
                 IsMovable = component.IsMovable,
             };
         }
@@ -52,6 +53,7 @@ namespace Tabloulet.Helpers
                 PositionX = component.PositionX,
                 PositionY = component.PositionY,
                 Rotation = component.RotationDeg,
+                ZIndex = component.Index,
                 IsMovable = component.IsMovable,
             };
         }

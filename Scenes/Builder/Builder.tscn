@@ -1,7 +1,7 @@
 [gd_scene load_steps=4 format=3 uid="uid://duy6rbl3spnb0"]
 
 [ext_resource type="Script" path="res://Scenes/Builder/Builder.cs" id="1_o7hen"]
-[ext_resource type="PackedScene" uid="uid://cydpdu71586wm" path="res://Scenes/Builder/ComponentsPanel/ComponentsPanel.tscn" id="2_hxg7v"]
+[ext_resource type="PackedScene" uid="uid://cydpdu71586wm" path="res://Scenes/Builder/ComponentPanels/CreateComponentPanel.tscn" id="2_hxg7v"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_w4sdb"]
 bg_color = Color(1, 1, 1, 1)
@@ -32,7 +32,8 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="ComponentsPanel" parent="." instance=ExtResource("2_hxg7v")]
+[node name="CreateComponentPanel" parent="." instance=ExtResource("2_hxg7v")]
+z_index = 100
 layout_mode = 2
 anchors_preset = 0
 anchor_right = 0.0
@@ -43,6 +44,7 @@ offset_right = 420.0
 offset_bottom = 820.0
 
 [node name="ExitPanel" type="Panel" parent="."]
+z_index = 100
 layout_mode = 1
 anchors_preset = 2
 anchor_top = 1.0

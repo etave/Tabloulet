@@ -1,6 +1,6 @@
 [gd_scene load_steps=9 format=3 uid="uid://cydpdu71586wm"]
 
-[ext_resource type="Script" path="res://Scenes/Builder/ComponentsPanel/ComponentsPanel.cs" id="1_1ksya"]
+[ext_resource type="Script" path="res://Scenes/Builder/ComponentPanels/CreateComponentPanel.cs" id="1_40br7"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_nvgwx"]
 bg_color = Color(1, 1, 1, 1)
@@ -46,7 +46,7 @@ corner_radius_bottom_left = 30
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_kvuja"]
 draw_center = false
 
-[node name="ComponentsPanel" type="Control"]
+[node name="CreateComponentPanel" type="Control"]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -56,7 +56,7 @@ offset_bottom = -280.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
-script = ExtResource("1_1ksya")
+script = ExtResource("1_40br7")
 
 [node name="OpenPanel" type="Panel" parent="."]
 layout_mode = 1
@@ -74,7 +74,6 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-scale = Vector2(1.00133, 1)
 
 [node name="PanelContainer" type="PanelContainer" parent="OpenPanel/VBoxContainer"]
 layout_mode = 2
