@@ -1,33 +1,30 @@
 using System;
 using System.Collections.Generic;
 using Godot;
-using SQLite;
 using Tabloulet.DatabaseNS;
-using Tabloulet.DatabaseNS.Models;
-using Tabloulet.Helpers;
 using Tabloulet.Scenes.BuilderNS.ComponentsPanelNS;
 using Base = Tabloulet.Scenes.Components.BaseNS.Base;
 using Button = Godot.Button;
-using ImageComponent = Tabloulet.Scenes.Components.ImageNS.Image;
 using ImageModel = Tabloulet.DatabaseNS.Models.Image;
-using TextComponent = Tabloulet.Scenes.Components.TextNS.Text;
 using TextModel = Tabloulet.DatabaseNS.Models.Text;
 
 namespace Tabloulet.Scenes.BuilderNS
 {
-    public partial class Builder : Control
+    public partial class Builder : Control, IDisplay
     {
         private Database _database;
 
         private Guid _idScenario;
         private Guid _currentPage;
 
-        private Control _blueprint;
+        public Control _blueprint;
         public ComponentsPanel componentsPanel;
         private Button _exitButton;
 
         private Button _addTextButton;
         private Button _addImageButton;
+
+        private ScenarioLoader _scenarioLoader;
 
         private Dictionary<Guid, Dictionary<Guid, Control>> _pages;
 
@@ -55,64 +52,15 @@ namespace Tabloulet.Scenes.BuilderNS
             _addTextButton.Pressed += AddTextButtonPressed;
             _addImageButton.Pressed += AddImageButtonPressed;
 
+            _scenarioLoader = new ScenarioLoader(_database, this);
+
             _pages = [];
         }
 
         public void Init(Guid idScenario)
         {
             this._idScenario = idScenario;
-            LoadScenario();
-        }
-
-        private void LoadScenario()
-        {
-            Scenario scenario = _database.GetById<Scenario>(_idScenario);
-            Page firstPage = _database.GetById<Page>(scenario.PageId);
-            _currentPage = firstPage.Id;
-
-            LoadPage(firstPage);
-        }
-
-        private void LoadPage(Page page)
-        {
-            Control pageControl =
-                new() { Name = page.Id.ToString(), Size = _blueprint.GetRect().Size };
-            ColorRect background =
-                new()
-                {
-                    Name = "Background",
-                    Color = new Color("#FFFFFF"),
-                    AnchorRight = 1,
-                    AnchorBottom = 1,
-                };
-            if (page.BackgroundColor != null)
-            {
-                background.Color = new Color(page.BackgroundColor);
-            }
-            pageControl.AddChild(background);
-            _blueprint.AddChild(pageControl);
-
-            LoadComponents<TextModel>(page.Id);
-            LoadComponents<ImageModel>(page.Id);
-        }
-
-        private void LoadComponents<T>(Guid pageId)
-            where T : IDatabaseModelComponent, new()
-        {
-            TableQuery<T> query = _database.GetTableComponentsByPageId<T>(pageId);
-
-            foreach (T component in query)
-            {
-                switch (component)
-                {
-                    case TextModel text:
-                        CreateTextComponent(text);
-                        break;
-                    case ImageModel image:
-                        CreateImageComponent(image);
-                        break;
-                }
-            }
+            _currentPage = _scenarioLoader.LoadScenario(idScenario);
         }
 
         private void AddTextButtonPressed()
@@ -134,7 +82,7 @@ namespace Tabloulet.Scenes.BuilderNS
                     Rotation = 0,
                     IsMovable = true,
                 };
-            CreateTextComponent(text);
+            _scenarioLoader.CreateTextComponent(text);
             _database.Insert(text);
         }
 
@@ -155,66 +103,31 @@ namespace Tabloulet.Scenes.BuilderNS
                     Rotation = 0,
                     IsMovable = true,
                 };
-            CreateImageComponent(image);
+            _scenarioLoader.CreateImageComponent(image);
             _database.Insert(image);
         }
 
-        private static Base CreateBase(
-            Control node,
-            bool isMovable,
-            bool inBuilderMode,
-            Builder builder
-        )
+        public Control GetDisplayRoot()
         {
-            return new Base(node, isMovable, inBuilderMode, builder);
+            return _blueprint;
         }
 
-        private void CreateTextComponent(TextModel text)
+        public void AddPage(Control page)
         {
-            TextComponent textComponent =
-                new(
-                    text.Content,
-                    text.Font,
-                    text.FontSize,
-                    text.ScaleX,
-                    text.ScaleY,
-                    text.SizeX,
-                    text.SizeY,
-                    text.PositionX,
-                    text.PositionY,
-                    text.Rotation,
-                    text.IsMovable
-                );
-            Base textBase = CreateBase(textComponent, text.IsMovable, true, this);
-            AddComponent(text.Id, textBase, textComponent);
+            _blueprint.AddChild(page);
         }
 
-        private void CreateImageComponent(ImageModel image)
+        public void AddComponent(Guid idPage, Guid idComponent, Base baseComponent)
         {
-            ImageComponent imageComponent =
-                new(
-                    image.Path,
-                    image.ScaleX,
-                    image.ScaleY,
-                    image.SizeX,
-                    image.SizeY,
-                    image.PositionX,
-                    image.PositionY,
-                    image.Rotation,
-                    image.IsMovable
-                );
-            Base imageBase = CreateBase(imageComponent, image.IsMovable, true, this);
-            AddComponent(image.Id, imageBase, imageComponent);
-        }
-
-        private void AddComponent(Guid id, Base baseComponent, Control component)
-        {
-            _blueprint.AddChild(baseComponent);
-            if (!_pages.ContainsKey(_currentPage))
+            Control page = _blueprint.GetNode<Control>(idPage.ToString());
+            page.AddChild(baseComponent);
+            if (!_pages.TryGetValue(idPage, out Dictionary<Guid, Control> value))
             {
-                _pages[_currentPage] = [];
+                value = ([]);
+                _pages[idPage] = value;
             }
-            _pages[_currentPage][id] = component;
+
+            value[idComponent] = baseComponent.GetChild<Control>(0);
         }
 
         private void ExitButtonPressed()
