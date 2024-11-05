@@ -22,9 +22,10 @@ namespace Tabloulet.Helpers
         public const string VideoTable = "Video";
         public const string AudioTable = "Audio";
         public const string ModelTable = "Model";
+        public const string ScenarioPageTable = "ScenarioPage";
 
         public const string CreateScenarioTable =
-            $"CREATE TABLE IF NOT EXISTS {ScenarioTable} (Id TEXT, PageId TEXT NOT NULL, Name TEXT NOT NULL, Description TEXT, FOREIGN KEY(PageId) REFERENCES {PageTable}(Id))";
+            $"CREATE TABLE IF NOT EXISTS {ScenarioTable} (Id TEXT PRIMARY KEY, PageId TEXT NOT NULL, Name TEXT NOT NULL, Description TEXT, FOREIGN KEY(PageId) REFERENCES {PageTable}(Id))";
         public const string CreatePageTable =
             $"CREATE TABLE IF NOT EXISTS {PageTable} (Id TEXT PRIMARY KEY, BackgroundColor TEXT)";
         public const string CreateButtonTable =
@@ -39,5 +40,7 @@ namespace Tabloulet.Helpers
             $"CREATE TABLE IF NOT EXISTS {AudioTable} (Id TEXT PRIMARY KEY, PageId TEXT NOT NULL, Path TEXT NOT NULL, ScaleX REAL NOT NULL, ScaleY REAL NOT NULL, SizeX REAL NOT NULL, SizeY REAL NOT NULL, PositionX REAL NOT NULL, PositionY REAL NOT NULL, Rotation REAL NOT NULL, ZIndex INTEGER NOT NULL, IsMovable BOOLEAN NOT NULL, FOREIGN KEY(PageId) REFERENCES {PageTable}(Id))";
         public const string CreateModelTable =
             $"CREATE TABLE IF NOT EXISTS {ModelTable} (Id TEXT PRIMARY KEY, PageId TEXT NOT NULL, Path TEXT NOT NULL, ScaleX REAL NOT NULL, ScaleY REAL NOT NULL, SizeX REAL NOT NULL, SizeY REAL NOT NULL, PositionX REAL NOT NULL, PositionY REAL NOT NULL, Rotation REAL NOT NULL, ZIndex INTEGER NOT NULL, IsMovable BOOLEAN NOT NULL, FOREIGN KEY(PageId) REFERENCES {PageTable}(Id))";
+        public const string CreateScenarioPageTable =
+            $"CREATE TABLE IF NOT EXISTS {ScenarioPageTable} (Id TEXT PRIMARY KEY, ScenarioId TEXT NOT NULL, PageId TEXT NOT NULL, FOREIGN KEY(ScenarioId) REFERENCES {ScenarioTable}(Id), FOREIGN KEY(PageId) REFERENCES {PageTable}(Id))";
     }
 }

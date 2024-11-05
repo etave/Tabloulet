@@ -90,6 +90,51 @@ namespace Tabloulet.DatabaseNS
             return _connection.Table<T>().Where(x => x.PageId == pageId);
         }
 
+        public SQLite.TableQuery<T> GetAllByType<T>()
+            where T : IDatabaseModel, new()
+        {
+            try
+            {
+                return _connection.Table<T>();
+            }
+            catch (SQLiteException e)
+            {
+                GD.PrintErr($"Error getting object by id: {e.Message}");
+                // TODO: Inform the user about the error in a more user-friendly way
+                return null;
+            }
+        }
+
+        public List<Page> GetPagesByScenario(Guid scenarioId)
+        {
+            SQLite.TableQuery<ScenarioPage> scenarioPages = _connection
+                .Table<ScenarioPage>()
+                .Where(x => x.ScenarioId == scenarioId);
+            List<Page> pages = [];
+            foreach (var page in scenarioPages)
+            {
+                pages.Add(GetById<Page>(page.PageId) as Page);
+            }
+            return pages;
+        }
+
+        public List<IDatabaseModel> GetElementsByPage(Guid pageId)
+        {
+            List<IDatabaseModel> elements = new List<IDatabaseModel>();
+            elements.AddRange(_connection.Table<Models.Button>().Where(x => x.PageId == pageId));
+            elements.AddRange(_connection.Table<Models.Text>().Where(x => x.PageId == pageId));
+            elements.AddRange(_connection.Table<Models.Image>().Where(x => x.PageId == pageId));
+            elements.AddRange(_connection.Table<Models.Video>().Where(x => x.PageId == pageId));
+            elements.AddRange(_connection.Table<Models.Audio>().Where(x => x.PageId == pageId));
+            elements.AddRange(_connection.Table<Models.Model>().Where(x => x.PageId == pageId));
+            return elements;
+        }
+
+        public ScenarioPage GetScenarioPageByPage(Guid pageId)
+        {
+            return _connection.Table<ScenarioPage>().FirstOrDefault(x => x.PageId == pageId);
+        }
+
         public bool Update(IDatabaseModel obj)
         {
             try
@@ -132,6 +177,7 @@ namespace Tabloulet.DatabaseNS
                 Constants.CreateVideoTable,
                 Constants.CreateAudioTable,
                 Constants.CreateModelTable,
+                Constants.CreateScenarioPageTable,
             };
 
             foreach (var statement in createTableStatements)
