@@ -84,6 +84,12 @@ namespace Tabloulet.DatabaseNS
             }
         }
 
+        public TableQuery<T> GetTableComponentsByPageId<T>(Guid pageId)
+            where T : IDatabaseModelComponent, new()
+        {
+            return _connection.Table<T>().Where(x => x.PageId == pageId);
+        }
+
         public SQLite.TableQuery<T> GetAllByType<T>()
             where T : IDatabaseModel, new()
         {
@@ -130,6 +136,21 @@ namespace Tabloulet.DatabaseNS
         }
 
         public bool Update(IDatabaseModel obj)
+        {
+            try
+            {
+                int result = _connection.Update(obj);
+                return result > 0;
+            }
+            catch (SQLiteException e)
+            {
+                GD.PrintErr($"Error updating object: {e.Message}");
+                // TODO: Inform the user about the error in a more user-friendly way
+                return false;
+            }
+        }
+
+        public bool Update(IDatabaseModelComponent obj)
         {
             try
             {
