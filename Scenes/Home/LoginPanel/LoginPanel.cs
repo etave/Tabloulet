@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using DotNetEnv;
 using Godot;
+using Tabloulet.Helpers;
 using Tabloulet.Scenes.HomeNS;
 
 public partial class LoginPanel : Control
@@ -16,6 +18,8 @@ public partial class LoginPanel : Control
     List<Button> numberButtons = [];
     Color originalTextColor;
     Button quitButton;
+    Timer timer;
+    Guid passwordGuid;
 
     public override void _Ready()
     {
@@ -54,6 +58,7 @@ public partial class LoginPanel : Control
 
         Env.Load(); // Charger le fichier .env
         string myPassword = Env.GetString("PASSWORD"); // Récupérer la valeur du mot de passe
+        passwordGuid = new(Env.GetString("PASSWORD_RFID")); // Récupérer la valeur du GUID
 
         // Connecter le bouton "BACKSPACE" à la méthode de gestion
         backspaceButton.Pressed += () => Backspace();
@@ -69,6 +74,11 @@ public partial class LoginPanel : Control
 
         // Connecter le bouton "QUIT" à la méthode de gestion
         quitButton.Pressed += OnQuitButtonPressed;
+
+        // Timer pour la lecture de la carte RFID
+        timer = GetNode<Timer>("RFIDTimer");
+        timer.Timeout += OnRFIDTimerTimeout;
+        timer.Start();
     }
 
     public List<Button> GetMyButtons(GridContainer gridContainer)
@@ -152,5 +162,22 @@ public partial class LoginPanel : Control
     private void OnQuitButtonPressed()
     {
         Visible = false;
+    }
+
+    private void OnRFIDTimerTimeout()
+    {
+        RFID.GetUIDAsync()
+            .ContinueWith(
+                task =>
+                {
+                    if (task.Result == passwordGuid)
+                    {
+                        Visible = false;
+                        var home = GetParent<Control>() as Home;
+                        home.ChangeToAdmin();
+                    }
+                },
+                TaskScheduler.FromCurrentSynchronizationContext()
+            );
     }
 }
