@@ -441,3 +441,5 @@ theme_override_styles/normal = SubResource("StyleBoxFlat_6s8ns")
 text = "VALIDER"
 expand_icon = true
 language = "fr"
+
+[node name="RFIDTimer" type="Timer" parent="."]
