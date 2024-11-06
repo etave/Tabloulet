@@ -170,5 +170,11 @@ namespace Tabloulet.Scenes.Components.TextNS
             RotationDeg = rotationDeg;
             Index = index;
         }
+
+        public override void _Process(double delta)
+        {
+            base._Process(delta);
+            ScrollActive = true;
+        }
     }
 }

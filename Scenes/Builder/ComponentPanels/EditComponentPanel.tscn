@@ -1,0 +1,399 @@
+[gd_scene load_steps=10 format=3 uid="uid://bmhr54bx5wrcy"]
+
+[ext_resource type="Script" path="res://Scenes/Builder/ComponentPanels/EditComponentPanel.cs" id="1_w5y7o"]
+[ext_resource type="Texture2D" uid="uid://crubptjn3tor1" path="res://Assets/Builder/UpDown.png" id="2_s03ap"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_a6hfi"]
+bg_color = Color(1, 1, 1, 1)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0, 0, 0, 1)
+corner_radius_top_left = 30
+corner_radius_top_right = 30
+corner_radius_bottom_right = 30
+corner_radius_bottom_left = 30
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_1ch06"]
+bg_color = Color(0.6, 0.6, 0.6, 0)
+draw_center = false
+border_width_bottom = 3
+border_color = Color(0, 0, 0, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_jq6yl"]
+content_margin_left = 9.0
+bg_color = Color(0.6, 0.6, 0.6, 0)
+draw_center = false
+border_width_left = 3
+border_color = Color(0, 0, 0, 1)
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_w2tfm"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_wr3xh"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_dw4o3"]
+bg_color = Color(1, 0, 0, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+expand_margin_left = 10.0
+expand_margin_top = 10.0
+expand_margin_right = 10.0
+expand_margin_bottom = 10.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_wlqy7"]
+draw_center = false
+
+[node name="EditComponentPanel" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 1520.0
+offset_bottom = -280.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_w5y7o")
+
+[node name="OpenPanel" type="Panel" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_a6hfi")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="OpenPanel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="PanelContainer" type="PanelContainer" parent="OpenPanel/VBoxContainer"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_1ch06")
+
+[node name="MarginContainer" type="MarginContainer" parent="OpenPanel/VBoxContainer/PanelContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 120
+
+[node name="Label" type="Label" parent="OpenPanel/VBoxContainer/PanelContainer/MarginContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 35
+text = "Édition"
+
+[node name="MarginContainer2" type="MarginContainer" parent="OpenPanel/VBoxContainer/PanelContainer"]
+layout_mode = 2
+size_flags_horizontal = 8
+theme_override_constants/margin_right = 15
+
+[node name="PanelContainer" type="PanelContainer" parent="OpenPanel/VBoxContainer/PanelContainer/MarginContainer2"]
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_styles/panel = SubResource("StyleBoxFlat_jq6yl")
+
+[node name="Button" type="Button" parent="OpenPanel/VBoxContainer/PanelContainer/MarginContainer2/PanelContainer"]
+layout_mode = 2
+size_flags_horizontal = 8
+focus_mode = 0
+theme_override_colors/font_color = Color(1, 0, 0, 1)
+theme_override_font_sizes/font_size = 30
+text = "🗙"
+flat = true
+
+[node name="HSeparator" type="HSeparator" parent="OpenPanel/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 30
+theme_override_styles/separator = SubResource("StyleBoxEmpty_w2tfm")
+
+[node name="PageMarginContainer" type="MarginContainer" parent="OpenPanel/VBoxContainer"]
+visible = false
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_right = 10
+
+[node name="VBoxContainer" type="VBoxContainer" parent="OpenPanel/VBoxContainer/PageMarginContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="OpenPanel/VBoxContainer/PageMarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 20
+text = "Éditer la couleur de l'arrière plan :"
+horizontal_alignment = 1
+
+[node name="ColorPicker" type="ColorPicker" parent="OpenPanel/VBoxContainer/PageMarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 0
+can_add_swatches = false
+sampler_visible = false
+color_modes_visible = false
+presets_visible = false
+
+[node name="BaseMarginContainer" type="MarginContainer" parent="OpenPanel/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_right = 10
+
+[node name="VBoxContainer" type="VBoxContainer" parent="OpenPanel/VBoxContainer/BaseMarginContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="OpenPanel/VBoxContainer/BaseMarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 20
+text = "Éditer les paramètres du composant :"
+horizontal_alignment = 1
+
+[node name="HSeparator" type="HSeparator" parent="OpenPanel/VBoxContainer/BaseMarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 10
+theme_override_styles/separator = SubResource("StyleBoxEmpty_wr3xh")
+
+[node name="PositionVBoxContainer" type="VBoxContainer" parent="OpenPanel/VBoxContainer/BaseMarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="Label" type="Label" parent="OpenPanel/VBoxContainer/BaseMarginContainer/VBoxContainer/PositionVBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 20
+text = "Position"
+horizontal_alignment = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="OpenPanel/VBoxContainer/BaseMarginContainer/VBoxContainer/PositionVBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_constants/separation = 40
+
+[node name="XHBoxContainer" type="HBoxContainer" parent="OpenPanel/VBoxContainer/BaseMarginContainer/VBoxContainer/PositionVBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="Label" type="Label" parent="OpenPanel/VBoxContainer/BaseMarginContainer/VBoxContainer/PositionVBoxContainer/HBoxContainer/XHBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 20
+text = "X :"
+
+[node name="XSpinBox" type="SpinBox" parent="OpenPanel/VBoxContainer/BaseMarginContainer/VBoxContainer/PositionVBoxContainer/HBoxContainer/XHBoxContainer"]
+layout_mode = 2
+theme_override_icons/updown = ExtResource("2_s03ap")
+min_value = -999999.0
+max_value = 999999.0
+suffix = "px"
+
+[node name="YHBoxContainer" type="HBoxContainer" parent="OpenPanel/VBoxContainer/BaseMarginContainer/VBoxContainer/PositionVBoxContainer/HBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="OpenPanel/VBoxContainer/BaseMarginContainer/VBoxContainer/PositionVBoxContainer/HBoxContainer/YHBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 20
+text = "Y :"
+
+[node name="YSpinBox" type="SpinBox" parent="OpenPanel/VBoxContainer/BaseMarginContainer/VBoxContainer/PositionVBoxContainer/HBoxContainer/YHBoxContainer"]
+layout_mode = 2
+theme_override_icons/updown = ExtResource("2_s03ap")
+min_value = -999999.0
+max_value = 999999.0
+suffix = "px"
+
+[node name="HSeparator2" type="HSeparator" parent="OpenPanel/VBoxContainer/BaseMarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 10
+theme_override_styles/separator = SubResource("StyleBoxEmpty_wr3xh")
+
+[node name="SizeVBoxContainer" type="VBoxContainer" parent="OpenPanel/VBoxContainer/BaseMarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="Label" type="Label" parent="OpenPanel/VBoxContainer/BaseMarginContainer/VBoxContainer/SizeVBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 20
+text = "Taille"
+horizontal_alignment = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="OpenPanel/VBoxContainer/BaseMarginContainer/VBoxContainer/SizeVBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_constants/separation = 40
+
+[node name="XHBoxContainer" type="HBoxContainer" parent="OpenPanel/VBoxContainer/BaseMarginContainer/VBoxContainer/SizeVBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="Label" type="Label" parent="OpenPanel/VBoxContainer/BaseMarginContainer/VBoxContainer/SizeVBoxContainer/HBoxContainer/XHBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 20
+text = "X :"
+
+[node name="XSpinBox" type="SpinBox" parent="OpenPanel/VBoxContainer/BaseMarginContainer/VBoxContainer/SizeVBoxContainer/HBoxContainer/XHBoxContainer"]
+layout_mode = 2
+theme_override_icons/updown = ExtResource("2_s03ap")
+min_value = -999999.0
+max_value = 999999.0
+suffix = "px"
+
+[node name="YHBoxContainer" type="HBoxContainer" parent="OpenPanel/VBoxContainer/BaseMarginContainer/VBoxContainer/SizeVBoxContainer/HBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="OpenPanel/VBoxContainer/BaseMarginContainer/VBoxContainer/SizeVBoxContainer/HBoxContainer/YHBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 20
+text = "Y :"
+
+[node name="YSpinBox" type="SpinBox" parent="OpenPanel/VBoxContainer/BaseMarginContainer/VBoxContainer/SizeVBoxContainer/HBoxContainer/YHBoxContainer"]
+layout_mode = 2
+theme_override_icons/updown = ExtResource("2_s03ap")
+min_value = -999999.0
+max_value = 999999.0
+suffix = "px"
+
+[node name="HSeparator3" type="HSeparator" parent="OpenPanel/VBoxContainer/BaseMarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 10
+theme_override_styles/separator = SubResource("StyleBoxEmpty_wr3xh")
+
+[node name="RotationVBoxContainer" type="VBoxContainer" parent="OpenPanel/VBoxContainer/BaseMarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="OpenPanel/VBoxContainer/BaseMarginContainer/VBoxContainer/RotationVBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 20
+text = "Rotation"
+horizontal_alignment = 1
+
+[node name="MarginContainer" type="MarginContainer" parent="OpenPanel/VBoxContainer/BaseMarginContainer/VBoxContainer/RotationVBoxContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 50
+theme_override_constants/margin_right = 50
+
+[node name="RotationSlider" type="HSlider" parent="OpenPanel/VBoxContainer/BaseMarginContainer/VBoxContainer/RotationVBoxContainer/MarginContainer"]
+layout_mode = 2
+max_value = 360.0
+
+[node name="HSeparator4" type="HSeparator" parent="OpenPanel/VBoxContainer/BaseMarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 10
+theme_override_styles/separator = SubResource("StyleBoxEmpty_wr3xh")
+
+[node name="ZIndexIsMovableHBoxContainer" type="HBoxContainer" parent="OpenPanel/VBoxContainer/BaseMarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_constants/separation = 40
+
+[node name="ZIndexVBoxContainer" type="VBoxContainer" parent="OpenPanel/VBoxContainer/BaseMarginContainer/VBoxContainer/ZIndexIsMovableHBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="Label" type="Label" parent="OpenPanel/VBoxContainer/BaseMarginContainer/VBoxContainer/ZIndexIsMovableHBoxContainer/ZIndexVBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 20
+text = "Z-Index"
+horizontal_alignment = 1
+
+[node name="ZIndexSpinBox" type="SpinBox" parent="OpenPanel/VBoxContainer/BaseMarginContainer/VBoxContainer/ZIndexIsMovableHBoxContainer/ZIndexVBoxContainer"]
+layout_mode = 2
+theme_override_icons/updown = ExtResource("2_s03ap")
+min_value = 1.0
+max_value = 99.0
+value = 1.0
+
+[node name="IsMovableVBoxContainer" type="VBoxContainer" parent="OpenPanel/VBoxContainer/BaseMarginContainer/VBoxContainer/ZIndexIsMovableHBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="Label" type="Label" parent="OpenPanel/VBoxContainer/BaseMarginContainer/VBoxContainer/ZIndexIsMovableHBoxContainer/IsMovableVBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 20
+text = "Mobile ?"
+horizontal_alignment = 1
+
+[node name="IsMovableCheckBox" type="CheckBox" parent="OpenPanel/VBoxContainer/BaseMarginContainer/VBoxContainer/ZIndexIsMovableHBoxContainer/IsMovableVBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+
+[node name="HSeparator2" type="HSeparator" parent="OpenPanel/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 10
+theme_override_styles/separator = SubResource("StyleBoxEmpty_w2tfm")
+
+[node name="ComponentMarginContainer" type="MarginContainer" parent="OpenPanel/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_right = 10
+
+[node name="DeleteMarginContainer" type="MarginContainer" parent="OpenPanel/VBoxContainer"]
+visible = false
+layout_mode = 2
+size_flags_vertical = 10
+theme_override_constants/margin_bottom = 20
+
+[node name="DeleteButton" type="Button" parent="OpenPanel/VBoxContainer/DeleteMarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 10
+focus_mode = 0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_styles/focus = SubResource("StyleBoxFlat_dw4o3")
+theme_override_styles/hover_pressed_mirrored = SubResource("StyleBoxFlat_dw4o3")
+theme_override_styles/hover_pressed = SubResource("StyleBoxFlat_dw4o3")
+theme_override_styles/hover_mirrored = SubResource("StyleBoxFlat_dw4o3")
+theme_override_styles/hover = SubResource("StyleBoxFlat_dw4o3")
+theme_override_styles/pressed_mirrored = SubResource("StyleBoxFlat_dw4o3")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_dw4o3")
+theme_override_styles/normal_mirrored = SubResource("StyleBoxFlat_dw4o3")
+theme_override_styles/normal = SubResource("StyleBoxFlat_dw4o3")
+text = "Supprimer"
+
+[node name="ClosePanel" type="Panel" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.825
+anchor_right = 1.0
+anchor_bottom = 0.087
+offset_left = -3.05176e-05
+offset_bottom = 0.399986
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_a6hfi")
+
+[node name="PanelContainer" type="PanelContainer" parent="ClosePanel"]
+layout_mode = 2
+offset_left = 10.5
+offset_top = 10.0
+offset_right = 59.5
+offset_bottom = 60.0
+size_flags_horizontal = 4
+size_flags_vertical = 6
+theme_override_styles/panel = SubResource("StyleBoxFlat_wlqy7")
+
+[node name="Button" type="Button" parent="ClosePanel/PanelContainer"]
+layout_mode = 2
+size_flags_horizontal = 8
+focus_mode = 0
+theme_override_colors/font_color = Color(1, 0, 0, 1)
+theme_override_font_sizes/font_size = 30
+text = "📂"
+flat = true

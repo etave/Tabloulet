@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Godot;
 using Tabloulet.DatabaseNS;
 using Tabloulet.DatabaseNS.Models;
@@ -16,11 +17,12 @@ namespace Tabloulet.Scenes.BuilderNS
     {
         private Database _database;
 
-        private Guid _idScenario;
+        public Guid idScenario;
         private Guid _currentPage;
 
         public Control _blueprint;
         public CreateComponentPanel createComponentPanel;
+        public EditComponentPanel editComponentPanel;
         private Button _exitButton;
 
         private Button _addTextButton;
@@ -29,6 +31,8 @@ namespace Tabloulet.Scenes.BuilderNS
         private ScenarioLoader _scenarioLoader;
 
         private Dictionary<Guid, Dictionary<Guid, Control>> _pages;
+
+        private Timer _saveTimer;
 
         // Called when the node enters the scene tree for the first time.
         public override void _Ready()
@@ -40,6 +44,7 @@ namespace Tabloulet.Scenes.BuilderNS
             _blueprint = GetNode<Control>("Blueprint");
 
             createComponentPanel = GetNode<CreateComponentPanel>("CreateComponentPanel");
+            editComponentPanel = GetNode<EditComponentPanel>("EditComponentPanel");
             _exitButton = GetNode<Button>("ExitPanel/MarginContainer/Button");
 
             _exitButton.Pressed += ExitButtonPressed;
@@ -57,12 +62,17 @@ namespace Tabloulet.Scenes.BuilderNS
             _scenarioLoader = new ScenarioLoader(_database, this);
 
             _pages = [];
+
+            _saveTimer = GetNode<Timer>("SaveTimer");
+            _saveTimer.Timeout += SaveCurrentPage;
         }
 
         public void Init(Guid idScenario)
         {
-            this._idScenario = idScenario;
+            this.idScenario = idScenario;
             _currentPage = _scenarioLoader.LoadScenario(idScenario);
+            _saveTimer.Start();
+            editComponentPanel.SetCurrentPage(_blueprint.GetNode<Control>(_currentPage.ToString()));
         }
 
         private void AddTextButtonPressed()
@@ -132,6 +142,41 @@ namespace Tabloulet.Scenes.BuilderNS
             }
 
             value[idComponent] = baseComponent.GetChild<Control>(0);
+        }
+
+        private void SaveCurrentPage()
+        {
+            _database.Update(
+                new Page()
+                {
+                    Id = _currentPage,
+                    BackgroundColor = _blueprint
+                        .GetNode<Control>(_currentPage.ToString())
+                        .GetNode<ColorRect>("Background")
+                        .Color.ToHtml(),
+                }
+            );
+            foreach (var component in _pages[_currentPage])
+            {
+                IDatabaseModelComponent model = ControlToDatabaseModel.ConvertToDatabaseModel(
+                    component.Key,
+                    component.Value
+                );
+                model.PageId = _currentPage;
+                _database.Update(model);
+            }
+        }
+
+        public void DeleteComponent(Control component)
+        {
+            Guid guid = _pages[_currentPage].FirstOrDefault(x => x.Value == component).Key;
+            IDatabaseModelComponent model = ControlToDatabaseModel.ConvertToDatabaseModel(
+                guid,
+                component
+            );
+            _database.Delete(model);
+            Control parent = component.GetParent<Control>();
+            parent.QueueFree();
         }
 
         private void ExitButtonPressed()

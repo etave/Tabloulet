@@ -69,6 +69,21 @@ namespace Tabloulet.DatabaseNS
             }
         }
 
+        public bool Delete(IDatabaseModelComponent obj)
+        {
+            try
+            {
+                int result = _connection.Delete(obj);
+                return result > 0;
+            }
+            catch (SQLiteException e)
+            {
+                GD.PrintErr($"Error deleting object: {e.Message}");
+                // TODO: Inform the user about the error in a more user-friendly way
+                return false;
+            }
+        }
+
         public T GetById<T>(Guid guid)
             where T : IDatabaseModel, new()
         {

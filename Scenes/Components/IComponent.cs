@@ -10,6 +10,7 @@
         float PositionY { get; set; }
         float RotationDeg { get; set; }
         int Index { get; set; }
+        bool IsMovable { get; set; }
         void UpdateSizePositionRotationParameters(
             float scaleX,
             float scaleY,
