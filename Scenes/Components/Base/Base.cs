@@ -18,12 +18,17 @@ namespace Tabloulet.Scenes.Components.BaseNS
 
         private bool _isMovable = isMovable;
 
-        private bool _isBeingPressed = false;
-
         public bool IsMovable
         {
             get => _isMovable;
-            set => _isMovable = value;
+            set
+            {
+                _isMovable = value;
+                if (_child is IComponent component && component.IsMovable != value)
+                {
+                    component.IsMovable = value;
+                }
+            }
         }
 
         // Called when the node enters the scene tree for the first time.
@@ -68,23 +73,38 @@ namespace Tabloulet.Scenes.Components.BaseNS
 
         public void DragChild(InputEventScreenDrag drag)
         {
+            _builder.editComponentPanel.RemoveCurrentComponent();
+
             _child.Position += drag.ScreenRelative;
         }
 
         public void TouchChild(InputEventScreenTouch touch)
         {
-            _isBeingPressed = touch.Pressed;
-            if (!_isBeingPressed)
+            if (!inBuilderMode)
             {
-                if (inBuilderMode && !_builder.createComponentPanel.closeByUser)
+                return;
+            }
+            if (!touch.Pressed)
+            {
+                if (!_builder.createComponentPanel.closeByUser)
                 {
                     _builder.createComponentPanel.OpenButtonPressed(false);
                 }
+                if (!_builder.editComponentPanel.closeByUser)
+                {
+                    _builder.editComponentPanel.OpenButtonPressed(false);
+                }
+            }
+            else if (touch.Pressed)
+            {
+                _builder.editComponentPanel.SetCurrentComponent(this);
             }
         }
 
         public void PinchChild(InputEventPinch pinch)
         {
+            _builder.editComponentPanel.RemoveCurrentComponent();
+
             float newScaleX = _child.Scale.X * pinch.Factor;
             float newScaleY = _child.Scale.Y * pinch.Factor;
 
@@ -98,6 +118,8 @@ namespace Tabloulet.Scenes.Components.BaseNS
 
         public void TwistChild(InputEventTwist twist)
         {
+            _builder.editComponentPanel.RemoveCurrentComponent();
+
             _child.PivotOffset = _child.Size / 2;
 
             _child.RotationDegrees += twist.Angle * Mathf.RadToDeg(0.05f);
@@ -107,11 +129,16 @@ namespace Tabloulet.Scenes.Components.BaseNS
         {
             if (!_isMovable)
             {
+                if (@event is InputEventScreenTouch touch && touch.Pressed)
+                {
+                    _builder.editComponentPanel.SetCurrentComponent(this);
+                }
                 return;
             }
             if (inBuilderMode)
             {
                 _builder.createComponentPanel.CloseButtonPressed(false);
+                _builder.editComponentPanel.CloseButtonPressed(false);
                 switch (_child)
                 {
                     case IComponent component:
@@ -158,9 +185,16 @@ namespace Tabloulet.Scenes.Components.BaseNS
             {
                 _twist = @event;
             }
-            else if (inBuilderMode && !_builder.createComponentPanel.closeByUser)
+            if (inBuilderMode)
             {
-                _builder.createComponentPanel.OpenButtonPressed(false);
+                if (!_builder.createComponentPanel.closeByUser)
+                {
+                    _builder.createComponentPanel.OpenButtonPressed(false);
+                }
+                if (!builder.editComponentPanel.closeByUser)
+                {
+                    _builder.editComponentPanel.OpenButtonPressed(false);
+                }
             }
         }
     }

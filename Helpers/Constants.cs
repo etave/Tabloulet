@@ -4,14 +4,15 @@ namespace Tabloulet.Helpers
 {
     public static class Constants
     {
+        public static readonly string AppPath;
         public static readonly string DatabasePath;
 
         static Constants()
         {
-            DatabasePath = Environment.GetFolderPath(Environment.SpecialFolder.Personal);
-            DatabasePath = System.IO.Path.Combine(DatabasePath, "Tabloulet");
-            System.IO.Directory.CreateDirectory(DatabasePath);
-            DatabasePath = System.IO.Path.Combine(DatabasePath, "Tabloulet.db");
+            AppPath = Environment.GetFolderPath(Environment.SpecialFolder.Personal);
+            AppPath = System.IO.Path.Combine(AppPath, "Tabloulet");
+            System.IO.Directory.CreateDirectory(AppPath);
+            DatabasePath = System.IO.Path.Combine(AppPath, "Tabloulet.db");
         }
 
         public const string ScenarioTable = "Scenario";
@@ -29,7 +30,7 @@ namespace Tabloulet.Helpers
         public const string CreatePageTable =
             $"CREATE TABLE IF NOT EXISTS {PageTable} (Id TEXT PRIMARY KEY, BackgroundColor TEXT)";
         public const string CreateButtonTable =
-            $"CREATE TABLE IF NOT EXISTS {ButtonTable} (Id TEXT PRIMARY KEY, PageId TEXT NOT NULL, LinkTo TEXT NOT NULL, Content TEXT NOT NULL, Color TEXT NOT NULL, ScaleX REAL NOT NULL, ScaleY REAL NOT NULL, SizeX REAL NOT NULL, SizeY REAL NOT NULL, PositionX REAL NOT NULL, PositionY REAL NOT NULL, Rotation REAL NOT NULL, ZIndex INTEGER NOT NULL, IsMovable BOOLEAN NOT NULL, FOREIGN KEY(PageId) REFERENCES {PageTable}(Id), FOREIGN KEY(LinkTo) REFERENCES {PageTable}(Id))";
+            $"CREATE TABLE IF NOT EXISTS {ButtonTable} (Id TEXT PRIMARY KEY, PageId TEXT NOT NULL, Content TEXT NOT NULL, Color TEXT NOT NULL, ScaleX REAL NOT NULL, ScaleY REAL NOT NULL, SizeX REAL NOT NULL, SizeY REAL NOT NULL, PositionX REAL NOT NULL, PositionY REAL NOT NULL, Rotation REAL NOT NULL, ZIndex INTEGER NOT NULL, IsMovable BOOLEAN NOT NULL, FOREIGN KEY(PageId) REFERENCES {PageTable}(Id))";
         public const string CreateTextTable =
             $"CREATE TABLE IF NOT EXISTS {TextTable} (Id TEXT PRIMARY KEY, PageId TEXT NOT NULL, Content TEXT NOT NULL, Font TEXT, FontSize INTEGER NOT NULL, ScaleX REAL NOT NULL, ScaleY REAL NOT NULL, SizeX REAL NOT NULL, SizeY REAL NOT NULL, PositionX REAL NOT NULL, PositionY REAL NOT NULL, Rotation REAL NOT NULL, ZIndex INTEGER NOT NULL, IsMovable BOOLEAN NOT NULL, FOREIGN KEY(PageId) REFERENCES {PageTable}(Id))";
         public const string CreateImageTable =

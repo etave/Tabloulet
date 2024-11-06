@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using Godot;
 using Tabloulet.Helpers.CustomInputEvents;
 
@@ -14,7 +15,10 @@ namespace Tabloulet.Helpers
         private float lastPinchDistance;
 
         // Called when the node enters the scene tree for the first time.
-        public override void _Ready() { }
+        public override void _Ready()
+        {
+            GetTree().Root.FocusExited += ClearFingersAndSprites;
+        }
 
         // Called every frame. 'delta' is the elapsed time since the previous frame.
         public override void _Process(double delta)
@@ -33,13 +37,28 @@ namespace Tabloulet.Helpers
                         {
                             Texture = CreateCircleTexture(25, new Color(1, 1, 1, 0.5f)),
                             Scale = new Vector2(1, 1),
-                            ZIndex = 1,
+                            ZIndex = 101,
                         };
                     value = fingerSprite;
                     fingerSprites.Add(finger.Key, value);
+
                     AddChild(fingerSprite);
                 }
                 value.GlobalPosition = finger.Value;
+            }
+        }
+
+        public void ClearFingersAndSprites()
+        {
+            foreach (var fingerSprite in fingerSprites)
+            {
+                fingerSprite.Value.QueueFree();
+            }
+            fingerSprites.Clear();
+            fingers.Clear();
+            foreach (Sprite2D sprite in GetChildren().Cast<Sprite2D>())
+            {
+                sprite.QueueFree();
             }
         }
 
@@ -95,8 +114,11 @@ namespace Tabloulet.Helpers
             if (!touch.Pressed)
             {
                 fingers.Remove(touch.Index);
-                fingerSprites[touch.Index].QueueFree();
-                fingerSprites.Remove(touch.Index);
+                if (fingerSprites.TryGetValue(touch.Index, out Sprite2D value))
+                {
+                    value.QueueFree();
+                    fingerSprites.Remove(touch.Index);
+                }
                 return;
             }
             fingers[touch.Index] = touch.Position;

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Godot;
 using Tabloulet.DatabaseNS;
 using Tabloulet.DatabaseNS.Models;
+using Tabloulet.Helpers;
 
 namespace Tabloulet.Scenes.HomeNS
 {
@@ -225,6 +226,9 @@ namespace Tabloulet.Scenes.HomeNS
             _database.Insert(page);
             _database.Insert(scenario);
             _database.Insert(scenarioPage);
+
+            System.IO.Directory.CreateDirectory(Constants.AppPath + scenario.Id.ToString());
+
             ClosePopUpCreateScenario();
         }
 

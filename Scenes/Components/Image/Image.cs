@@ -35,7 +35,11 @@ namespace Tabloulet.Scenes.Components.ImageNS
         public string Path
         {
             get => _path;
-            set => _path = value;
+            set
+            {
+                _path = value;
+                LoadImage(value);
+            }
         }
 
         public float ScaleX

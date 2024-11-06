@@ -1,4 +1,4 @@
-[gd_scene load_steps=23 format=3 uid="uid://dxqo13a3yn4q4"]
+[gd_scene load_steps=23 format=3 uid="uid://rjmr323x6ka"]
 
 [ext_resource type="Script" path="res://Scenes/Home/Home.cs" id="1_q6al0"]
 [ext_resource type="Texture2D" uid="uid://cc3njq7jqs73n" path="res://Assets/Home/AdminLogo.png" id="2_cmbqb"]

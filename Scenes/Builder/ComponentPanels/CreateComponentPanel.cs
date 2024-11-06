@@ -1,4 +1,3 @@
-using System;
 using Godot;
 
 namespace Tabloulet.Scenes.BuilderNS.ComponentPanelsNS
