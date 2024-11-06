@@ -1,4 +1,4 @@
-[gd_scene load_steps=23 format=3 uid="uid://rjmr323x6ka"]
+[gd_scene load_steps=24 format=3 uid="uid://dxqo13a3yn4q4"]
 
 [ext_resource type="Script" path="res://Scenes/Home/Home.cs" id="1_q6al0"]
 [ext_resource type="Texture2D" uid="uid://cc3njq7jqs73n" path="res://Assets/Home/AdminLogo.png" id="2_cmbqb"]
@@ -108,6 +108,10 @@ corner_radius_top_left = 5
 corner_radius_top_right = 5
 corner_radius_bottom_right = 5
 corner_radius_bottom_left = 5
+
+[sub_resource type="LabelSettings" id="LabelSettings_uq8yb"]
+font_size = 20
+font_color = Color(0.807151, 0, 0.0549888, 1)
 
 [sub_resource type="LabelSettings" id="LabelSettings_2tk5k"]
 line_spacing = 40.0
@@ -323,12 +327,12 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_constants/margin_left = 30
-theme_override_constants/margin_top = 160
+theme_override_constants/margin_top = 140
 theme_override_constants/margin_right = 30
 
 [node name="VBoxCreate" type="VBoxContainer" parent="MarginCreate/PanelCreate/MarginInsideCreate"]
 layout_mode = 2
-theme_override_constants/separation = 25
+theme_override_constants/separation = 22
 
 [node name="NameCreate" type="Label" parent="MarginCreate/PanelCreate/MarginInsideCreate/VBoxCreate"]
 layout_mode = 2
@@ -358,6 +362,13 @@ theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_font_sizes/font_size = 30
 theme_override_styles/normal = SubResource("StyleBoxFlat_mefha")
 wrap_mode = 1
+
+[node name="ErrorCreate" type="Label" parent="MarginCreate/PanelCreate/MarginInsideCreate/VBoxCreate"]
+visible = false
+layout_mode = 2
+text = "Le nom et la description sont nécessaires. "
+label_settings = SubResource("LabelSettings_uq8yb")
+horizontal_alignment = 1
 
 [node name="HBoxCreate" type="HBoxContainer" parent="MarginCreate/PanelCreate/MarginInsideCreate/VBoxCreate"]
 layout_mode = 2
