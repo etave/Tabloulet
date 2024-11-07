@@ -10,7 +10,7 @@ namespace Tabloulet.Scenes.HomeNS
     public partial class Home : Control
     {
         private Database _database;
-        private List<Godot.Button> buttons = [];
+        private List<Godot.Button> _buttons = [];
         private Action deleteAction;
 
         public override void _Ready()
@@ -120,7 +120,7 @@ namespace Tabloulet.Scenes.HomeNS
                 editButton.AddThemeStyleboxOverride("hover", normalStyleBox);
                 editButton.AddThemeStyleboxOverride("pressed", normalStyleBox);
                 editButton.FocusMode = Control.FocusModeEnum.None;
-                buttons.Add(editButton);
+                _buttons.Add(editButton);
 
                 // Create the delete button
                 Godot.Button deleteButton =
@@ -140,7 +140,7 @@ namespace Tabloulet.Scenes.HomeNS
                 deleteButton.AddThemeStyleboxOverride("pressed", normalStyleBox);
                 deleteButton.Pressed += () => DisplayPopUpDelete(scenario.Id);
                 deleteButton.FocusMode = Control.FocusModeEnum.None;
-                buttons.Add(deleteButton);
+                _buttons.Add(deleteButton);
 
                 // Add the children to the parent nodes
                 hBoxContainer.AddChild(editButton);
@@ -154,7 +154,7 @@ namespace Tabloulet.Scenes.HomeNS
         // Change the page into the admin page
         public void ChangeToAdmin()
         {
-            foreach (Godot.Button button in buttons)
+            foreach (Godot.Button button in _buttons)
             {
                 button.Visible = true;
             }
@@ -172,7 +172,7 @@ namespace Tabloulet.Scenes.HomeNS
         // Change the page into the user page
         public void ChangeToUser()
         {
-            foreach (Godot.Button button in buttons)
+            foreach (Godot.Button button in _buttons)
             {
                 button.Visible = false;
             }
@@ -247,7 +247,7 @@ namespace Tabloulet.Scenes.HomeNS
             }
             else
             {
-                Page page = new() { Id = Guid.NewGuid() };
+                Page page = new() { Id = Guid.NewGuid(), Name = "Home" };
                 Scenario scenario =
                     new()
                     {
@@ -340,10 +340,8 @@ namespace Tabloulet.Scenes.HomeNS
             Godot.Button deleteButton = button.GetNode<Godot.Button>(
                 "MarginContainer/HBoxContainer/DeleteButton" + scenarioId
             );
-            GD.Print(buttons.Count);
-            buttons.Remove(editButton);
-            buttons.Remove(deleteButton);
-            GD.Print(buttons.Count);
+            _buttons.Remove(editButton);
+            _buttons.Remove(deleteButton);
             button.QueueFree();
             ClosePopUpDelete();
         }

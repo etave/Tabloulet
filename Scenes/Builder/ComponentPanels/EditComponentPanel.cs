@@ -22,7 +22,7 @@ namespace Tabloulet.Scenes.BuilderNS.ComponentPanelsNS
         public bool closeByUser;
 
         private bool _isEditingPage;
-        private bool _isBackgroundCallableSet;
+        public bool isBackgroundCallableSet;
         private bool _isEditingComponent;
 
         private VBoxContainer _vboxContainerContent;
@@ -72,7 +72,7 @@ namespace Tabloulet.Scenes.BuilderNS.ComponentPanelsNS
             );
 
             _isEditingPage = false;
-            _isBackgroundCallableSet = false;
+            isBackgroundCallableSet = false;
             _isEditingComponent = false;
 
             _baseMarginContainer = _vboxContainerContent.GetNode<MarginContainer>(
@@ -139,10 +139,10 @@ namespace Tabloulet.Scenes.BuilderNS.ComponentPanelsNS
             ColorRect background = _currentPage.GetNode<ColorRect>("Background");
             _pageColorPicker.Color = background.Color;
 
-            if (!_isBackgroundCallableSet)
+            if (!isBackgroundCallableSet)
             {
                 background.GuiInput += BackgroundGuiInput;
-                _isBackgroundCallableSet = true;
+                isBackgroundCallableSet = true;
             }
 
             ResetComponentMarginContainer();

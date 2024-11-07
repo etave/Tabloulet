@@ -9,5 +9,6 @@ namespace Tabloulet.Scenes
         Control GetDisplayRoot();
         void AddPage(Control page);
         void AddComponent(Guid idPage, Guid idComponent, Base baseComponent);
+        void FreePage();
     }
 }

@@ -4,12 +4,11 @@ using System.Threading.Tasks;
 using DotNetEnv;
 using Godot;
 using Tabloulet.Helpers;
-using Tabloulet.Scenes.HomeNS;
 
 namespace Tabloulet.Scenes.HomeNS.LoginPanelNS
 {
     public partial class LoginPanel : Control
-    
+    {
         // Référence aux éléments de l'interface
         Panel myPanel;
         Label loginError;
@@ -60,9 +59,6 @@ namespace Tabloulet.Scenes.HomeNS.LoginPanelNS
                 "Panel/VBoxContainer/PanelLeave/MarginContainer/ButtonLeave"
             );
 
-            Env.Load(); // Charger le fichier .env
-            string myPassword = Env.GetString("PASSWORD"); // Récupérer la valeur du mot de passe
-          
             Env.Load(); // Charger le fichier .env
             string myPassword = Env.GetString("PASSWORD"); // Récupérer la valeur du mot de passe
             passwordGuid = new(Env.GetString("PASSWORD_RFID")); // Récupérer la valeur du GUID
@@ -170,22 +166,22 @@ namespace Tabloulet.Scenes.HomeNS.LoginPanelNS
         {
             Visible = false;
         }
-    }
 
-    private void OnRFIDTimerTimeout()
-    {
-        RFID.GetUIDAsync()
-            .ContinueWith(
-                task =>
-                {
-                    if (task.Result == passwordGuid)
+        private void OnRFIDTimerTimeout()
+        {
+            RFID.GetUIDAsync()
+                .ContinueWith(
+                    task =>
                     {
-                        Visible = false;
-                        var home = GetParent<Control>() as Home;
-                        home.ChangeToAdmin();
-                    }
-                },
-                TaskScheduler.FromCurrentSynchronizationContext()
-            );
+                        if (task.Result == passwordGuid)
+                        {
+                            Visible = false;
+                            var home = GetParent<Control>() as Home;
+                            home.ChangeToAdmin();
+                        }
+                    },
+                    TaskScheduler.FromCurrentSynchronizationContext()
+                );
+        }
     }
 }
