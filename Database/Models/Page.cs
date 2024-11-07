@@ -9,7 +9,7 @@ namespace Tabloulet.DatabaseNS.Models
     {
         [PrimaryKey]
         public Guid Id { get; set; }
-
+        public string Name { get; set; }
         public string BackgroundColor { get; set; }
     }
 }

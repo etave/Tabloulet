@@ -26,7 +26,7 @@ namespace Tabloulet.Scenes
             return firstPage.Id;
         }
 
-        private void LoadPage(Page page)
+        public void LoadPage(Page page)
         {
             _currentPage = page.Id;
 

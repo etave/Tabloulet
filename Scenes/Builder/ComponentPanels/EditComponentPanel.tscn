@@ -58,6 +58,7 @@ grow_vertical = 2
 script = ExtResource("1_w5y7o")
 
 [node name="OpenPanel" type="Panel" parent="."]
+visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -138,6 +139,7 @@ color_modes_visible = false
 presets_visible = false
 
 [node name="BaseMarginContainer" type="MarginContainer" parent="OpenPanel/VBoxContainer"]
+visible = false
 layout_mode = 2
 theme_override_constants/margin_left = 10
 theme_override_constants/margin_right = 10
@@ -367,7 +369,6 @@ theme_override_styles/normal = SubResource("StyleBoxFlat_dw4o3")
 text = "Supprimer"
 
 [node name="ClosePanel" type="Panel" parent="."]
-visible = false
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 0.825

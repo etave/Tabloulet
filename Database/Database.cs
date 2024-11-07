@@ -135,13 +135,15 @@ namespace Tabloulet.DatabaseNS
 
         public List<IDatabaseModel> GetElementsByPage(Guid pageId)
         {
-            List<IDatabaseModel> elements = new List<IDatabaseModel>();
-            elements.AddRange(_connection.Table<Models.Button>().Where(x => x.PageId == pageId));
-            elements.AddRange(_connection.Table<Models.Text>().Where(x => x.PageId == pageId));
-            elements.AddRange(_connection.Table<Models.Image>().Where(x => x.PageId == pageId));
-            elements.AddRange(_connection.Table<Models.Video>().Where(x => x.PageId == pageId));
-            elements.AddRange(_connection.Table<Models.Audio>().Where(x => x.PageId == pageId));
-            elements.AddRange(_connection.Table<Models.Model>().Where(x => x.PageId == pageId));
+            List<IDatabaseModel> elements =
+            [
+                .. _connection.Table<Models.Button>().Where(x => x.PageId == pageId),
+                .. _connection.Table<Models.Text>().Where(x => x.PageId == pageId),
+                .. _connection.Table<Models.Image>().Where(x => x.PageId == pageId),
+                .. _connection.Table<Models.Video>().Where(x => x.PageId == pageId),
+                .. _connection.Table<Models.Audio>().Where(x => x.PageId == pageId),
+                .. _connection.Table<Models.Model>().Where(x => x.PageId == pageId),
+            ];
             return elements;
         }
 
