@@ -3,13 +3,15 @@ using System.Collections.Generic;
 using Godot;
 using Tabloulet.DatabaseNS;
 using Tabloulet.DatabaseNS.Models;
+using Tabloulet.Helpers;
 
 namespace Tabloulet.Scenes.HomeNS
 {
     public partial class Home : Control
     {
         private Database _database;
-        private List<Godot.Button> buttons = [];
+        private List<Godot.Button> _buttons = [];
+        private Action deleteAction;
 
         public override void _Ready()
         {
@@ -39,6 +41,9 @@ namespace Tabloulet.Scenes.HomeNS
                 "MarginDelete/PanelDelete/MarginInsideDelete/VBoxDelete/HBoxDelete/CancelDeleteButton"
             );
             cancelDelete.Pressed += ClosePopUpDelete;
+
+            Godot.Button adminButton = GetNode<Godot.Button>("MarginAdmin/HBoxAdmin/AdminButton");
+            adminButton.Pressed += DisplayAdmin;
         }
 
         // Add the scenario buttons to the list
@@ -90,12 +95,13 @@ namespace Tabloulet.Scenes.HomeNS
                 scenarioButton.AddThemeStyleboxOverride("pressed", styleBox);
 
                 // Create a margin container
-                MarginContainer marginContainer = new();
+                MarginContainer marginContainer = new() { Name = "MarginContainer" };
                 marginContainer.AddThemeConstantOverride("margin_right", 30);
                 marginContainer.SetAnchorsPreset(Control.LayoutPreset.FullRect);
 
                 // Create a HBoxContainer to align the buttons
-                HBoxContainer hBoxContainer = new() { Alignment = BoxContainer.AlignmentMode.End };
+                HBoxContainer hBoxContainer =
+                    new() { Alignment = BoxContainer.AlignmentMode.End, Name = "HBoxContainer" };
                 hBoxContainer.AddThemeConstantOverride("separation", 10);
 
                 // Create the edit button
@@ -113,7 +119,8 @@ namespace Tabloulet.Scenes.HomeNS
                 editButton.AddThemeStyleboxOverride("normal", normalStyleBox);
                 editButton.AddThemeStyleboxOverride("hover", normalStyleBox);
                 editButton.AddThemeStyleboxOverride("pressed", normalStyleBox);
-                buttons.Add(editButton);
+                editButton.FocusMode = Control.FocusModeEnum.None;
+                _buttons.Add(editButton);
 
                 // Create the delete button
                 Godot.Button deleteButton =
@@ -132,7 +139,8 @@ namespace Tabloulet.Scenes.HomeNS
                 deleteButton.AddThemeStyleboxOverride("hover", normalStyleBox);
                 deleteButton.AddThemeStyleboxOverride("pressed", normalStyleBox);
                 deleteButton.Pressed += () => DisplayPopUpDelete(scenario.Id);
-                buttons.Add(deleteButton);
+                deleteButton.FocusMode = Control.FocusModeEnum.None;
+                _buttons.Add(deleteButton);
 
                 // Add the children to the parent nodes
                 hBoxContainer.AddChild(editButton);
@@ -146,12 +154,38 @@ namespace Tabloulet.Scenes.HomeNS
         // Change the page into the admin page
         public void ChangeToAdmin()
         {
-            foreach (Godot.Button button in buttons)
+            foreach (Godot.Button button in _buttons)
             {
                 button.Visible = true;
             }
             Godot.Button createButton = GetNode<Godot.Button>("MarginAdmin/HBoxAdmin/CreateButton");
             createButton.Visible = true;
+
+            Godot.Button adminButton = GetNode<Godot.Button>("MarginAdmin/HBoxAdmin/AdminButton");
+            Texture2D adminButtonIcon = (Texture2D)
+                ResourceLoader.Load("res://Assets/Home/AdminLogoutLogo.png");
+            adminButton.Icon = adminButtonIcon;
+            adminButton.Pressed -= DisplayAdmin;
+            adminButton.Pressed += ChangeToUser;
+        }
+
+        // Change the page into the user page
+        public void ChangeToUser()
+        {
+            foreach (Godot.Button button in _buttons)
+            {
+                button.Visible = false;
+            }
+            Godot.Button createButton = GetNode<Godot.Button>("MarginAdmin/HBoxAdmin/CreateButton");
+            createButton.Visible = false;
+
+            Godot.Button adminButton = GetNode<Godot.Button>("MarginAdmin/HBoxAdmin/AdminButton");
+            Texture2D adminButtonIcon = (Texture2D)
+                ResourceLoader.Load("res://Assets/Home/AdminLogo.png");
+            adminButton.Icon = adminButtonIcon;
+            adminButton.Pressed -= ChangeToUser;
+            adminButton.Pressed += DisplayAdmin;
+            CloseAdmin();
         }
 
         // Display the pop up with the scenario description
@@ -186,6 +220,10 @@ namespace Tabloulet.Scenes.HomeNS
         // Close the pop up to create a scenario
         public void ClosePopUpCreateScenario()
         {
+            Label ErrorCreate = GetNode<Label>(
+                "MarginCreate/PanelCreate/MarginInsideCreate/VBoxCreate/ErrorCreate"
+            );
+            ErrorCreate.Visible = false;
             MarginContainer marginCreate = GetNode<MarginContainer>("MarginCreate");
             marginCreate.Visible = false;
         }
@@ -200,28 +238,40 @@ namespace Tabloulet.Scenes.HomeNS
                 "MarginCreate/PanelCreate/MarginInsideCreate/VBoxCreate/TextEditDescription"
             );
 
-            Page page = new() { Id = Guid.NewGuid() };
-            Scenario scenario =
-                new()
-                {
-                    Id = Guid.NewGuid(),
-                    Name = nameEdit.Text,
-                    Description = descriptionEdit.Text,
-                    PageId = page.Id,
-                };
-            ScenarioPage scenarioPage =
-                new()
-                {
-                    Id = Guid.NewGuid(),
-                    ScenarioId = scenario.Id,
-                    PageId = page.Id,
-                };
-            GD.Print(scenarioPage.ScenarioId);
+            if (nameEdit.Text == "" || descriptionEdit.Text == "")
+            {
+                Label ErrorCreate = GetNode<Label>(
+                    "MarginCreate/PanelCreate/MarginInsideCreate/VBoxCreate/ErrorCreate"
+                );
+                ErrorCreate.Visible = true;
+            }
+            else
+            {
+                Page page = new() { Id = Guid.NewGuid(), Name = "Home" };
+                Scenario scenario =
+                    new()
+                    {
+                        Id = Guid.NewGuid(),
+                        Name = nameEdit.Text,
+                        Description = descriptionEdit.Text,
+                        PageId = page.Id,
+                    };
+                ScenarioPage scenarioPage =
+                    new()
+                    {
+                        Id = Guid.NewGuid(),
+                        ScenarioId = scenario.Id,
+                        PageId = page.Id,
+                    };
 
-            _database.Insert(page);
-            _database.Insert(scenario);
-            _database.Insert(scenarioPage);
-            ClosePopUpCreateScenario();
+                _database.Insert(page);
+                _database.Insert(scenario);
+                _database.Insert(scenarioPage);
+
+                System.IO.Directory.CreateDirectory(Constants.AppPath + scenario.Id.ToString());
+
+                ClosePopUpCreateScenario();
+            }
         }
 
         // Display the pop up to delete a scenario
@@ -232,7 +282,13 @@ namespace Tabloulet.Scenes.HomeNS
             Godot.Button validateDelete = GetNode<Godot.Button>(
                 "MarginDelete/PanelDelete/MarginInsideDelete/VBoxDelete/HBoxDelete/ValidateDeleteButton"
             );
-            validateDelete.Pressed += () => DeleteScenario(scenarioId);
+            if (this.deleteAction != null)
+            {
+                validateDelete.Pressed -= this.deleteAction;
+            }
+            Action deleteAction = () => DeleteScenario(scenarioId);
+            this.deleteAction = deleteAction;
+            validateDelete.Pressed += deleteAction;
         }
 
         // Close the pop up to delete a scenario
@@ -274,11 +330,34 @@ namespace Tabloulet.Scenes.HomeNS
             _database.Delete(firstScenarioPage);
             _database.Delete(scenario);
             _database.Delete(firstPage);
-            Godot.Button button = GetNode<Godot.Button>(
+            // Delete the buttons
+            Godot.Button button = GetNodeOrNull<Godot.Button>(
                 "MarginList/ScrollList/MarginScroll/ListScenario/ScenarioButton" + scenarioId
             );
+            Godot.Button editButton = button.GetNode<Godot.Button>(
+                "MarginContainer/HBoxContainer/EditButton" + scenarioId
+            );
+            Godot.Button deleteButton = button.GetNode<Godot.Button>(
+                "MarginContainer/HBoxContainer/DeleteButton" + scenarioId
+            );
+            _buttons.Remove(editButton);
+            _buttons.Remove(deleteButton);
             button.QueueFree();
             ClosePopUpDelete();
+        }
+
+        // Display the admin login panel
+        public void DisplayAdmin()
+        {
+            Control loginPanel = GetNode<Control>("LoginPanel");
+            loginPanel.Visible = true;
+        }
+
+        // Close the admin login panel
+        public void CloseAdmin()
+        {
+            Control loginPanel = GetNode<Control>("LoginPanel");
+            loginPanel.Visible = false;
         }
 
         public override void _Process(double delta) { }

@@ -69,6 +69,21 @@ namespace Tabloulet.DatabaseNS
             }
         }
 
+        public bool Delete(IDatabaseModelComponent obj)
+        {
+            try
+            {
+                int result = _connection.Delete(obj);
+                return result > 0;
+            }
+            catch (SQLiteException e)
+            {
+                GD.PrintErr($"Error deleting object: {e.Message}");
+                // TODO: Inform the user about the error in a more user-friendly way
+                return false;
+            }
+        }
+
         public T GetById<T>(Guid guid)
             where T : IDatabaseModel, new()
         {
@@ -82,6 +97,12 @@ namespace Tabloulet.DatabaseNS
                 // TODO: Inform the user about the error in a more user-friendly way
                 return default;
             }
+        }
+
+        public TableQuery<T> GetTableComponentsByPageId<T>(Guid pageId)
+            where T : IDatabaseModelComponent, new()
+        {
+            return _connection.Table<T>().Where(x => x.PageId == pageId);
         }
 
         public SQLite.TableQuery<T> GetAllByType<T>()
@@ -114,13 +135,15 @@ namespace Tabloulet.DatabaseNS
 
         public List<IDatabaseModel> GetElementsByPage(Guid pageId)
         {
-            List<IDatabaseModel> elements = new List<IDatabaseModel>();
-            elements.AddRange(_connection.Table<Models.Button>().Where(x => x.PageId == pageId));
-            elements.AddRange(_connection.Table<Models.Text>().Where(x => x.PageId == pageId));
-            elements.AddRange(_connection.Table<Models.Image>().Where(x => x.PageId == pageId));
-            elements.AddRange(_connection.Table<Models.Video>().Where(x => x.PageId == pageId));
-            elements.AddRange(_connection.Table<Models.Audio>().Where(x => x.PageId == pageId));
-            elements.AddRange(_connection.Table<Models.Model>().Where(x => x.PageId == pageId));
+            List<IDatabaseModel> elements =
+            [
+                .. _connection.Table<Models.Button>().Where(x => x.PageId == pageId),
+                .. _connection.Table<Models.Text>().Where(x => x.PageId == pageId),
+                .. _connection.Table<Models.Image>().Where(x => x.PageId == pageId),
+                .. _connection.Table<Models.Video>().Where(x => x.PageId == pageId),
+                .. _connection.Table<Models.Audio>().Where(x => x.PageId == pageId),
+                .. _connection.Table<Models.Model>().Where(x => x.PageId == pageId),
+            ];
             return elements;
         }
 
@@ -130,6 +153,21 @@ namespace Tabloulet.DatabaseNS
         }
 
         public bool Update(IDatabaseModel obj)
+        {
+            try
+            {
+                int result = _connection.Update(obj);
+                return result > 0;
+            }
+            catch (SQLiteException e)
+            {
+                GD.PrintErr($"Error updating object: {e.Message}");
+                // TODO: Inform the user about the error in a more user-friendly way
+                return false;
+            }
+        }
+
+        public bool Update(IDatabaseModelComponent obj)
         {
             try
             {

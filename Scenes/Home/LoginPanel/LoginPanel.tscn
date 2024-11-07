@@ -1,0 +1,445 @@
+[gd_scene load_steps=19 format=3 uid="uid://enai0nx8jrw8"]
+
+[ext_resource type="Script" path="res://Scenes/Home/LoginPanel/LoginPanel.cs" id="1_iy2m1"]
+[ext_resource type="Texture2D" uid="uid://bl1jqn6ccup3a" path="res://Assets/LoginPanel/Mountain.png" id="2_41kld"]
+[ext_resource type="Texture2D" uid="uid://di6ho5hexn154" path="res://Assets/LoginPanel/NFCLogo.png" id="2_lwjnw"]
+[ext_resource type="Texture2D" uid="uid://dv4ds1ctg4y6r" path="res://Assets/LoginPanel/UserLogo.png" id="3_jtcrg"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_4uau8"]
+bg_color = Color(0.905882, 0.92549, 0.929412, 1)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0, 0, 0, 1)
+corner_radius_top_left = 30
+corner_radius_top_right = 30
+corner_radius_bottom_right = 30
+corner_radius_bottom_left = 30
+shadow_color = Color(0, 0, 0, 0.392157)
+shadow_size = 6
+shadow_offset = Vector2(8, 10)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_65j2u"]
+bg_color = Color(0.333333, 0.376471, 0.501961, 1)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0, 0, 0, 1)
+corner_radius_top_left = 30
+corner_radius_top_right = 30
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_k5oh8"]
+content_margin_left = 3.0
+content_margin_top = 0.0
+content_margin_right = 0.0
+content_margin_bottom = 0.0
+bg_color = Color(0.301961, 0.215686, 0.470588, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0, 0, 0, 1)
+corner_radius_top_right = 30
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_0hyh7"]
+bg_color = Color(0.333333, 0.376471, 0.501961, 1)
+draw_center = false
+border_width_left = 2
+border_color = Color(0, 0, 0, 1)
+corner_radius_top_right = 30
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_n4nv0"]
+bg_color = Color(0, 0, 0, 0.0980392)
+border_width_bottom = 2
+border_color = Color(0, 0, 0, 1)
+border_blend = true
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_gxo6l"]
+bg_color = Color(1, 1, 1, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0, 0, 0, 1)
+corner_radius_top_left = 15
+corner_radius_top_right = 15
+corner_radius_bottom_right = 15
+corner_radius_bottom_left = 15
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_76f0p"]
+bg_color = Color(0.752941, 0.752941, 0.752941, 1)
+border_color = Color(0, 0, 0, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_jitvy"]
+bg_color = Color(0.752941, 0.752941, 0.752941, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.905882, 0.92549, 0.929412, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_b2lfo"]
+bg_color = Color(0.8, 0.2, 0.2, 1)
+border_color = Color(0, 0, 0, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_kfjva"]
+bg_color = Color(0.8, 0.2, 0.2, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.905882, 0.92549, 0.929412, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_8kjdm"]
+bg_color = Color(0.156863, 0.156863, 0.156863, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_dwr1c"]
+bg_color = Color(0.156863, 0.156863, 0.156863, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.905882, 0.92549, 0.929412, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_6s8ns"]
+bg_color = Color(0.2, 0.745098, 0.2, 1)
+border_color = Color(0, 0, 0, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_x0bqw"]
+bg_color = Color(0.2, 0.745098, 0.2, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.905882, 0.92549, 0.929412, 1)
+
+[node name="Control" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+script = ExtResource("1_iy2m1")
+
+[node name="Panel" type="Panel" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 368.0
+offset_top = 176.0
+offset_right = -400.0
+offset_bottom = -200.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_4uau8")
+
+[node name="TextureRect" type="TextureRect" parent="Panel"]
+modulate = Color(1, 1, 1, 0.0392157)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = 144.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_41kld")
+expand_mode = 1
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Panel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="PanelLeave" type="Panel" parent="Panel/VBoxContainer"]
+custom_minimum_size = Vector2(0, 45)
+layout_mode = 2
+size_flags_vertical = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_65j2u")
+
+[node name="MarginContainer" type="MarginContainer" parent="Panel/VBoxContainer/PanelLeave"]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -55.0
+offset_bottom = 45.0
+grow_horizontal = 0
+theme_override_constants/margin_right = 0
+
+[node name="ButtonLeave" type="Button" parent="Panel/VBoxContainer/PanelLeave/MarginContainer"]
+custom_minimum_size = Vector2(55, 45)
+layout_mode = 2
+size_flags_horizontal = 10
+size_flags_vertical = 8
+focus_mode = 0
+theme_override_colors/font_color = Color(0.905882, 0.92549, 0.929412, 1)
+theme_override_font_sizes/font_size = 20
+theme_override_styles/hover = SubResource("StyleBoxFlat_k5oh8")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_k5oh8")
+theme_override_styles/normal = SubResource("StyleBoxFlat_0hyh7")
+text = "🗙"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Panel/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 6
+theme_override_constants/separation = 120
+
+[node name="CenterContainerLogo" type="CenterContainer" parent="Panel/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 10
+
+[node name="LogoNFC" type="TextureRect" parent="Panel/VBoxContainer/HBoxContainer/CenterContainerLogo"]
+custom_minimum_size = Vector2(320, 420)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+texture = ExtResource("2_lwjnw")
+expand_mode = 1
+
+[node name="LogoCenter" type="VBoxContainer" parent="Panel/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+
+[node name="Line2DTop" type="Line2D" parent="Panel/VBoxContainer/HBoxContainer/LogoCenter"]
+points = PackedVector2Array(65, -27, 65, 181)
+width = 2.0
+default_color = Color(0.333333, 0.376471, 0.501961, 1)
+
+[node name="Line2DBottom" type="Line2D" parent="Panel/VBoxContainer/HBoxContainer/LogoCenter"]
+points = PackedVector2Array(65, 373, 65, 573)
+width = 2.0
+default_color = Color(0.333333, 0.376471, 0.501961, 1)
+
+[node name="LogoUser" type="TextureRect" parent="Panel/VBoxContainer/HBoxContainer/LogoCenter"]
+custom_minimum_size = Vector2(130, 130)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 6
+texture = ExtResource("3_jtcrg")
+expand_mode = 1
+
+[node name="PaveNumerique" type="VBoxContainer" parent="Panel/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 2
+
+[node name="GridContainer" type="GridContainer" parent="Panel/VBoxContainer/HBoxContainer/PaveNumerique"]
+layout_mode = 2
+theme_override_constants/v_separation = 15
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Panel/VBoxContainer/HBoxContainer/PaveNumerique/GridContainer"]
+layout_mode = 2
+theme_override_constants/separation = 3
+
+[node name="LabelError" type="Label" parent="Panel/VBoxContainer/HBoxContainer/PaveNumerique/GridContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.905882, 0.92549, 0.929412, 1)
+theme_override_font_sizes/font_size = 12
+text = "Mot de passe incorrect, veuillez réessayer
+"
+horizontal_alignment = 1
+
+[node name="LineEdit" type="LineEdit" parent="Panel/VBoxContainer/HBoxContainer/PaveNumerique/GridContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 60)
+layout_mode = 2
+focus_mode = 0
+theme_override_colors/font_uneditable_color = Color(0, 0, 0, 1)
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 25
+theme_override_styles/read_only = SubResource("StyleBoxFlat_n4nv0")
+theme_override_styles/normal = SubResource("StyleBoxFlat_gxo6l")
+alignment = 1
+editable = false
+secret_character = "*"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Panel/VBoxContainer/HBoxContainer/PaveNumerique/GridContainer"]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="Button1" type="Button" parent="Panel/VBoxContainer/HBoxContainer/PaveNumerique/GridContainer/HBoxContainer"]
+custom_minimum_size = Vector2(80, 80)
+layout_mode = 2
+size_flags_horizontal = 6
+size_flags_vertical = 4
+theme_override_colors/font_hover_color = Color(0, 0, 0, 1)
+theme_override_colors/font_pressed_color = Color(0, 0, 0, 1)
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 30
+theme_override_styles/hover = SubResource("StyleBoxFlat_76f0p")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_jitvy")
+theme_override_styles/normal = SubResource("StyleBoxFlat_76f0p")
+text = "1"
+
+[node name="Button2" type="Button" parent="Panel/VBoxContainer/HBoxContainer/PaveNumerique/GridContainer/HBoxContainer"]
+custom_minimum_size = Vector2(80, 80)
+layout_mode = 2
+size_flags_horizontal = 6
+size_flags_vertical = 4
+theme_override_colors/font_hover_color = Color(0, 0, 0, 1)
+theme_override_colors/font_pressed_color = Color(0, 0, 0, 1)
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 30
+theme_override_styles/hover = SubResource("StyleBoxFlat_76f0p")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_jitvy")
+theme_override_styles/normal = SubResource("StyleBoxFlat_76f0p")
+text = "2"
+
+[node name="Button3" type="Button" parent="Panel/VBoxContainer/HBoxContainer/PaveNumerique/GridContainer/HBoxContainer"]
+custom_minimum_size = Vector2(80, 80)
+layout_mode = 2
+size_flags_horizontal = 6
+size_flags_vertical = 4
+theme_override_colors/font_hover_color = Color(0, 0, 0, 1)
+theme_override_colors/font_pressed_color = Color(0, 0, 0, 1)
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 30
+theme_override_styles/hover = SubResource("StyleBoxFlat_76f0p")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_jitvy")
+theme_override_styles/normal = SubResource("StyleBoxFlat_76f0p")
+text = "3"
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="Panel/VBoxContainer/HBoxContainer/PaveNumerique/GridContainer"]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="Button4" type="Button" parent="Panel/VBoxContainer/HBoxContainer/PaveNumerique/GridContainer/HBoxContainer2"]
+custom_minimum_size = Vector2(80, 80)
+layout_mode = 2
+theme_override_colors/font_hover_color = Color(0, 0, 0, 1)
+theme_override_colors/font_pressed_color = Color(0, 0, 0, 1)
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 30
+theme_override_styles/hover = SubResource("StyleBoxFlat_76f0p")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_jitvy")
+theme_override_styles/normal = SubResource("StyleBoxFlat_76f0p")
+text = "4"
+
+[node name="Button5" type="Button" parent="Panel/VBoxContainer/HBoxContainer/PaveNumerique/GridContainer/HBoxContainer2"]
+custom_minimum_size = Vector2(80, 80)
+layout_mode = 2
+theme_override_colors/font_hover_color = Color(0, 0, 0, 1)
+theme_override_colors/font_pressed_color = Color(0, 0, 0, 1)
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 30
+theme_override_styles/hover = SubResource("StyleBoxFlat_76f0p")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_jitvy")
+theme_override_styles/normal = SubResource("StyleBoxFlat_76f0p")
+text = "5"
+
+[node name="Button6" type="Button" parent="Panel/VBoxContainer/HBoxContainer/PaveNumerique/GridContainer/HBoxContainer2"]
+custom_minimum_size = Vector2(80, 80)
+layout_mode = 2
+theme_override_colors/font_hover_color = Color(0, 0, 0, 1)
+theme_override_colors/font_pressed_color = Color(0, 0, 0, 1)
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 30
+theme_override_styles/hover = SubResource("StyleBoxFlat_76f0p")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_jitvy")
+theme_override_styles/normal = SubResource("StyleBoxFlat_76f0p")
+text = "6"
+
+[node name="HBoxContainer3" type="HBoxContainer" parent="Panel/VBoxContainer/HBoxContainer/PaveNumerique/GridContainer"]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="Button7" type="Button" parent="Panel/VBoxContainer/HBoxContainer/PaveNumerique/GridContainer/HBoxContainer3"]
+custom_minimum_size = Vector2(80, 80)
+layout_mode = 2
+theme_override_colors/font_hover_color = Color(0, 0, 0, 1)
+theme_override_colors/font_pressed_color = Color(0, 0, 0, 1)
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 30
+theme_override_styles/hover = SubResource("StyleBoxFlat_76f0p")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_jitvy")
+theme_override_styles/normal = SubResource("StyleBoxFlat_76f0p")
+text = "7"
+
+[node name="Button8" type="Button" parent="Panel/VBoxContainer/HBoxContainer/PaveNumerique/GridContainer/HBoxContainer3"]
+custom_minimum_size = Vector2(80, 80)
+layout_mode = 2
+theme_override_colors/font_hover_color = Color(0, 0, 0, 1)
+theme_override_colors/font_pressed_color = Color(0, 0, 0, 1)
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 30
+theme_override_styles/hover = SubResource("StyleBoxFlat_76f0p")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_jitvy")
+theme_override_styles/normal = SubResource("StyleBoxFlat_76f0p")
+text = "8"
+
+[node name="Button9" type="Button" parent="Panel/VBoxContainer/HBoxContainer/PaveNumerique/GridContainer/HBoxContainer3"]
+custom_minimum_size = Vector2(80, 80)
+layout_mode = 2
+theme_override_colors/font_hover_color = Color(0, 0, 0, 1)
+theme_override_colors/font_pressed_color = Color(0, 0, 0, 1)
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 30
+theme_override_styles/hover = SubResource("StyleBoxFlat_76f0p")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_jitvy")
+theme_override_styles/normal = SubResource("StyleBoxFlat_76f0p")
+text = "9"
+
+[node name="HBoxContainer4" type="HBoxContainer" parent="Panel/VBoxContainer/HBoxContainer/PaveNumerique/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 10
+size_flags_vertical = 6
+theme_override_constants/separation = 20
+
+[node name="ButtonX" type="Button" parent="Panel/VBoxContainer/HBoxContainer/PaveNumerique/GridContainer/HBoxContainer4"]
+custom_minimum_size = Vector2(80, 80)
+layout_mode = 2
+focus_mode = 0
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 30
+theme_override_styles/hover = SubResource("StyleBoxFlat_b2lfo")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_kfjva")
+theme_override_styles/normal = SubResource("StyleBoxFlat_b2lfo")
+text = "🗙"
+
+[node name="Button0" type="Button" parent="Panel/VBoxContainer/HBoxContainer/PaveNumerique/GridContainer/HBoxContainer4"]
+custom_minimum_size = Vector2(80, 80)
+layout_mode = 2
+theme_override_colors/font_hover_color = Color(0, 0, 0, 1)
+theme_override_colors/font_pressed_color = Color(0, 0, 0, 1)
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 30
+theme_override_styles/hover = SubResource("StyleBoxFlat_76f0p")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_jitvy")
+theme_override_styles/normal = SubResource("StyleBoxFlat_76f0p")
+text = "0"
+
+[node name="ButtonBackspace" type="Button" parent="Panel/VBoxContainer/HBoxContainer/PaveNumerique/GridContainer/HBoxContainer4"]
+custom_minimum_size = Vector2(80, 80)
+layout_mode = 2
+focus_mode = 0
+theme_override_font_sizes/font_size = 30
+theme_override_styles/hover = SubResource("StyleBoxFlat_8kjdm")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_dwr1c")
+theme_override_styles/normal = SubResource("StyleBoxFlat_8kjdm")
+text = "←"
+
+[node name="HBoxContainer5" type="HBoxContainer" parent="Panel/VBoxContainer/HBoxContainer/PaveNumerique/GridContainer"]
+layout_mode = 2
+theme_override_constants/separation = 2
+
+[node name="ButtonLogin" type="Button" parent="Panel/VBoxContainer/HBoxContainer/PaveNumerique/GridContainer/HBoxContainer5"]
+custom_minimum_size = Vector2(0, 80)
+layout_mode = 2
+size_flags_horizontal = 3
+focus_mode = 0
+theme_override_font_sizes/font_size = 30
+theme_override_styles/hover = SubResource("StyleBoxFlat_6s8ns")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_x0bqw")
+theme_override_styles/normal = SubResource("StyleBoxFlat_6s8ns")
+text = "VALIDER"
+expand_icon = true
+language = "fr"
+
+[node name="RFIDTimer" type="Timer" parent="."]
