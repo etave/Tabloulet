@@ -21,6 +21,7 @@ namespace Tabloulet.Scenes.HomeNS.LoginPanelNS
         Button quitButton;
         Timer timer;
         Guid passwordGuid;
+        public Boolean passwordIsDefined = false;
 
         public override void _Ready()
         {
@@ -61,7 +62,25 @@ namespace Tabloulet.Scenes.HomeNS.LoginPanelNS
 
             Env.Load(); // Charger le fichier .env
             string myPassword = Env.GetString("PASSWORD"); // Récupérer la valeur du mot de passe
-            passwordGuid = new(Env.GetString("PASSWORD_RFID")); // Récupérer la valeur du GUID
+            string passwordGuidString = Env.GetString("PASSWORD_RFID");
+            if (passwordGuidString != null)
+            {
+                passwordGuid = Guid.Parse(passwordGuidString);
+            }
+            else
+            {
+                passwordGuid = Guid.Empty;
+            }
+
+            // Vérifier si les deux variables sont définies
+            if (
+                (!string.IsNullOrEmpty(myPassword) || myPassword != null)
+                && !string.IsNullOrEmpty(passwordGuid.ToString())
+                && passwordGuid != Guid.Empty
+            )
+            {
+                passwordIsDefined = true;
+            }
 
             // Connecter le bouton "BACKSPACE" à la méthode de gestion
             backspaceButton.Pressed += () => Backspace();

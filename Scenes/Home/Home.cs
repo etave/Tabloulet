@@ -4,6 +4,7 @@ using Godot;
 using Tabloulet.DatabaseNS;
 using Tabloulet.DatabaseNS.Models;
 using Tabloulet.Helpers;
+using Tabloulet.Scenes.HomeNS.LoginPanelNS; // Assurez-vous que le namespace de LoginPanel est bien importé
 
 namespace Tabloulet.Scenes.HomeNS
 {
@@ -42,7 +43,18 @@ namespace Tabloulet.Scenes.HomeNS
             );
             cancelDelete.Pressed += ClosePopUpDelete;
 
+            LoginPanel loginPanel = GetNode<LoginPanel>("LoginPanel");
             Godot.Button adminButton = GetNode<Godot.Button>("MarginAdmin/HBoxAdmin/AdminButton");
+
+            // Vérifier si passwordIsDefined est défini
+            if (loginPanel.passwordIsDefined)
+            {
+                adminButton.Visible = true;
+            }
+            else
+            {
+                adminButton.Visible = false;
+            }
             adminButton.Pressed += DisplayAdmin;
         }
 
