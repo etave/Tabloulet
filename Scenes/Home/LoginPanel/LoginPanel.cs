@@ -192,6 +192,11 @@ namespace Tabloulet.Scenes.HomeNS.LoginPanelNS
                 .ContinueWith(
                     task =>
                     {
+                        if (task.IsFaulted || task.Result == Guid.Empty)
+                        {
+                            return;
+                        }
+
                         if (task.Result == passwordGuid)
                         {
                             Visible = false;

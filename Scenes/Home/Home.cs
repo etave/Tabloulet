@@ -1,9 +1,11 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using Godot;
 using Tabloulet.DatabaseNS;
 using Tabloulet.DatabaseNS.Models;
 using Tabloulet.Helpers;
+using Tabloulet.Scenes.BuilderNS;
 using Tabloulet.Scenes.HomeNS.LoginPanelNS; // Assurez-vous que le namespace de LoginPanel est bien importé
 
 namespace Tabloulet.Scenes.HomeNS
@@ -131,6 +133,7 @@ namespace Tabloulet.Scenes.HomeNS
                 editButton.AddThemeStyleboxOverride("normal", normalStyleBox);
                 editButton.AddThemeStyleboxOverride("hover", normalStyleBox);
                 editButton.AddThemeStyleboxOverride("pressed", normalStyleBox);
+                editButton.Pressed += () => SwitchToBuilder(scenario.Id);
                 editButton.FocusMode = Control.FocusModeEnum.None;
                 _buttons.Add(editButton);
 
@@ -259,7 +262,7 @@ namespace Tabloulet.Scenes.HomeNS
             }
             else
             {
-                Page page = new() { Id = Guid.NewGuid(), Name = "Home" };
+                Page page = new() { Id = Guid.NewGuid(), Name = "Accueil" };
                 Scenario scenario =
                     new()
                     {
@@ -280,10 +283,23 @@ namespace Tabloulet.Scenes.HomeNS
                 _database.Insert(scenario);
                 _database.Insert(scenarioPage);
 
-                System.IO.Directory.CreateDirectory(Constants.AppPath + scenario.Id.ToString());
+                string directoryPath = Path.Combine(Constants.AppPath, scenario.Id.ToString());
+                if (!Directory.Exists(directoryPath))
+                {
+                    Directory.CreateDirectory(directoryPath);
+                }
 
-                ClosePopUpCreateScenario();
+                SwitchToBuilder(scenario.Id);
             }
+        }
+
+        private void SwitchToBuilder(Guid id)
+        {
+            PackedScene builderScene = GD.Load<PackedScene>("res://Scenes/Builder/Builder.tscn");
+            Builder builder = (Builder)builderScene.Instantiate();
+            GetTree().Root.AddChild(builder);
+            builder.Init(id);
+            QueueFree();
         }
 
         // Display the pop up to delete a scenario
