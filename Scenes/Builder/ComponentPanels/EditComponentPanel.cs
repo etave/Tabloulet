@@ -266,7 +266,9 @@ namespace Tabloulet.Scenes.BuilderNS.ComponentPanelsNS
             LineEdit lineEdit =
                 new()
                 {
-                    Text = image.Path,
+                    Text = !string.IsNullOrEmpty(image.Path)
+                        ? Path.Combine(Constants.AppPath, image.Path)
+                        : "",
                     Editable = false,
                     SizeFlagsHorizontal = SizeFlags.ExpandFill,
                 };
@@ -288,7 +290,7 @@ namespace Tabloulet.Scenes.BuilderNS.ComponentPanelsNS
                 );
                 string newFilePath = Path.Combine(directoryPath, Path.GetFileName(path));
                 File.Copy(path, newFilePath, true);
-                image.Path = newFilePath;
+                image.Path = Path.Combine(_builder.idScenario.ToString(), Path.GetFileName(path));
             };
 
             Button openDialogButton =

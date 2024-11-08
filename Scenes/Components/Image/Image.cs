@@ -3,6 +3,7 @@ using Godot;
 using Tabloulet.Helpers;
 using Tabloulet.Scenes.Components.BaseNS;
 using GDImage = Godot.Image;
+using IOPath = System.IO.Path;
 
 namespace Tabloulet.Scenes.Components.ImageNS
 {
@@ -127,10 +128,11 @@ namespace Tabloulet.Scenes.Components.ImageNS
         private void LoadImage(string path)
         {
             GDImage image = new();
-            Error loadError = image.Load(path);
+            string fullPath = IOPath.Combine(Constants.AppPath, path);
+            Error loadError = image.Load(fullPath);
             if (loadError != Error.Ok)
             {
-                GD.PrintErr($"Error loading image: {path}");
+                GD.PrintErr($"Error loading image: {fullPath}");
                 // TODO: Inform the user about the error in a more user-friendly way
                 SetPlaceholderTexture();
                 Scale = new Vector2(_scaleX, _scaleY);
