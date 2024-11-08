@@ -1,6 +1,7 @@
 using System;
 using System.Diagnostics;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using Godot;
 
@@ -10,6 +11,11 @@ namespace Tabloulet.Helpers
     {
         public static async Task<Guid> GetUIDAsync(Guid idScenario = default)
         {
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            {
+                return Guid.Empty;
+            }
+
             using var process = new Process();
             process.StartInfo.FileName = "bash";
             process.StartInfo.Arguments = "-c \"nfc-list | grep UID | cut -d':' -f2 | tr -d ' '\"";

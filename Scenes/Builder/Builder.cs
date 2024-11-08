@@ -7,6 +7,7 @@ using Tabloulet.DatabaseNS;
 using Tabloulet.DatabaseNS.Models;
 using Tabloulet.Helpers;
 using Tabloulet.Scenes.BuilderNS.ComponentPanelsNS;
+using Tabloulet.Scenes.HomeNS;
 using Base = Tabloulet.Scenes.Components.BaseNS.Base;
 using Button = Godot.Button;
 using ImageModel = Tabloulet.DatabaseNS.Models.Image;
@@ -142,11 +143,7 @@ namespace Tabloulet.Scenes.BuilderNS
         {
             _pageSelector.Clear();
             _pageSelectorOptions = [];
-            List<Page> pages =
-            [
-                _database.GetById<Page>(_database.GetById<Scenario>(idScenario).PageId),
-                .. _database.GetPagesByScenario(idScenario),
-            ];
+            List<Page> pages = _database.GetPagesByScenario(idScenario);
             for (int i = 0; i < pages.Count; i++)
             {
                 _pageSelector.AddItem(pages[i].Name, i);
@@ -306,8 +303,10 @@ namespace Tabloulet.Scenes.BuilderNS
 
         private void ExitButtonPressed()
         {
-            // TODO: Change scene before queue free
             SaveCurrentPage();
+            PackedScene homeScene = GD.Load<PackedScene>("res://Scenes/Home/Home.tscn");
+            Home home = (Home)homeScene.Instantiate();
+            GetTree().Root.AddChild(home);
             QueueFree();
         }
     }
