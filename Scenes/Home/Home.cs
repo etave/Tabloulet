@@ -6,6 +6,7 @@ using Tabloulet.DatabaseNS;
 using Tabloulet.DatabaseNS.Models;
 using Tabloulet.Helpers;
 using Tabloulet.Scenes.BuilderNS;
+using Tabloulet.Scenes.ViewerNS;
 
 namespace Tabloulet.Scenes.HomeNS
 {
@@ -95,6 +96,7 @@ namespace Tabloulet.Scenes.HomeNS
                 scenarioButton.AddThemeStyleboxOverride("normal", styleBox);
                 scenarioButton.AddThemeStyleboxOverride("hover", styleBox);
                 scenarioButton.AddThemeStyleboxOverride("pressed", styleBox);
+                scenarioButton.Pressed += () => SwitchToViewer(scenario.Id);
 
                 // Create a margin container
                 MarginContainer marginContainer = new() { Name = "MarginContainer" };
@@ -287,6 +289,15 @@ namespace Tabloulet.Scenes.HomeNS
             Builder builder = (Builder)builderScene.Instantiate();
             GetTree().Root.AddChild(builder);
             builder.Init(id);
+            QueueFree();
+        }
+
+        private void SwitchToViewer(Guid id)
+        {
+            PackedScene viewerScene = GD.Load<PackedScene>("res://Scenes/Viewer/Viewer.tscn");
+            Viewer viewer = (Viewer)viewerScene.Instantiate();
+            GetTree().Root.AddChild(viewer);
+            viewer.Init(id);
             QueueFree();
         }
 

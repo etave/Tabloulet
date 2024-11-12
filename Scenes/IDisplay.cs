@@ -10,5 +10,6 @@ namespace Tabloulet.Scenes
         void AddPage(Control page);
         void AddComponent(Guid idPage, Guid idComponent, Base baseComponent);
         void FreePage();
+        void ChangePage(Guid idPage);
     }
 }
