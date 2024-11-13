@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Security.Cryptography;
 using Godot;
 using Tabloulet.DatabaseNS;
 using Tabloulet.DatabaseNS.Models;
@@ -9,6 +10,7 @@ using Tabloulet.Helpers;
 using Tabloulet.Scenes.BuilderNS.ComponentPanelsNS;
 using Base = Tabloulet.Scenes.Components.BaseNS.Base;
 using Button = Godot.Button;
+using ButtonModel = Tabloulet.DatabaseNS.Models.Button;
 using ImageModel = Tabloulet.DatabaseNS.Models.Image;
 using TextModel = Tabloulet.DatabaseNS.Models.Text;
 
@@ -28,6 +30,7 @@ namespace Tabloulet.Scenes.BuilderNS
 
         private Button _addTextButton;
         private Button _addImageButton;
+        private Button _addButtonButton;
 
         private ScenarioLoader _scenarioLoader;
 
@@ -65,9 +68,13 @@ namespace Tabloulet.Scenes.BuilderNS
             _addImageButton = createComponentPanel.GetNode<Button>(
                 "OpenPanel/VBoxContainer/ImageMarginContainer/PanelContainer/GridContainer/MarginContainer/Button"
             );
+            _addButtonButton = createComponentPanel.GetNode<Button>(
+                "OpenPanel/VBoxContainer/ButtonMarginContainer/PanelContainer/GridContainer/MarginContainer/Button"
+            );
 
             _addTextButton.Pressed += AddTextButtonPressed;
             _addImageButton.Pressed += AddImageButtonPressed;
+            _addButtonButton.Pressed += AddButtonButtonPressed;
 
             _scenarioLoader = new ScenarioLoader(_database, this);
 
@@ -234,6 +241,29 @@ namespace Tabloulet.Scenes.BuilderNS
                 };
             _scenarioLoader.CreateImageComponent(image);
             _database.Insert(image);
+        }
+
+        private void AddButtonButtonPressed()
+        {
+            ButtonModel button =
+                new()
+                {
+                    Id = Guid.NewGuid(),
+                    PageId = _currentPage,
+                    Content = "Button",
+                    Color = "#FFFFFF",
+                    ScaleX = 1,
+                    ScaleY = 1,
+                    SizeX = 200,
+                    SizeY = 100,
+                    PositionX = GetRect().Size.X / 2,
+                    PositionY = GetRect().Size.Y / 2,
+                    Rotation = 0,
+                    ZIndex = 1,
+                    IsMovable = true,
+                };
+            _scenarioLoader.CreateButtonComponent(button);
+            _database.Insert(button);
         }
 
         public Control GetDisplayRoot()

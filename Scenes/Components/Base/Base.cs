@@ -1,3 +1,4 @@
+using System;
 using Godot;
 using Tabloulet.Helpers;
 using Tabloulet.Helpers.CustomInputEvents;
@@ -195,6 +196,14 @@ namespace Tabloulet.Scenes.Components.BaseNS
                 {
                     _builder.editComponentPanel.OpenButtonPressed(false);
                 }
+            }
+        }
+
+        public void changePage(Guid linkTo)
+        {
+            if (inBuilderMode)
+            {
+                this._builder.ChangePage(linkTo);
             }
         }
     }
