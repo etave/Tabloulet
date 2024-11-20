@@ -340,5 +340,10 @@ namespace Tabloulet.Scenes.BuilderNS
             SaveCurrentPage();
             QueueFree();
         }
+
+        public Guid getCurrentPageId()
+        {
+            return _currentPage;
+        }
     }
 }

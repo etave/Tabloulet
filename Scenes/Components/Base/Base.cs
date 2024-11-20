@@ -201,7 +201,7 @@ namespace Tabloulet.Scenes.Components.BaseNS
 
         public void changePage(Guid linkTo)
         {
-            if (inBuilderMode)
+            if (!inBuilderMode)
             {
                 this._builder.ChangePage(linkTo);
             }
