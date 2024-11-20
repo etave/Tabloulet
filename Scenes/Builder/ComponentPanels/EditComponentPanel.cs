@@ -1,7 +1,12 @@
-﻿using System.IO;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
 using Godot;
+using Tabloulet.DatabaseNS;
+using Tabloulet.DatabaseNS.Models;
 using Tabloulet.Helpers;
 using Tabloulet.Scenes.Components.BaseNS;
+using ButtonComponent = Tabloulet.Scenes.Components.ButtonNS.Button;
 using ImageComponent = Tabloulet.Scenes.Components.ImageNS.Image;
 using TextComponent = Tabloulet.Scenes.Components.TextNS.Text;
 
@@ -10,14 +15,15 @@ namespace Tabloulet.Scenes.BuilderNS.ComponentPanelsNS
     public partial class EditComponentPanel : Control
     {
         private Builder _builder;
+        private Database _database;
 
         private Panel _openPanel;
         private Panel _closePanel;
 
-        private Button _closeButton;
-        private Button _openButton;
+        private Godot.Button _closeButton;
+        private Godot.Button _openButton;
         private Control _currentPage;
-        private Base _currentComponent;
+        private Components.BaseNS.Base _currentComponent;
 
         public bool closeByUser;
 
@@ -41,21 +47,24 @@ namespace Tabloulet.Scenes.BuilderNS.ComponentPanelsNS
 
         private MarginContainer _componentMarginContainer;
 
-        private Button _deleteButton;
+        private Godot.Button _deleteButton;
+
+        private Dictionary<int, Guid> _pages;
 
         public override void _Ready()
         {
             base._Ready();
 
             _builder = GetParent<Builder>();
+            _database = GetNode<Database>("/root/Database");
 
             _openPanel = GetNode<Panel>("OpenPanel");
             _closePanel = GetNode<Panel>("ClosePanel");
 
-            _closeButton = _openPanel.GetNode<Button>(
+            _closeButton = _openPanel.GetNode<Godot.Button>(
                 "VBoxContainer/PanelContainer/MarginContainer2/PanelContainer/Button"
             );
-            _openButton = _closePanel.GetNode<Button>("PanelContainer/Button");
+            _openButton = _closePanel.GetNode<Godot.Button>("PanelContainer/Button");
 
             _closeButton.Pressed += () => CloseButtonPressed(true);
             _openButton.Pressed += () => OpenButtonPressed(true);
@@ -104,10 +113,11 @@ namespace Tabloulet.Scenes.BuilderNS.ComponentPanelsNS
                 "ComponentMarginContainer"
             );
 
-            _deleteButton = _vboxContainerContent.GetNode<Button>(
+            _deleteButton = _vboxContainerContent.GetNode<Godot.Button>(
                 "DeleteMarginContainer/DeleteButton"
             );
             _deleteButton.Pressed += DeleteComponent;
+            _pages = new Dictionary<int, Guid>();
         }
 
         public override void _Process(double delta)
@@ -148,7 +158,7 @@ namespace Tabloulet.Scenes.BuilderNS.ComponentPanelsNS
             ResetComponentMarginContainer();
         }
 
-        public void SetCurrentComponent(Base component)
+        public void SetCurrentComponent(Components.BaseNS.Base component)
         {
             _currentComponent = component;
             _isEditingComponent = true;
@@ -215,6 +225,9 @@ namespace Tabloulet.Scenes.BuilderNS.ComponentPanelsNS
                     break;
                 case ImageComponent image:
                     CreateImageComponentEdit(image);
+                    break;
+                case ButtonComponent button:
+                    CreateButtonComponentEdit(button);
                     break;
                 default:
                     break;
@@ -293,7 +306,7 @@ namespace Tabloulet.Scenes.BuilderNS.ComponentPanelsNS
                 image.Path = Path.Combine(_builder.idScenario.ToString(), Path.GetFileName(path));
             };
 
-            Button openDialogButton =
+            Godot.Button openDialogButton =
                 new() { Text = "📂", SizeFlagsHorizontal = SizeFlags.ShrinkCenter };
             openDialogButton.Pressed += () => fileDialog.PopupCenteredRatio();
 
@@ -307,6 +320,48 @@ namespace Tabloulet.Scenes.BuilderNS.ComponentPanelsNS
             vBoxContainer.AddChild(hBoxContainer);
 
             _componentMarginContainer.AddChild(vBoxContainer);
+        }
+
+        private void CreateButtonComponentEdit(ButtonComponent button)
+        {
+            ResetComponentMarginContainer();
+
+            _pages.Clear();
+
+            VBoxContainer vBoxContainer = new() { Name = "ButtonComponentEdit" };
+            Label label =
+                new() { Text = "Lien du bouton", HorizontalAlignment = HorizontalAlignment.Center };
+            label.AddThemeFontSizeOverride("font_size", 20);
+            label.AddThemeColorOverride("font_color", new Color(0, 0, 0));
+
+            // Ajout d'un menu déroulant pour sélectionner une page
+            OptionButton pageSelector = new() { SizeFlagsHorizontal = SizeFlags.ExpandFill };
+            List<Page> query = _database.GetPagesByScenario(_builder.idScenario);
+            int index = 0;
+            foreach (Page page in query)
+            {
+                if (page.Id != _builder.getCurrentPageId())
+                {
+                    pageSelector.AddItem(page.Name, index);
+                    this._pages.Add(index, page.Id);
+                    index++;
+                }
+            }
+
+            pageSelector.ItemSelected += (long index) => onPageSelectorPressed(index, button);
+
+            HBoxContainer hBoxContainer = new();
+            hBoxContainer.AddChild(pageSelector);
+
+            vBoxContainer.AddChild(label);
+            vBoxContainer.AddChild(hBoxContainer);
+
+            _componentMarginContainer.AddChild(vBoxContainer);
+        }
+
+        private void onPageSelectorPressed(long index, ButtonComponent button)
+        {
+            button.LinkTo = _pages[(int)index];
         }
     }
 }

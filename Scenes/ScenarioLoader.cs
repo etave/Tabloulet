@@ -5,6 +5,8 @@ using Tabloulet.DatabaseNS;
 using Tabloulet.DatabaseNS.Models;
 using Tabloulet.Scenes.BuilderNS;
 using BaseComponent = Tabloulet.Scenes.Components.BaseNS.Base;
+using ButtonComponent = Tabloulet.Scenes.Components.ButtonNS.Button;
+using ButtonModel = Tabloulet.DatabaseNS.Models.Button;
 using ImageComponent = Tabloulet.Scenes.Components.ImageNS.Image;
 using ImageModel = Tabloulet.DatabaseNS.Models.Image;
 using TextComponent = Tabloulet.Scenes.Components.TextNS.Text;
@@ -50,6 +52,7 @@ namespace Tabloulet.Scenes
 
             LoadComponents<TextModel>(page.Id);
             LoadComponents<ImageModel>(page.Id);
+            LoadComponents<ButtonModel>(page.Id);
         }
 
         private void LoadComponents<T>(Guid pageId)
@@ -66,6 +69,9 @@ namespace Tabloulet.Scenes
                         break;
                     case ImageModel image:
                         CreateImageComponent(image);
+                        break;
+                    case ButtonModel bouton:
+                        CreateButtonComponent(bouton);
                         break;
                 }
             }
@@ -119,6 +125,27 @@ namespace Tabloulet.Scenes
                 );
             BaseComponent imageBase = CreateBase(imageComponent, image.IsMovable, display);
             display.AddComponent(_currentPage, image.Id, imageBase);
+        }
+
+        public void CreateButtonComponent(ButtonModel bouton)
+        {
+            ButtonComponent boutonComponent =
+                new(
+                    bouton.LinkTo.ToString(),
+                    bouton.Content,
+                    bouton.Color,
+                    bouton.ScaleX,
+                    bouton.ScaleY,
+                    bouton.SizeX,
+                    bouton.SizeY,
+                    bouton.PositionX,
+                    bouton.PositionY,
+                    bouton.Rotation,
+                    bouton.ZIndex,
+                    bouton.IsMovable
+                );
+            BaseComponent boutonBase = CreateBase(boutonComponent, bouton.IsMovable, display);
+            display.AddComponent(_currentPage, bouton.Id, boutonBase);
         }
     }
 }

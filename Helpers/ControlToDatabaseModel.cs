@@ -1,6 +1,8 @@
 ﻿using System;
 using Godot;
 using Tabloulet.DatabaseNS.Models;
+using ButtonComponent = Tabloulet.Scenes.Components.ButtonNS.Button;
+using ButtonModel = Tabloulet.DatabaseNS.Models.Button;
 using ImageComponent = Tabloulet.Scenes.Components.ImageNS.Image;
 using ImageModel = Tabloulet.DatabaseNS.Models.Image;
 using TextComponent = Tabloulet.Scenes.Components.TextNS.Text;
@@ -16,6 +18,7 @@ namespace Tabloulet.Helpers
             {
                 TextComponent text => CreateTextModel(id, text),
                 ImageComponent image => CreateImageModel(id, image),
+                ButtonComponent button => CreateButtonModel(id, button),
                 _ => null,
             };
         }
@@ -46,6 +49,26 @@ namespace Tabloulet.Helpers
             {
                 Id = id,
                 Path = component.Path,
+                ScaleX = component.ScaleX,
+                ScaleY = component.ScaleY,
+                SizeX = component.SizeX,
+                SizeY = component.SizeY,
+                PositionX = component.PositionX,
+                PositionY = component.PositionY,
+                Rotation = component.RotationDeg,
+                ZIndex = component.Index,
+                IsMovable = component.IsMovable,
+            };
+        }
+
+        private static ButtonModel CreateButtonModel(Guid id, ButtonComponent component)
+        {
+            return new ButtonModel()
+            {
+                Id = id,
+                LinkTo = component.LinkTo,
+                Content = component.Content,
+                Color = component.Color,
                 ScaleX = component.ScaleX,
                 ScaleY = component.ScaleY,
                 SizeX = component.SizeX,
