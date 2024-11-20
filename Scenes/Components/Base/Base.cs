@@ -3,10 +3,11 @@ using Godot;
 using Tabloulet.Helpers;
 using Tabloulet.Helpers.CustomInputEvents;
 using Tabloulet.Scenes.BuilderNS;
+using Tabloulet.Scenes.ViewerNS;
 
 namespace Tabloulet.Scenes.Components.BaseNS
 {
-    public partial class Base(Control node, bool isMovable, bool inBuilderMode, Builder builder)
+    public partial class Base(Control node, bool isMovable, bool inBuilderMode, IDisplay iDisplay)
         : Control
     {
         private Control _child = node;
@@ -16,6 +17,9 @@ namespace Tabloulet.Scenes.Components.BaseNS
         private InputEvent _twist;
 
         private Builder _builder;
+        private Viewer _viewer;
+
+        private bool _inBuilderMode = inBuilderMode;
 
         private bool _isMovable = isMovable;
 
@@ -39,9 +43,13 @@ namespace Tabloulet.Scenes.Components.BaseNS
 
             _inputHandler = GetNode<InputHandler>("/root/InputHandler");
 
-            if (inBuilderMode)
+            if (_inBuilderMode)
             {
-                _builder = builder;
+                _builder = iDisplay as Builder;
+            }
+            else
+            {
+                _viewer = iDisplay as Viewer;
             }
 
             if (_child != null)
@@ -74,14 +82,17 @@ namespace Tabloulet.Scenes.Components.BaseNS
 
         public void DragChild(InputEventScreenDrag drag)
         {
-            _builder.editComponentPanel.RemoveCurrentComponent();
+            if (_inBuilderMode)
+            {
+                _builder.editComponentPanel.RemoveCurrentComponent();
+            }
 
             _child.Position += drag.ScreenRelative;
         }
 
         public void TouchChild(InputEventScreenTouch touch)
         {
-            if (!inBuilderMode)
+            if (!_inBuilderMode)
             {
                 return;
             }
@@ -104,7 +115,10 @@ namespace Tabloulet.Scenes.Components.BaseNS
 
         public void PinchChild(InputEventPinch pinch)
         {
-            _builder.editComponentPanel.RemoveCurrentComponent();
+            if (_inBuilderMode)
+            {
+                _builder.editComponentPanel.RemoveCurrentComponent();
+            }
 
             float newScaleX = _child.Scale.X * pinch.Factor;
             float newScaleY = _child.Scale.Y * pinch.Factor;
@@ -119,7 +133,10 @@ namespace Tabloulet.Scenes.Components.BaseNS
 
         public void TwistChild(InputEventTwist twist)
         {
-            _builder.editComponentPanel.RemoveCurrentComponent();
+            if (_inBuilderMode)
+            {
+                _builder.editComponentPanel.RemoveCurrentComponent();
+            }
 
             _child.PivotOffset = _child.Size / 2;
 
@@ -130,13 +147,13 @@ namespace Tabloulet.Scenes.Components.BaseNS
         {
             if (!_isMovable)
             {
-                if (@event is InputEventScreenTouch touch && touch.Pressed)
+                if (@event is InputEventScreenTouch touch && touch.Pressed && _inBuilderMode)
                 {
                     _builder.editComponentPanel.SetCurrentComponent(this);
                 }
                 return;
             }
-            if (inBuilderMode)
+            if (_inBuilderMode)
             {
                 _builder.createComponentPanel.CloseButtonPressed(false);
                 _builder.editComponentPanel.CloseButtonPressed(false);
@@ -186,13 +203,13 @@ namespace Tabloulet.Scenes.Components.BaseNS
             {
                 _twist = @event;
             }
-            if (inBuilderMode)
+            if (_inBuilderMode)
             {
                 if (!_builder.createComponentPanel.closeByUser)
                 {
                     _builder.createComponentPanel.OpenButtonPressed(false);
                 }
-                if (!builder.editComponentPanel.closeByUser)
+                if (!_builder.editComponentPanel.closeByUser)
                 {
                     _builder.editComponentPanel.OpenButtonPressed(false);
                 }

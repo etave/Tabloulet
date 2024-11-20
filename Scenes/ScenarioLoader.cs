@@ -4,6 +4,7 @@ using SQLite;
 using Tabloulet.DatabaseNS;
 using Tabloulet.DatabaseNS.Models;
 using Tabloulet.Scenes.BuilderNS;
+using Tabloulet.Scenes.ViewerNS;
 using BaseComponent = Tabloulet.Scenes.Components.BaseNS.Base;
 using ButtonComponent = Tabloulet.Scenes.Components.ButtonNS.Button;
 using ButtonModel = Tabloulet.DatabaseNS.Models.Button;
@@ -84,7 +85,7 @@ namespace Tabloulet.Scenes
                 return new BaseComponent(node, isMovable, true, display as Builder);
             }
 
-            return new BaseComponent(node, isMovable, false, null);
+            return new BaseComponent(node, isMovable, false, display as Viewer);
         }
 
         public void CreateTextComponent(TextModel text)
