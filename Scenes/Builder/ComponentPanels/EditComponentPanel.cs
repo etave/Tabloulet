@@ -337,7 +337,8 @@ namespace Tabloulet.Scenes.BuilderNS.ComponentPanelsNS
             // Ajout d'un menu déroulant pour sélectionner une page
             OptionButton pageSelector = new() { SizeFlagsHorizontal = SizeFlags.ExpandFill };
             List<Page> query = _database.GetPagesByScenario(_builder.idScenario);
-            int index = 0;
+            int index = 1;
+            pageSelector.AddItem("Aucun", 0);
             foreach (Page page in query)
             {
                 if (page.Id != _builder.getCurrentPageId())
@@ -361,6 +362,11 @@ namespace Tabloulet.Scenes.BuilderNS.ComponentPanelsNS
 
         private void onPageSelectorPressed(long index, ButtonComponent button)
         {
+            if (index == 0)
+            {
+                button.LinkTo = null;
+                return;
+            }
             button.LinkTo = _pages[(int)index];
         }
     }
