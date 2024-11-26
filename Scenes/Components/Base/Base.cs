@@ -220,7 +220,7 @@ namespace Tabloulet.Scenes.Components.BaseNS
         {
             if (!inBuilderMode)
             {
-                this._builder.ChangePage(linkTo);
+                this._viewer.ChangePage(linkTo);
             }
         }
     }
