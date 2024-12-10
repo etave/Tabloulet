@@ -1,3 +1,5 @@
+using System.IO;
+using System.Runtime.CompilerServices;
 using Godot;
 using Tabloulet.Helpers;
 using Tabloulet.Scenes.Components.BaseNS;
@@ -37,19 +39,31 @@ namespace Tabloulet.Scenes.Components.TextNS
         public string Content
         {
             get => _content;
-            set => _content = value;
+            set
+            {
+                _content = value;
+                UpdateContent(value);
+            }
         }
 
         public string FontPath
         {
             get => _fontPath;
-            set => _fontPath = value;
+            set
+            {
+                _fontPath = value;
+                UpdateFontPath(value);
+            }
         }
 
         public int FontSize
         {
             get => _fontSize;
-            set => _fontSize = value;
+            set
+            {
+                _fontSize = value;
+                UpdateFontSize(value);
+            }
         }
 
         public float ScaleX
@@ -120,17 +134,7 @@ namespace Tabloulet.Scenes.Components.TextNS
 
             if (!string.IsNullOrEmpty(_fontPath))
             {
-                FontFile font = new();
-                Error loadError = font.LoadDynamicFont(_fontPath);
-                if (loadError != Error.Ok || font.Data.Length == 0)
-                {
-                    GD.PrintErr($"Error loading font: {_fontPath}");
-                    // TODO: Inform the user about the error in a more user-friendly way
-                }
-                else
-                {
-                    AddThemeFontOverride("normal_font", font);
-                }
+                UpdateFontPath(_fontPath);
             }
 
             BbcodeEnabled = true;
@@ -175,6 +179,37 @@ namespace Tabloulet.Scenes.Components.TextNS
         {
             base._Process(delta);
             ScrollActive = true;
+        }
+
+        private void UpdateContent(string content)
+        {
+            Text = content;
+        }
+
+        private void UpdateFontSize(int fontSize)
+        {
+            AddThemeFontSizeOverride("normal_font_size", fontSize);
+        }
+
+        private void UpdateFontPath(string path)
+        {
+            FontFile font = new();
+            if (path == null)
+            {
+                AddThemeFontOverride("normal_font", font);
+                return;
+            }
+            string fontPath = Path.Combine(Constants.AppPath, path);
+            Error loadError = font.LoadDynamicFont(fontPath);
+            if (loadError != Error.Ok || font.Data.Length == 0)
+            {
+                GD.PrintErr($"Error loading font: {fontPath}");
+                // TODO: Inform the user about the error in a more user-friendly way
+            }
+            else
+            {
+                AddThemeFontOverride("normal_font", font);
+            }
         }
     }
 }
