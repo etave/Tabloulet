@@ -268,6 +268,7 @@ namespace Tabloulet.Scenes.BuilderNS.ComponentPanelsNS
         private void CreateTextComponentEdit(TextComponent text)
         {
             ResetComponentMarginContainer();
+            ShrinkingOpenPanel();
 
             VBoxContainer vBoxContainer = new() { Name = "TextComponentEdit" };
             Label textLabel =
@@ -505,6 +506,8 @@ namespace Tabloulet.Scenes.BuilderNS.ComponentPanelsNS
                     Text = "Texte du bouton",
                     HorizontalAlignment = HorizontalAlignment.Center,
                 };
+            label3.AddThemeFontSizeOverride("font_size", 20);
+            label3.AddThemeColorOverride("font_color", new Color(0, 0, 0));
 
             LineEdit lineEdit =
                 new() { Text = button.Text, SizeFlagsHorizontal = SizeFlags.ExpandFill };
@@ -540,7 +543,7 @@ namespace Tabloulet.Scenes.BuilderNS.ComponentPanelsNS
 
         private void ShrinkingOpenPanel()
         {
-            _openPanel.Size = new Vector2(_openPanel.Size.X, 720);
+            _openPanel.Size = new Vector2(_openPanel.Size.X, 800);
         }
     }
 }
