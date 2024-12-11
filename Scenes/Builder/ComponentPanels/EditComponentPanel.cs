@@ -266,6 +266,7 @@ namespace Tabloulet.Scenes.BuilderNS.ComponentPanelsNS
         private void CreateImageComponentEdit(ImageComponent image)
         {
             ResetComponentMarginContainer();
+            ShrinkingOpenPanel();
 
             VBoxContainer vBoxContainer = new() { Name = "ImageComponentEdit" };
             Label label =
@@ -325,6 +326,7 @@ namespace Tabloulet.Scenes.BuilderNS.ComponentPanelsNS
         private void CreateButtonComponentEdit(ButtonComponent button)
         {
             ResetComponentMarginContainer();
+            ExpendOpenPanel();
 
             _pages.Clear();
 
@@ -349,18 +351,54 @@ namespace Tabloulet.Scenes.BuilderNS.ComponentPanelsNS
                 }
             }
 
-            pageSelector.ItemSelected += (long index) => onPageSelectorPressed(index, button);
+            Label label2 =
+                new()
+                {
+                    Text = "Couleur du bouton",
+                    HorizontalAlignment = HorizontalAlignment.Center,
+                };
+            label2.AddThemeFontSizeOverride("font_size", 20);
+            label2.AddThemeColorOverride("font_color", new Color(0, 0, 0));
+
+            ColorPicker colorPicker =
+                new()
+                {
+                    SizeFlagsHorizontal = SizeFlags.ExpandFill,
+                    Color = new Color(button.Color),
+                };
+            colorPicker.ColorChanged += (Color color) => button.Color = color.ToHtml();
+            colorPicker.SamplerVisible = false;
+            colorPicker.ColorModesVisible = false;
+            colorPicker.PresetsVisible = false;
+            colorPicker.SlidersVisible = false;
+            colorPicker.HexVisible = false;
+            pageSelector.ItemSelected += (long index) => OnPageSelectorPressed(index, button);
+
+            Label label3 =
+                new()
+                {
+                    Text = "Texte du bouton",
+                    HorizontalAlignment = HorizontalAlignment.Center,
+                };
+
+            LineEdit lineEdit =
+                new() { Text = button.Text, SizeFlagsHorizontal = SizeFlags.ExpandFill };
+            lineEdit.TextChanged += (string text) => button.Content = text;
 
             HBoxContainer hBoxContainer = new();
             hBoxContainer.AddChild(pageSelector);
 
             vBoxContainer.AddChild(label);
             vBoxContainer.AddChild(hBoxContainer);
+            vBoxContainer.AddChild(label2);
+            vBoxContainer.AddChild(colorPicker);
+            vBoxContainer.AddChild(label3);
+            vBoxContainer.AddChild(lineEdit);
 
             _componentMarginContainer.AddChild(vBoxContainer);
         }
 
-        private void onPageSelectorPressed(long index, ButtonComponent button)
+        private void OnPageSelectorPressed(long index, ButtonComponent button)
         {
             if (index == 0)
             {
@@ -368,6 +406,16 @@ namespace Tabloulet.Scenes.BuilderNS.ComponentPanelsNS
                 return;
             }
             button.LinkTo = _pages[(int)index];
+        }
+
+        private void ExpendOpenPanel()
+        {
+            _openPanel.Size = new Vector2(_openPanel.Size.X, 965);
+        }
+
+        private void ShrinkingOpenPanel()
+        {
+            _openPanel.Size = new Vector2(_openPanel.Size.X, 720);
         }
     }
 }

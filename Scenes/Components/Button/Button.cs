@@ -44,13 +44,21 @@ namespace Tabloulet.Scenes.Components.ButtonNS
         public string Content
         {
             get => _content;
-            set => _content = value;
+            set
+            {
+                _content = value;
+                this.Text = value;
+            }
         }
 
         public string Color
         {
             get => _color;
-            set => _color = value;
+            set
+            {
+                _color = value;
+                changeColor(value);
+            }
         }
         public float ScaleX
         {
@@ -154,6 +162,8 @@ namespace Tabloulet.Scenes.Components.ButtonNS
             this.AddThemeColorOverride("font_hover_color", textColor);
             this.AddThemeColorOverride("font_pressed_color", textColor);
             this.AddThemeColorOverride("font_focus_color", textColor);
+            this.ClipText = true;
+            this.AutowrapMode = TextServer.AutowrapMode.WordSmart;
 
             Size = new Vector2(_sizeX, _sizeY);
             Scale = new Vector2(_scaleX, _scaleY);
@@ -181,6 +191,20 @@ namespace Tabloulet.Scenes.Components.ButtonNS
             PositionY = positionY;
             RotationDeg = rotationDeg;
             Index = index;
+        }
+
+        public void changeColor(string color)
+        {
+            StyleBoxFlat styleBoxFlat = new StyleBoxFlat();
+            styleBoxFlat.BgColor = new Color(color);
+            styleBoxFlat.CornerRadiusBottomRight = 5;
+            styleBoxFlat.CornerRadiusBottomLeft = 5;
+            styleBoxFlat.CornerRadiusTopRight = 5;
+            styleBoxFlat.CornerRadiusTopLeft = 5;
+            this.AddThemeStyleboxOverride("normal", styleBoxFlat);
+            this.AddThemeStyleboxOverride("hover", styleBoxFlat);
+            this.AddThemeStyleboxOverride("pressed", styleBoxFlat);
+            this.AddThemeStyleboxOverride("focus", styleBoxFlat);
         }
     }
 }
