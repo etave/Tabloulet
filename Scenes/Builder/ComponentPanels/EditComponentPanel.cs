@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using Godot;
 using Tabloulet.DatabaseNS;
 using Tabloulet.DatabaseNS.Models;
 using Tabloulet.Helpers;
-using Tabloulet.Scenes.Components.BaseNS;
 using ButtonComponent = Tabloulet.Scenes.Components.ButtonNS.Button;
+using GodotButton = Godot.Button;
 using ImageComponent = Tabloulet.Scenes.Components.ImageNS.Image;
 using TextComponent = Tabloulet.Scenes.Components.TextNS.Text;
 
@@ -222,6 +223,7 @@ namespace Tabloulet.Scenes.BuilderNS.ComponentPanelsNS
             switch (child)
             {
                 case TextComponent text:
+                    CreateTextComponentEdit(text);
                     break;
                 case ImageComponent image:
                     CreateImageComponentEdit(image);
@@ -261,6 +263,129 @@ namespace Tabloulet.Scenes.BuilderNS.ComponentPanelsNS
             {
                 child.QueueFree();
             }
+        }
+
+        private void CreateTextComponentEdit(TextComponent text)
+        {
+            ResetComponentMarginContainer();
+
+            VBoxContainer vBoxContainer = new() { Name = "TextComponentEdit" };
+            Label textLabel =
+                new() { Text = "Texte (BBCode)", HorizontalAlignment = HorizontalAlignment.Center };
+            textLabel.AddThemeFontSizeOverride("font_size", 20);
+            textLabel.AddThemeColorOverride("font_color", new Color(0, 0, 0));
+            TextEdit textEdit =
+                new()
+                {
+                    Text = text.Text,
+                    WrapMode = TextEdit.LineWrappingMode.Boundary,
+                    SizeFlagsVertical = SizeFlags.Fill | SizeFlags.Expand,
+                };
+
+            textEdit.TextChanged += () => text.Content = textEdit.Text;
+
+            vBoxContainer.AddChild(textLabel);
+            vBoxContainer.AddChild(textEdit);
+
+            Label fontSizeLabel =
+                new()
+                {
+                    Text = "Taille de la police d'écriture",
+                    HorizontalAlignment = HorizontalAlignment.Center,
+                };
+            fontSizeLabel.AddThemeFontSizeOverride("font_size", 20);
+            fontSizeLabel.AddThemeColorOverride("font_color", new Color(0, 0, 0));
+
+            SpinBox fontSizeSpinBox = _basePositionX.Duplicate() as SpinBox;
+            fontSizeSpinBox.Name = "FontSizeSpinBox";
+            fontSizeSpinBox.Value = text.FontSize;
+            fontSizeSpinBox.MinValue = 1;
+            fontSizeSpinBox.MaxValue = 300;
+            fontSizeSpinBox.Suffix = "";
+            fontSizeSpinBox.ValueChanged += (value) => text.FontSize = (int)value;
+
+            vBoxContainer.AddChild(fontSizeLabel);
+            vBoxContainer.AddChild(fontSizeSpinBox);
+
+            Label fontLabel =
+                new()
+                {
+                    Text = "Police d'écriture",
+                    HorizontalAlignment = HorizontalAlignment.Center,
+                };
+            fontLabel.AddThemeFontSizeOverride("font_size", 20);
+            fontLabel.AddThemeColorOverride("font_color", new Color(0, 0, 0));
+
+            OptionButton fontSelector = new() { SizeFlagsHorizontal = SizeFlags.ExpandFill };
+            fontSelector.AddItem("Par défaut", 0);
+            fontSelector.Select(0);
+
+            string directoryPath = Path.Combine(Constants.AppPath, _builder.idScenario.ToString());
+            if (!Directory.Exists(directoryPath))
+            {
+                Directory.CreateDirectory(directoryPath);
+            }
+            string[] fontFiles = Directory.GetFiles(directoryPath, "*.ttf");
+            fontFiles = [.. fontFiles, .. Directory.GetFiles(directoryPath, "*.otf")];
+            foreach (string fontFile in fontFiles)
+            {
+                fontSelector.AddItem(Path.GetFileName(fontFile), fontSelector.GetItemCount());
+            }
+
+            for (int i = 0; i < fontSelector.GetItemCount(); i++)
+            {
+                if (fontSelector.GetItemText(i) == Path.GetFileName(text.FontPath))
+                {
+                    fontSelector.Select(i);
+                    break;
+                }
+            }
+
+            fontSelector.ItemSelected += (long index) =>
+            {
+                if (index == 0)
+                {
+                    text.FontPath = null;
+                    return;
+                }
+                text.FontPath = Path.Combine(
+                    _builder.idScenario.ToString(),
+                    fontSelector.GetItemText((int)index)
+                );
+            };
+
+            FileDialog fileDialog =
+                new()
+                {
+                    FileMode = FileDialog.FileModeEnum.OpenFile,
+                    Access = FileDialog.AccessEnum.Filesystem,
+                    Filters = ["*.ttf", "*.otf"],
+                };
+
+            fileDialog.FileSelected += (string path) =>
+            {
+                string newFilePath = Path.Combine(directoryPath, Path.GetFileName(path));
+                File.Copy(path, newFilePath, true);
+                text.FontPath = Path.Combine(
+                    _builder.idScenario.ToString(),
+                    Path.GetFileName(path)
+                );
+                fontSelector.AddItem(Path.GetFileName(newFilePath), fontSelector.GetItemCount());
+                fontSelector.Select(fontSelector.GetItemCount() - 1);
+            };
+
+            GodotButton newFontButton = new() { Text = "📂" };
+            newFontButton.Pressed += () => fileDialog.PopupCenteredRatio();
+
+            HBoxContainer hBoxContainer = new();
+            hBoxContainer.AddChild(fontSelector);
+            hBoxContainer.AddChild(newFontButton);
+            hBoxContainer.AddChild(fileDialog);
+
+            vBoxContainer.AddChild(fontLabel);
+            vBoxContainer.AddChild(hBoxContainer);
+
+            _componentMarginContainer.AddChild(vBoxContainer);
         }
 
         private void CreateImageComponentEdit(ImageComponent image)
@@ -307,7 +432,7 @@ namespace Tabloulet.Scenes.BuilderNS.ComponentPanelsNS
                 image.Path = Path.Combine(_builder.idScenario.ToString(), Path.GetFileName(path));
             };
 
-            Godot.Button openDialogButton =
+            GodotButton openDialogButton =
                 new() { Text = "📂", SizeFlagsHorizontal = SizeFlags.ShrinkCenter };
             openDialogButton.Pressed += () => fileDialog.PopupCenteredRatio();
 

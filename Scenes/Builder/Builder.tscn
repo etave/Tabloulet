@@ -146,9 +146,9 @@ wait_time = 5.0
 z_index = 100
 layout_mode = 0
 offset_left = 1520.0
-offset_top = 990.0
+offset_top = 910.0
 offset_right = 1770.0
-offset_bottom = 1060.0
+offset_bottom = 980.0
 theme_override_styles/panel = SubResource("StyleBoxFlat_ybhlk")
 
 [node name="MarginContainer" type="MarginContainer" parent="PagePanelContainer"]

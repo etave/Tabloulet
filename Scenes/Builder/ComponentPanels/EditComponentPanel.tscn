@@ -136,6 +136,8 @@ size_flags_vertical = 0
 can_add_swatches = false
 sampler_visible = false
 color_modes_visible = false
+sliders_visible = false
+hex_visible = false
 presets_visible = false
 
 [node name="BaseMarginContainer" type="MarginContainer" parent="OpenPanel/VBoxContainer"]
@@ -345,6 +347,7 @@ layout_mode = 2
 size_flags_vertical = 3
 theme_override_constants/margin_left = 10
 theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = -110
 
 [node name="DeleteMarginContainer" type="MarginContainer" parent="OpenPanel/VBoxContainer"]
 visible = false
