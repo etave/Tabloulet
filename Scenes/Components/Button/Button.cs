@@ -57,7 +57,7 @@ namespace Tabloulet.Scenes.Components.ButtonNS
             set
             {
                 _color = value;
-                changeColor(value);
+                ChangeColor(value);
             }
         }
         public float ScaleX
@@ -153,6 +153,11 @@ namespace Tabloulet.Scenes.Components.ButtonNS
             styleBoxFlat.CornerRadiusBottomLeft = 5;
             styleBoxFlat.CornerRadiusTopRight = 5;
             styleBoxFlat.CornerRadiusTopLeft = 5;
+            styleBoxFlat.BorderWidthBottom = 1;
+            styleBoxFlat.BorderWidthLeft = 1;
+            styleBoxFlat.BorderWidthRight = 1;
+            styleBoxFlat.BorderWidthTop = 1;
+            styleBoxFlat.BorderColor = new Color(0, 0, 0);
             this.AddThemeStyleboxOverride("normal", styleBoxFlat);
             this.AddThemeStyleboxOverride("hover", styleBoxFlat);
             this.AddThemeStyleboxOverride("pressed", styleBoxFlat);
@@ -193,18 +198,43 @@ namespace Tabloulet.Scenes.Components.ButtonNS
             Index = index;
         }
 
-        public void changeColor(string color)
+        public void ChangeColor(string color)
         {
-            StyleBoxFlat styleBoxFlat = new StyleBoxFlat();
-            styleBoxFlat.BgColor = new Color(color);
-            styleBoxFlat.CornerRadiusBottomRight = 5;
-            styleBoxFlat.CornerRadiusBottomLeft = 5;
-            styleBoxFlat.CornerRadiusTopRight = 5;
-            styleBoxFlat.CornerRadiusTopLeft = 5;
+            StyleBoxFlat styleBoxFlat = new StyleBoxFlat
+            {
+                BgColor = new Color(color),
+                CornerRadiusBottomRight = 5,
+                CornerRadiusBottomLeft = 5,
+                CornerRadiusTopRight = 5,
+                CornerRadiusTopLeft = 5,
+            };
             this.AddThemeStyleboxOverride("normal", styleBoxFlat);
             this.AddThemeStyleboxOverride("hover", styleBoxFlat);
             this.AddThemeStyleboxOverride("pressed", styleBoxFlat);
             this.AddThemeStyleboxOverride("focus", styleBoxFlat);
+
+            Color fontColor;
+            if (IsColorDark(new Color(color)))
+            {
+                fontColor = new Color(255, 255, 255);
+            }
+            else
+            {
+                fontColor = new Color(0, 0, 0);
+            }
+
+            this.AddThemeColorOverride("font_color", fontColor);
+            this.AddThemeColorOverride("font_hover_color", fontColor);
+            this.AddThemeColorOverride("font_pressed_color", fontColor);
+            this.AddThemeColorOverride("font_focus_color", fontColor);
+
+            this.QueueRedraw();
+        }
+
+        private static bool IsColorDark(Color color)
+        {
+            float brightness = (0.299f * color.R) + (0.587f * color.G) + (0.114f * color.B);
+            return brightness < 0.5f;
         }
     }
 }
