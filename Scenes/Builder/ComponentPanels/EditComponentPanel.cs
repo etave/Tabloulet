@@ -4,6 +4,7 @@ using Tabloulet.Helpers;
 using Tabloulet.Scenes.Components.BaseNS;
 using ImageComponent = Tabloulet.Scenes.Components.ImageNS.Image;
 using TextComponent = Tabloulet.Scenes.Components.TextNS.Text;
+using ModeleCompenent = Tabloulet.Scenes.Components.Model3DNS.Model3D;
 
 namespace Tabloulet.Scenes.BuilderNS.ComponentPanelsNS
 {
@@ -216,6 +217,9 @@ namespace Tabloulet.Scenes.BuilderNS.ComponentPanelsNS
                 case ImageComponent image:
                     CreateImageComponentEdit(image);
                     break;
+                case ModeleCompenent model:
+                    CreateModel3DComponentEdit(model);
+                    break;
                 default:
                     break;
             }
@@ -309,7 +313,7 @@ namespace Tabloulet.Scenes.BuilderNS.ComponentPanelsNS
             _componentMarginContainer.AddChild(vBoxContainer);
         }
 
-        private void CreateModel3DComponentEdit()
+        private void CreateModel3DComponentEdit(ModeleCompenent model)
         {
             ResetComponentMarginContainer();
 
@@ -325,6 +329,9 @@ namespace Tabloulet.Scenes.BuilderNS.ComponentPanelsNS
             LineEdit lineEdit =
                 new()
                 {
+                    Text = !string.IsNullOrEmpty(model.Path)
+                        ? Path.Combine(Constants.AppPath, model.Path)
+                        : "",
                     Editable = false,
                     SizeFlagsHorizontal = SizeFlags.ExpandFill,
                 };
@@ -340,6 +347,13 @@ namespace Tabloulet.Scenes.BuilderNS.ComponentPanelsNS
             fileDialog.FileSelected += (string path) =>
             {
                 lineEdit.Text = path;
+                string directoryPath = Path.Combine(
+                    Constants.AppPath,
+                    _builder.idScenario.ToString()
+                );
+                string newFilePath = Path.Combine(directoryPath, Path.GetFileName(path));
+                File.Copy(path, newFilePath, true);
+                model.Path = Path.Combine(_builder.idScenario.ToString(), Path.GetFileName(path));
             };
 
             Button openDialogButton =
@@ -357,5 +371,6 @@ namespace Tabloulet.Scenes.BuilderNS.ComponentPanelsNS
 
             _componentMarginContainer.AddChild(vBoxContainer);
         }
+
     }
 }
