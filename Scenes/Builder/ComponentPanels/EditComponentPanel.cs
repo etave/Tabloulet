@@ -491,7 +491,10 @@ namespace Tabloulet.Scenes.BuilderNS.ComponentPanelsNS
                     SizeFlagsHorizontal = SizeFlags.ExpandFill,
                     Color = new Color(button.Color),
                 };
-            colorPicker.ColorChanged += (Color color) => button.Color = color.ToHtml();
+            colorPicker.ColorChanged += (Color color) =>
+            {
+                button.Color = color.ToHtml();
+            };
             colorPicker.SamplerVisible = false;
             colorPicker.ColorModesVisible = false;
             colorPicker.PresetsVisible = false;
