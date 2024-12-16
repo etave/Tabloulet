@@ -29,6 +29,7 @@ namespace Tabloulet.Scenes.BuilderNS
 
         private Button _addTextButton;
         private Button _addImageButton;
+        private Button _addModelButton;
 
         private ScenarioLoader _scenarioLoader;
 
@@ -67,12 +68,21 @@ namespace Tabloulet.Scenes.BuilderNS
                 "OpenPanel/VBoxContainer/ImageMarginContainer/PanelContainer/GridContainer/MarginContainer/Button"
             );
 
+            _addModelButton = createComponentPanel.GetNode<Button>(
+                "OpenPanel/VBoxContainer/ModelMarginContainer/PanelContainer/GridContainer/MarginContainer/Button"
+            );
+
+
             _addTextButton.Pressed += AddTextButtonPressed;
             _addImageButton.Pressed += AddImageButtonPressed;
+            _addModelButton.Pressed += AddModelButtonPressed;
+
 
             _scenarioLoader = new ScenarioLoader(_database, this);
 
+
             _page = [];
+
 
             _saveTimer = GetNode<Timer>("SaveTimer");
             _saveTimer.Timeout += SaveCurrentPage;
@@ -231,6 +241,30 @@ namespace Tabloulet.Scenes.BuilderNS
                 };
             _scenarioLoader.CreateImageComponent(image);
             _database.Insert(image);
+        }
+
+        private void AddModelButtonPressed()
+        {
+            Console.WriteLine("Test");
+            Model model =
+                new()
+                {
+                    Id = Guid.NewGuid(),
+                    PageId = _currentPage,
+                    Path = "",
+                    ScaleX = 1,
+                    ScaleY = 1,
+                    SizeX = 200,
+                    SizeY = 200,
+                    PositionX = GetRect().Size.X / 2,
+                    PositionY = GetRect().Size.Y / 2,
+                    Rotation = 0,
+                    ZIndex = 1,
+                    IsMovable = true,
+                };
+            _scenarioLoader.CreateModelComponent(model);
+            _database.Insert(model);
+            
         }
 
         public Control GetDisplayRoot()

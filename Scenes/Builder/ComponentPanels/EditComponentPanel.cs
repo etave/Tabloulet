@@ -308,5 +308,54 @@ namespace Tabloulet.Scenes.BuilderNS.ComponentPanelsNS
 
             _componentMarginContainer.AddChild(vBoxContainer);
         }
+
+        private void CreateModel3DComponentEdit()
+        {
+            ResetComponentMarginContainer();
+
+            VBoxContainer vBoxContainer = new() { Name = "Model3DComponentEdit" };
+            Label label =
+                new()
+                {
+                    Text = "Chemin du modèle 3D",
+                    HorizontalAlignment = HorizontalAlignment.Center,
+                };
+            label.AddThemeFontSizeOverride("font_size", 20);
+            label.AddThemeColorOverride("font_color", new Color(0, 0, 0));
+            LineEdit lineEdit =
+                new()
+                {
+                    Editable = false,
+                    SizeFlagsHorizontal = SizeFlags.ExpandFill,
+                };
+            lineEdit.AddThemeColorOverride("font_uneditable_color", new Color(0, 0, 0));
+            FileDialog fileDialog =
+                new()
+                {
+                    FileMode = FileDialog.FileModeEnum.OpenFile,
+                    Access = FileDialog.AccessEnum.Filesystem,
+                    Filters = ["*.glb", "*.gltf"],
+                };
+
+            fileDialog.FileSelected += (string path) =>
+            {
+                lineEdit.Text = path;
+            };
+
+            Button openDialogButton =
+                new() { Text = "📂", SizeFlagsHorizontal = SizeFlags.ShrinkCenter };
+            openDialogButton.Pressed += () => fileDialog.PopupCenteredRatio();
+
+            HBoxContainer hBoxContainer = new();
+
+            hBoxContainer.AddChild(lineEdit);
+            hBoxContainer.AddChild(openDialogButton);
+            hBoxContainer.AddChild(fileDialog);
+
+            vBoxContainer.AddChild(label);
+            vBoxContainer.AddChild(hBoxContainer);
+
+            _componentMarginContainer.AddChild(vBoxContainer);
+        }
     }
 }

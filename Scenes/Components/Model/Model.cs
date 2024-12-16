@@ -2,36 +2,43 @@ using System;
 using Godot;
 using Tabloulet.Helpers;
 using Tabloulet.Scenes.Components.BaseNS;
-using GDImage = Godot.Image;
 using IOPath = System.IO.Path;
 
-namespace Tabloulet.Scenes.Components.ImageNS
+namespace Tabloulet.Scenes.Components.Model3DNS
 {
-    public partial class Image(
-        string path,
-        float scaleX,
-        float scaleY,
-        float sizeX,
-        float sizeY,
-        float positionX,
-        float positionY,
-        float rotationDeg,
-        int index,
-        bool isMovable
-    ) : TextureRect, IComponent
+    public partial class Model3D : TextureRect, IComponent
     {
+        private string _path;
+        private float _scaleX, _scaleY, _sizeX, _sizeY, _positionX, _positionY, _rotationDeg;
+        private int _index;
+        private bool _isMovable;
         private InputHandler _inputHandler;
 
-        private string _path = path;
-        private float _scaleX = scaleX;
-        private float _scaleY = scaleY;
-        private float _sizeX = sizeX;
-        private float _sizeY = sizeY;
-        private float _positionX = positionX;
-        private float _positionY = positionY;
-        private float _rotationDeg = rotationDeg;
-        private int _index = index;
-        private bool _isMovable = isMovable;
+        public Model3D(
+            string path,
+            float scaleX,
+            float scaleY,
+            float sizeX,
+            float sizeY,
+            float positionX,
+            float positionY,
+            float rotationDeg,
+            int index,
+            bool isMovable
+        )
+        {
+            _path = path;
+            _scaleX = scaleX;
+            _scaleY = scaleY;
+            _sizeX = sizeX;
+            _sizeY = sizeY;
+
+            _positionX = positionX;
+            _positionY = positionY;
+            _rotationDeg = rotationDeg;
+            _index = index;
+            _isMovable = isMovable;
+        }
 
         public string Path
         {
@@ -39,7 +46,7 @@ namespace Tabloulet.Scenes.Components.ImageNS
             set
             {
                 _path = value;
-                LoadImage(value);
+                LoadModel(value);
             }
         }
 
@@ -97,7 +104,6 @@ namespace Tabloulet.Scenes.Components.ImageNS
             set => _isMovable = value;
         }
 
-        // Called when the node enters the scene tree for the first time.
         public override void _Ready()
         {
             base._Ready();
@@ -106,7 +112,7 @@ namespace Tabloulet.Scenes.Components.ImageNS
 
             if (!string.IsNullOrEmpty(_path))
             {
-                LoadImage(_path);
+                LoadModel(_path);
             }
             else
             {
@@ -120,29 +126,19 @@ namespace Tabloulet.Scenes.Components.ImageNS
             ZIndex = _index;
         }
 
-        private void LoadImage(string path)
+        private void LoadModel(string path)
         {
-            GDImage image = new();
-            string fullPath = IOPath.Combine(Constants.AppPath, path);
-            Error loadError = image.Load(fullPath);
-            if (loadError != Error.Ok)
+            var modelPath = IOPath.Combine(Constants.AppPath, path);
+            var meshResource = GD.Load<Mesh>(modelPath);
+
+            if (meshResource != null)
             {
-                GD.PrintErr($"Error loading image: {fullPath}");
-                // TODO: Inform the user about the error in a more user-friendly way
-                SetPlaceholderTexture();
-                Scale = new Vector2(_scaleX, _scaleY);
+                GD.Print("Model loaded successfully");
             }
             else
             {
-                ImageTexture imageTexture = new();
-                imageTexture.SetImage(image);
-                Texture = imageTexture;
-
-                ExpandMode = ExpandModeEnum.IgnoreSize;
-                float widthRatio = _scaleX / image.GetWidth();
-                float heightRatio = _scaleY / image.GetHeight();
-                float ratio = Math.Min(widthRatio, heightRatio);
-                Scale = new Vector2(image.GetWidth() * ratio, image.GetHeight() * ratio);
+                GD.PrintErr($"Error loading model: {modelPath}");
+                SetPlaceholderTexture();
             }
         }
 

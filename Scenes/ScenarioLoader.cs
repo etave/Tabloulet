@@ -9,6 +9,9 @@ using ImageComponent = Tabloulet.Scenes.Components.ImageNS.Image;
 using ImageModel = Tabloulet.DatabaseNS.Models.Image;
 using TextComponent = Tabloulet.Scenes.Components.TextNS.Text;
 using TextModel = Tabloulet.DatabaseNS.Models.Text;
+using Model3DComponent = Tabloulet.Scenes.Components.Model3DNS.Model3D;
+using Model3DModel = Tabloulet.DatabaseNS.Models.Model;
+
 
 namespace Tabloulet.Scenes
 {
@@ -50,6 +53,7 @@ namespace Tabloulet.Scenes
 
             LoadComponents<TextModel>(page.Id);
             LoadComponents<ImageModel>(page.Id);
+            LoadComponents<Model3DModel>(page.Id);
         }
 
         private void LoadComponents<T>(Guid pageId)
@@ -66,6 +70,9 @@ namespace Tabloulet.Scenes
                         break;
                     case ImageModel image:
                         CreateImageComponent(image);
+                        break;
+                    case Model3DModel model:
+                        CreateModelComponent(model);
                         break;
                 }
             }
@@ -119,6 +126,25 @@ namespace Tabloulet.Scenes
                 );
             BaseComponent imageBase = CreateBase(imageComponent, image.IsMovable, display);
             display.AddComponent(_currentPage, image.Id, imageBase);
+        }
+
+        public void CreateModelComponent(Model3DModel model)
+        {
+            Model3DComponent modelComponent =
+                new(
+                    model.Path,
+                    model.ScaleX,
+                    model.ScaleY,
+                    model.SizeX,
+                    model.SizeY,
+                    model.PositionX,
+                    model.PositionY,
+                    model.Rotation,
+                    model.ZIndex,
+                    model.IsMovable
+                );
+            BaseComponent modelBase = CreateBase(modelComponent, model.IsMovable, display);
+            display.AddComponent(_currentPage, model.Id, modelBase);
         }
     }
 }
