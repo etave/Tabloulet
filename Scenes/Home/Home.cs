@@ -96,7 +96,6 @@ namespace Tabloulet.Scenes.HomeNS
                 scenarioButton.AddThemeStyleboxOverride("normal", styleBox);
                 scenarioButton.AddThemeStyleboxOverride("hover", styleBox);
                 scenarioButton.AddThemeStyleboxOverride("pressed", styleBox);
-                scenarioButton.Pressed += () => SwitchToViewer(scenario.Id);
 
                 // Create a margin container
                 MarginContainer marginContainer = new() { Name = "MarginContainer" };
@@ -206,6 +205,11 @@ namespace Tabloulet.Scenes.HomeNS
 
             MarginContainer marginPopUp = GetNode<MarginContainer>("MarginPopUp");
             marginPopUp.Visible = true;
+
+            Godot.Button loadButton = GetNode<Godot.Button>(
+                "MarginPopUp/PanelPopUp/MarginInsidePopUp/VBoxPopUp/MarginButtonPopUp/HBoxPopUp/LoadButton"
+            );
+            loadButton.Pressed += () => SwitchToViewer(Guid.Parse(idScenario));
         }
 
         // Close the pop up with the scenario description
