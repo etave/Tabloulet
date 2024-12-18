@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://bmhr54bx5wrcy"]
+[gd_scene load_steps=11 format=3 uid="uid://bmhr54bx5wrcy"]
 
 [ext_resource type="Script" path="res://Scenes/Builder/ComponentPanels/EditComponentPanel.cs" id="1_w5y7o"]
 [ext_resource type="Texture2D" uid="uid://crubptjn3tor1" path="res://Assets/Builder/UpDown.png" id="2_s03ap"]
@@ -29,6 +29,8 @@ border_width_left = 3
 border_color = Color(0, 0, 0, 1)
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_w2tfm"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_j2fyy"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_wr3xh"]
 
@@ -121,6 +123,21 @@ theme_override_constants/margin_right = 10
 
 [node name="VBoxContainer" type="VBoxContainer" parent="OpenPanel/VBoxContainer/PageMarginContainer"]
 layout_mode = 2
+
+[node name="Label2" type="Label" parent="OpenPanel/VBoxContainer/PageMarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 20
+text = "Éditer le nom de la page :"
+horizontal_alignment = 1
+
+[node name="LineEdit" type="LineEdit" parent="OpenPanel/VBoxContainer/PageMarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="HSeparator" type="HSeparator" parent="OpenPanel/VBoxContainer/PageMarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 10
+theme_override_styles/separator = SubResource("StyleBoxEmpty_j2fyy")
 
 [node name="Label" type="Label" parent="OpenPanel/VBoxContainer/PageMarginContainer/VBoxContainer"]
 layout_mode = 2

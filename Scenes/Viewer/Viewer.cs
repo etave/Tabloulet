@@ -1,8 +1,10 @@
 using System;
+using System.Threading.Tasks;
 using Godot;
 using Tabloulet.DatabaseNS;
 using Tabloulet.DatabaseNS.Models;
 using Tabloulet.Scenes.HomeNS;
+using Tabloulet.Scenes.HomeNS.LoginPanelNS;
 using BaseComponent = Tabloulet.Scenes.Components.BaseNS.Base;
 
 namespace Tabloulet.Scenes.ViewerNS
@@ -17,6 +19,8 @@ namespace Tabloulet.Scenes.ViewerNS
 
         private ScenarioLoader _scenarioLoader;
 
+        private Timer _rfidTimer;
+        
         private Control _loginPanel;
 
         public override void _Ready()
@@ -27,12 +31,13 @@ namespace Tabloulet.Scenes.ViewerNS
 
             _scenarioLoader = new ScenarioLoader(_database, this);
 
-            _loginPanel = GetNode<Control>("LoginPanel");
+            _rfidTimer = GetNode<Timer>("RFIDTimer");
+            _rfidTimer.Timeout += OnRFIDTimerTimeout;
+            _rfidTimer.Start();
+
+            _loginPanel = GetNode<LoginPanel>("LoginPanel");
             _loginPanel.SetProcess(false);
-            if (_loginPanel is Tabloulet.Scenes.HomeNS.LoginPanelNS.LoginPanel loginPanel)
-            {
-                loginPanel.viewerMode = true;
-            }
+            _loginPanel.viewerMode = true;
         }
 
         public void Init(Guid idScenario)
@@ -154,6 +159,35 @@ namespace Tabloulet.Scenes.ViewerNS
             page.Visible = true;
             _loginPanel.SetProcess(false);
             _loginPanel.Visible = false;
+        }
+
+        private void OnRFIDTimerTimeout()
+        {
+            Helpers
+                .RFID.GetUIDAsync(_idScenario)
+                .ContinueWith(
+                    task =>
+                    {
+                        if (
+                            task.IsFaulted
+                            || task.Result == Guid.Empty
+                            || task.Result == _idScenario
+                        )
+                        {
+                            return;
+                        }
+                        RFID rfid = _database.GetRFIDByTag(task.Result);
+                        if (rfid == null)
+                        {
+                            return;
+                        }
+                        if (rfid.PageId == _currentPage)
+                        {
+                            ChangePage(rfid.LinkTo);
+                        }
+                    },
+                    TaskScheduler.FromCurrentSynchronizationContext()
+                );
         }
     }
 }
