@@ -6,6 +6,7 @@ using Godot;
 using Tabloulet.DatabaseNS;
 using Tabloulet.DatabaseNS.Models;
 using Tabloulet.Helpers;
+using AudioComponent = Tabloulet.Scenes.Components.AudioNS.Audio;
 using ButtonComponent = Tabloulet.Scenes.Components.ButtonNS.Button;
 using GodotButton = Godot.Button;
 using ImageComponent = Tabloulet.Scenes.Components.ImageNS.Image;
@@ -231,6 +232,9 @@ namespace Tabloulet.Scenes.BuilderNS.ComponentPanelsNS
                 case ButtonComponent button:
                     CreateButtonComponentEdit(button);
                     break;
+                case AudioComponent audio:
+                    CreateAudioComponentEdit(audio);
+                    break;
                 default:
                     break;
             }
@@ -241,7 +245,12 @@ namespace Tabloulet.Scenes.BuilderNS.ComponentPanelsNS
             Control child = _currentComponent.GetChild<Control>(0);
             child.PivotOffset = child.Size / 2;
             child.Position = new Vector2((float)_basePositionX.Value, (float)_basePositionY.Value);
-            child.Size = new Vector2((float)_baseSizeX.Value, (float)_baseSizeY.Value);
+
+            if (child is not AudioComponent)
+            {
+                child.Size = new Vector2((float)_baseSizeX.Value, (float)_baseSizeY.Value);
+            }
+
             child.ZIndex = (int)_baseZIndex.Value;
             child.RotationDegrees = (float)_baseRotation.Value;
             _currentComponent.IsMovable = _baseIsMovable.ButtonPressed;
@@ -525,6 +534,66 @@ namespace Tabloulet.Scenes.BuilderNS.ComponentPanelsNS
             vBoxContainer.AddChild(colorPicker);
             vBoxContainer.AddChild(label3);
             vBoxContainer.AddChild(lineEdit);
+
+            _componentMarginContainer.AddChild(vBoxContainer);
+        }
+
+        private void CreateAudioComponentEdit(AudioComponent audio)
+        {
+            ResetComponentMarginContainer();
+            ShrinkingOpenPanel();
+
+            VBoxContainer vBoxContainer = new() { Name = "AudioComponentEdit" };
+            Label label =
+                new()
+                {
+                    Text = "Chemin de l'audio",
+                    HorizontalAlignment = HorizontalAlignment.Center,
+                };
+            label.AddThemeFontSizeOverride("font_size", 20);
+            label.AddThemeColorOverride("font_color", new Color(0, 0, 0));
+            LineEdit lineEdit =
+                new()
+                {
+                    Text = !string.IsNullOrEmpty(audio.Path)
+                        ? Path.Combine(Constants.AppPath, audio.Path)
+                        : "",
+                    Editable = false,
+                    SizeFlagsHorizontal = SizeFlags.ExpandFill,
+                };
+            lineEdit.AddThemeColorOverride("font_uneditable_color", new Color(0, 0, 0));
+            FileDialog fileDialog =
+                new()
+                {
+                    FileMode = FileDialog.FileModeEnum.OpenFile,
+                    Access = FileDialog.AccessEnum.Filesystem,
+                    Filters = ["*.wav", "*.mp3"],
+                };
+
+            fileDialog.FileSelected += (string path) =>
+            {
+                lineEdit.Text = path;
+                string directoryPath = Path.Combine(
+                    Constants.AppPath,
+                    _builder.idScenario.ToString()
+                );
+                string newFilePath = Path.Combine(directoryPath, Path.GetFileName(path));
+                File.Copy(path, newFilePath, true);
+                audio.Path = Path.Combine(_builder.idScenario.ToString(), Path.GetFileName(path));
+            };
+
+            GodotButton openDialogButton =
+                new() { Text = "📂", SizeFlagsHorizontal = SizeFlags.ShrinkCenter };
+            openDialogButton.Pressed += () => fileDialog.PopupCenteredRatio();
+
+            HBoxContainer hBoxContainer = new();
+
+            hBoxContainer.AddChild(lineEdit);
+            hBoxContainer.AddChild(openDialogButton);
+            hBoxContainer.AddChild(fileDialog);
+
+            vBoxContainer.AddChild(label);
+            vBoxContainer.AddChild(hBoxContainer);
 
             _componentMarginContainer.AddChild(vBoxContainer);
         }

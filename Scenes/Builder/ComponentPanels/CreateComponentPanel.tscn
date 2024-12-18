@@ -228,6 +228,46 @@ layout_mode = 2
 theme_override_font_sizes/font_size = 25
 text = "Insérer"
 
+[node name="HSeparator4" type="HSeparator" parent="OpenPanel/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 30
+theme_override_styles/separator = SubResource("StyleBoxEmpty_i22fh")
+
+[node name="AudioMarginContainer" type="MarginContainer" parent="OpenPanel/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_right = 10
+
+[node name="PanelContainer" type="PanelContainer" parent="OpenPanel/VBoxContainer/AudioMarginContainer"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_4oqyo")
+
+[node name="GridContainer" type="GridContainer" parent="OpenPanel/VBoxContainer/AudioMarginContainer/PanelContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+columns = 3
+
+[node name="Label" type="Label" parent="OpenPanel/VBoxContainer/AudioMarginContainer/PanelContainer/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_font_sizes/font_size = 30
+text = "AUDIO"
+
+[node name="VSeparator" type="VSeparator" parent="OpenPanel/VBoxContainer/AudioMarginContainer/PanelContainer/GridContainer"]
+layout_mode = 2
+theme_override_constants/separation = 80
+theme_override_styles/separator = SubResource("StyleBoxEmpty_dpo87")
+
+[node name="MarginContainer" type="MarginContainer" parent="OpenPanel/VBoxContainer/AudioMarginContainer/PanelContainer/GridContainer"]
+layout_mode = 2
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_bottom = 5
+
+[node name="Button" type="Button" parent="OpenPanel/VBoxContainer/AudioMarginContainer/PanelContainer/GridContainer/MarginContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 25
+text = "Insérer"
+
 [node name="ClosePanel" type="Panel" parent="."]
 visible = false
 layout_mode = 1
