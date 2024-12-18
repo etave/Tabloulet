@@ -1,13 +1,12 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
-using System.Security.Cryptography;
 using Godot;
 using Tabloulet.DatabaseNS;
 using Tabloulet.DatabaseNS.Models;
 using Tabloulet.Helpers;
 using Tabloulet.Scenes.BuilderNS.ComponentPanelsNS;
+using Tabloulet.Scenes.BuilderNS.NavigationGraphNS;
 using Tabloulet.Scenes.HomeNS;
 using Base = Tabloulet.Scenes.Components.BaseNS.Base;
 using Button = Godot.Button;
@@ -39,14 +38,7 @@ namespace Tabloulet.Scenes.BuilderNS
 
         private Timer _saveTimer;
 
-        private OptionButton _pageSelector;
-        private Dictionary<int, Guid> _pageSelectorOptions;
-        private Button _newPageButton;
-
-        private Panel _newPagePopupPanel;
-        private LineEdit _newPageName;
-        private Button _newPageCreateButton;
-        private Button _newPageCancelButton;
+        private Button _navigationGraphButton;
 
         // Called when the node enters the scene tree for the first time.
         public override void _Ready()
@@ -84,30 +76,10 @@ namespace Tabloulet.Scenes.BuilderNS
             _saveTimer = GetNode<Timer>("SaveTimer");
             _saveTimer.Timeout += SaveCurrentPage;
 
-            _pageSelector = GetNode<OptionButton>(
-                "PagePanelContainer/MarginContainer/PageOptionButton"
+            _navigationGraphButton = GetNode<Button>(
+                "NavigationGraphButtonPanel/MarginContainer/NavigationGraphButton"
             );
-
-            _pageSelector.ItemSelected += OnPageSelectorItemSelected;
-
-            _newPageButton = GetNode<Button>("NewPageButtonPanel/MarginContainer/NewPageButton");
-
-            _newPageButton.Pressed += NewPageButtonPressed;
-
-            _newPagePopupPanel = GetNode<Panel>("NewPagePopupPanel");
-            _newPageName = _newPagePopupPanel.GetNode<LineEdit>(
-                "VBoxContainer/MarginContainer/LineEdit"
-            );
-            _newPageCreateButton = _newPagePopupPanel.GetNode<Button>(
-                "VBoxContainer/ButtonsHBoxContainer/CreateButton"
-            );
-            _newPageCancelButton = _newPagePopupPanel.GetNode<Button>(
-                "VBoxContainer/ButtonsHBoxContainer/CancelButton"
-            );
-
-            _newPageName.TextChanged += OnNewPageNameTextChanged;
-            _newPageCreateButton.Pressed += NewPageCreateButtonPressed;
-            _newPageCancelButton.Pressed += NewPageCancelButtonPressed;
+            _navigationGraphButton.Pressed += NavigationGraphButtonPressed;
         }
 
         public void Init(Guid idScenario)
@@ -116,54 +88,6 @@ namespace Tabloulet.Scenes.BuilderNS
             _currentPage = _scenarioLoader.LoadScenario(idScenario);
             _saveTimer.Start();
             editComponentPanel.SetCurrentPage(_blueprint.GetNode<Control>(_currentPage.ToString()));
-            UpdatePageSelector();
-        }
-
-        private void NewPageButtonPressed()
-        {
-            _newPagePopupPanel.Visible = true;
-        }
-
-        private void NewPageCreateButtonPressed()
-        {
-            Page page =
-                new()
-                {
-                    Id = Guid.NewGuid(),
-                    Name = _newPageName.Text,
-                    BackgroundColor = "#FFFFFF",
-                };
-            _database.Insert(page);
-            ScenarioPage scenarioPage =
-                new()
-                {
-                    Id = Guid.NewGuid(),
-                    ScenarioId = idScenario,
-                    PageId = page.Id,
-                };
-            _database.Insert(scenarioPage);
-            _newPagePopupPanel.Visible = false;
-            UpdatePageSelector();
-        }
-
-        private void UpdatePageSelector()
-        {
-            _pageSelector.Clear();
-            _pageSelectorOptions = [];
-            List<Page> pages = _database.GetPagesByScenario(idScenario);
-            for (int i = 0; i < pages.Count; i++)
-            {
-                _pageSelector.AddItem(pages[i].Name, i);
-                _pageSelectorOptions[i] = pages[i].Id;
-            }
-            _pageSelector.Selected = _pageSelectorOptions
-                .FirstOrDefault(x => x.Value == _currentPage)
-                .Key;
-        }
-
-        private void OnPageSelectorItemSelected(long index)
-        {
-            ChangePage(_pageSelectorOptions[(int)index]);
         }
 
         public void ChangePage(Guid idPage)
@@ -174,24 +98,16 @@ namespace Tabloulet.Scenes.BuilderNS
             editComponentPanel.isBackgroundCallableSet = false;
             _scenarioLoader.LoadPage(_database.GetById<Page>(_currentPage));
             editComponentPanel.SetCurrentPage(_blueprint.GetNode<Control>(_currentPage.ToString()));
-            UpdatePageSelector();
         }
 
-        private void NewPageCancelButtonPressed()
+        private void NavigationGraphButtonPressed()
         {
-            _newPagePopupPanel.Visible = false;
-        }
-
-        private void OnNewPageNameTextChanged(string newText)
-        {
-            if (newText.Length > 0)
-            {
-                _newPageCreateButton.Disabled = false;
-            }
-            else
-            {
-                _newPageCreateButton.Disabled = true;
-            }
+            PackedScene navigationGraphScene = GD.Load<PackedScene>(
+                "res://Scenes/Builder/NavigationGraph/NavigationGraph.tscn"
+            );
+            NavigationGraph navigationGraph = (NavigationGraph)navigationGraphScene.Instantiate();
+            GetTree().Root.AddChild(navigationGraph);
+            navigationGraph.LoadGraph(idScenario);
         }
 
         private void AddTextButtonPressed()
@@ -286,6 +202,7 @@ namespace Tabloulet.Scenes.BuilderNS
 
         public void FreePage()
         {
+            editComponentPanel.pageNameLineEdit.Text = "";
             Control page = _blueprint.GetNode<Control>(_currentPage.ToString());
             foreach (Control component in page.GetChildren().Cast<Control>())
             {
@@ -297,15 +214,13 @@ namespace Tabloulet.Scenes.BuilderNS
 
         private void SaveCurrentPage()
         {
+            Control blueprintPage = _blueprint.GetNode<Control>(_currentPage.ToString());
             _database.Update(
                 new Page()
                 {
                     Id = _currentPage,
-                    BackgroundColor = _blueprint
-                        .GetNode<Control>(_currentPage.ToString())
-                        .GetNode<ColorRect>("Background")
-                        .Color.ToHtml(),
-                    Name = _database.GetById<Page>(_currentPage).Name,
+                    BackgroundColor = blueprintPage.GetNode<ColorRect>("Background").Color.ToHtml(),
+                    Name = editComponentPanel.pageNameLineEdit.Text,
                 }
             );
             foreach (var component in _page)
@@ -340,7 +255,7 @@ namespace Tabloulet.Scenes.BuilderNS
             QueueFree();
         }
 
-        public Guid getCurrentPageId()
+        public Guid GetCurrentPageId()
         {
             return _currentPage;
         }

@@ -1,4 +1,5 @@
 using System;
+using System.Threading.Tasks;
 using Godot;
 using Tabloulet.DatabaseNS;
 using Tabloulet.DatabaseNS.Models;
@@ -12,7 +13,11 @@ namespace Tabloulet.Scenes.ViewerNS
 
         private Guid _currentPage;
 
+        private Guid _idScenario;
+
         private ScenarioLoader _scenarioLoader;
+
+        private Timer _rfidTimer;
 
         public override void _Ready()
         {
@@ -21,11 +26,16 @@ namespace Tabloulet.Scenes.ViewerNS
             _database = GetNode<Database>("/root/Database");
 
             _scenarioLoader = new ScenarioLoader(_database, this);
+
+            _rfidTimer = GetNode<Timer>("RFIDTimer");
+            _rfidTimer.Timeout += OnRFIDTimerTimeout;
+            _rfidTimer.Start();
         }
 
         public void Init(Guid idScenario)
         {
             _currentPage = _scenarioLoader.LoadScenario(idScenario);
+            _idScenario = idScenario;
         }
 
         public Control GetDisplayRoot()
@@ -55,6 +65,35 @@ namespace Tabloulet.Scenes.ViewerNS
             FreePage();
             _currentPage = idPage;
             _scenarioLoader.LoadPage(_database.GetById<Page>(_currentPage));
+        }
+
+        private void OnRFIDTimerTimeout()
+        {
+            Helpers
+                .RFID.GetUIDAsync(_idScenario)
+                .ContinueWith(
+                    task =>
+                    {
+                        if (
+                            task.IsFaulted
+                            || task.Result == Guid.Empty
+                            || task.Result == _idScenario
+                        )
+                        {
+                            return;
+                        }
+                        RFID rfid = _database.GetRFIDByTag(task.Result);
+                        if (rfid == null)
+                        {
+                            return;
+                        }
+                        if (rfid.PageId == _currentPage)
+                        {
+                            ChangePage(rfid.LinkTo);
+                        }
+                    },
+                    TaskScheduler.FromCurrentSynchronizationContext()
+                );
         }
     }
 }

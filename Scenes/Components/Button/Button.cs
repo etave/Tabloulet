@@ -129,7 +129,7 @@ namespace Tabloulet.Scenes.Components.ButtonNS
             if (!(_linkTo == null))
             {
                 Base parent = GetParent<Base>();
-                this.Pressed += () => parent.changePage((Guid)_linkTo);
+                this.Pressed += () => parent.ChangePage((Guid)_linkTo);
             }
 
             if (String.IsNullOrEmpty(_content))
