@@ -20,8 +20,8 @@ namespace Tabloulet.Scenes.ViewerNS
         private ScenarioLoader _scenarioLoader;
 
         private Timer _rfidTimer;
-        
-        private Control _loginPanel;
+
+        private LoginPanel _loginPanel;
 
         public override void _Ready()
         {
@@ -84,7 +84,7 @@ namespace Tabloulet.Scenes.ViewerNS
 
         private void OnExitButtonPressed()
         {
-            Control page = GetChild(1) as Control;
+            Control page = GetChild(2) as Control;
             page.Visible = false;
             _loginPanel.SetProcess(true);
             _loginPanel.Visible = true;
@@ -155,7 +155,7 @@ namespace Tabloulet.Scenes.ViewerNS
 
         public void LoginCancelButtonPressed()
         {
-            Control page = GetChild(1) as Control;
+            Control page = GetChild(2) as Control;
             page.Visible = true;
             _loginPanel.SetProcess(false);
             _loginPanel.Visible = false;
