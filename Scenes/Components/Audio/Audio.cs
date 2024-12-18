@@ -190,16 +190,18 @@ namespace Tabloulet.Scenes.Components.AudioNS
             ZIndex = _index; // Ordre d'affichage
         }
 
-        private void LoadAudio(string absolutePath)
+        private void LoadAudio(string path)
         {
-            if (string.IsNullOrEmpty(absolutePath))
+            string fullPath = System.IO.Path.Combine(Constants.AppPath, path);
+
+            if (string.IsNullOrEmpty(fullPath))
             {
                 GD.PrintErr("Le chemin est vide ou null.");
                 return;
             }
 
             // Normaliser le chemin (remplacer les backslashes par des slashes pour compatibilité)
-            string normalizedPath = absolutePath.Replace("\\", "/");
+            string normalizedPath = fullPath.Replace("\\", "/");
             GD.Print("Chemin absolu normalisé : " + normalizedPath);
 
             // Ouvrir le fichier audio
@@ -288,24 +290,51 @@ namespace Tabloulet.Scenes.Components.AudioNS
 
         public void SetAudio(AudioStream audioStream)
         {
+            // Vérifie si _audioStreamPlayer est initialisé
+            if (_audioStreamPlayer == null)
+            {
+                GD.PrintErr("L'AudioStreamPlayer (_audioStreamPlayer) n'est pas initialisé.");
+                return;
+            }
+
             // Assigne le flux audio à l'AudioStreamPlayer
             _audioStreamPlayer.Stream = audioStream;
-            _maxPosition = (float)_audioStreamPlayer.Stream.GetLength();
 
-            // Initialise la barre de progression si un audio valide est assigné
+            // Si le flux audio est valide, met à jour la durée et la barre de progression
             if (audioStream != null)
             {
-                float audioLength = (float)audioStream.GetLength(); // Durée en secondes
+                float audioLength = (float)audioStream.GetLength(); // Durée totale en secondes
 
-                _progressionSlider.MinValue = 0;
-                _progressionSlider.MaxValue = audioLength; // Durée totale de l'audio en secondes
-                _progressionSlider.Value = 0; // Remet à zéro la progression
+                GD.Print($"Durée de l'audio : {audioLength} secondes.");
+                _maxPosition = audioLength;
+
+                // Vérifie si _progressionSlider est initialisé
+                if (_progressionSlider != null)
+                {
+                    _progressionSlider.MinValue = 0;
+                    _progressionSlider.MaxValue = audioLength; // Définit la durée de l'audio
+                    _progressionSlider.Value = 0; // Réinitialise la progression
+                }
+                else
+                {
+                    GD.PrintErr(
+                        "Le Slider de progression (_progressionSlider) n'est pas initialisé."
+                    );
+                }
             }
             else
             {
-                _progressionSlider.MinValue = 0;
-                _progressionSlider.MaxValue = 0;
-                _progressionSlider.Value = 0;
+                GD.PrintErr("AudioStream nul, réinitialisation des valeurs.");
+
+                // Réinitialise les valeurs de la barre de progression
+                _maxPosition = 0;
+
+                if (_progressionSlider != null)
+                {
+                    _progressionSlider.MinValue = 0;
+                    _progressionSlider.MaxValue = 0;
+                    _progressionSlider.Value = 0;
+                }
             }
         }
 
