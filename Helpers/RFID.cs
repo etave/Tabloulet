@@ -13,18 +13,22 @@ namespace Tabloulet.Helpers
         {
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             {
+                GD.PrintErr("RFID.GetUIDAsync() is not supported on Windows.");
                 return Guid.Empty;
             }
 
             using var process = new Process();
             process.StartInfo.FileName = "bash";
-            process.StartInfo.Arguments = "-c \"nfc-list | grep UID | cut -d':' -f2 | tr -d ' '\"";
+            process.StartInfo.Arguments =
+                "-c \"nfc-list | grep UID | cut -d':' -f2 | tr -d '[:space:]'\"";
             process.StartInfo.UseShellExecute = false;
             process.StartInfo.RedirectStandardOutput = true;
+            process.StartInfo.RedirectStandardError = true;
 
             process.Start();
             string hexInput = await process.StandardOutput.ReadToEndAsync();
             hexInput = hexInput.Trim();
+            GD.Print($"UID: {hexInput}");
 
             hexInput = new string(
                 hexInput.Where(c => "0123456789abcdefABCDEF".Contains(c)).ToArray()

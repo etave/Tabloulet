@@ -216,7 +216,7 @@ namespace Tabloulet.Scenes.Components.BaseNS
             }
         }
 
-        public void changePage(Guid linkTo)
+        public void ChangePage(Guid linkTo)
         {
             if (!inBuilderMode)
             {

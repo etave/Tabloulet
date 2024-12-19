@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=3 uid="uid://busbh4yd6424o"]
+[gd_scene load_steps=3 format=3 uid="uid://busbh4yd6424o"]
 
 [ext_resource type="Script" path="res://Scenes/Viewer/Viewer.cs" id="1_u72oc"]
+[ext_resource type="PackedScene" uid="uid://enai0nx8jrw8" path="res://Scenes/Home/LoginPanel/LoginPanel.tscn" id="2_ipd5q"]
 
 [node name="Viewer" type="Control"]
 layout_mode = 3
@@ -10,3 +11,15 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_u72oc")
+
+[node name="RFIDTimer" type="Timer" parent="."]
+wait_time = 3.0
+
+[node name="LoginPanel" parent="." instance=ExtResource("2_ipd5q")]
+visible = false
+z_index = 101
+layout_mode = 1
+offset_left = -13.0
+offset_top = -17.0
+offset_right = -13.0
+offset_bottom = -17.0
