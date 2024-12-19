@@ -218,6 +218,42 @@ namespace Tabloulet.DatabaseNS
             }
         }
 
+        public void SavePageAsTemplate(Guid pageId)
+        {
+            Page page = GetById<Page>(pageId);
+            Template template = new Template { Id = Guid.NewGuid(), Name = page.Name };
+            Insert(template);
+
+            List<IDatabaseModel> elements = GetElementsByPage(pageId);
+            foreach (IDatabaseModel element in elements)
+            {
+                if (element is IDatabaseModelComponent component)
+                {
+                    component.PageId = template.Id;
+                    Insert((IDatabaseModel)component);
+                }
+            }
+        }
+
+        public Guid GeneratePageByTemplate(Guid templateId)
+        {
+            Template template = GetById<Template>(templateId);
+            Page page = new Page { Id = Guid.NewGuid(), Name = template.Name };
+            Insert(page);
+
+            List<IDatabaseModel> elements = GetElementsByPage(templateId);
+            foreach (IDatabaseModel element in elements)
+            {
+                if (element is IDatabaseModelComponent component)
+                {
+                    component.PageId = page.Id;
+                    Insert((IDatabaseModel)component);
+                }
+            }
+
+            return page.Id;
+        }
+
         private void CreateTables()
         {
             var createTableStatements = new List<string>()
@@ -232,6 +268,7 @@ namespace Tabloulet.DatabaseNS
                 Constants.CreateModelTable,
                 Constants.CreateScenarioPageTable,
                 Constants.CreateRFIDTable,
+                Constants.CreateTemplateTable,
             };
 
             foreach (var statement in createTableStatements)
