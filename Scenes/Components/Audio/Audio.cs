@@ -31,9 +31,10 @@ namespace Tabloulet.Scenes.Components.AudioNS
         private StyleBoxFlat _styleBoxPlayPauseBtnHover;
         private StyleBoxFlat _styleBoxPlayPauseBtnPressed;
         private HSlider _volumeSlider;
-        private HSlider _progressionSlider;
+        private HSlider _progressionSlider = new();
         private bool _isPlaying = false;
         private bool _isEnded = false;
+        private bool _isDragging = false;
         private float _maxPosition = 0f; // Durée totale de l'audio
         private float _targetPlaybackPosition = 0f; // Position de lecture souhaitée
 
@@ -138,13 +139,13 @@ namespace Tabloulet.Scenes.Components.AudioNS
             );
 
             _progressionSlider.SizeFlagsHorizontal = SizeFlags.ShrinkCenter; // Centre l'élément sans étirement
-            GD.Print(_progressionSlider.SizeFlagsHorizontal);
 
             _playIcon = GD.Load<CompressedTexture2D>(
                 "res://Assets/Components/bouton-de-lecture.png"
             );
             _pauseIcon = GD.Load<CompressedTexture2D>("res://Assets/Components/pause.png");
 
+            // StyleBox pour les boutons de lecture/pause
             _styleBoxPlayPauseBtnNormal =
                 _playPauseButton.GetThemeStylebox("normal") as StyleBoxFlat;
             _styleBoxPlayPauseBtnHover = _playPauseButton.GetThemeStylebox("hover") as StyleBoxFlat;
@@ -156,6 +157,7 @@ namespace Tabloulet.Scenes.Components.AudioNS
             _playPauseButton.Pressed += () => OnPlayPauseButtonPressed(_playIcon, _pauseIcon);
             _volumeSlider.ValueChanged += OnVolumeSliderChanged;
             _progressionSlider.ValueChanged += OnProgressionSliderChanged;
+            _progressionSlider.GuiInput += OnProgressionSliderGuiInput;
 
             _audioStreamPlayer.Finished += () => OnAudioFinished(_playIcon);
 
@@ -164,10 +166,6 @@ namespace Tabloulet.Scenes.Components.AudioNS
             _volumeSlider.MaxValue = 100;
             _volumeSlider.Value = 100; // Volume au maximum au démarrage
             _audioStreamPlayer.VolumeDb = 0; // Volume maximal au départ
-
-            // // Charger un audio
-            // var audioStream = GD.Load<AudioStream>("res://Assets/Components/song.ogg");
-            // SetAudio(audioStream);
 
             _inputHandler = GetNodeOrNull<InputHandler>("/root/InputHandler");
             if (_inputHandler == null)
@@ -190,6 +188,15 @@ namespace Tabloulet.Scenes.Components.AudioNS
             ZIndex = _index; // Ordre d'affichage
         }
 
+        public override void _Process(double delta)
+        {
+            // Mise à jour de la barre de progression pendant la lecture
+            if (_audioStreamPlayer.Playing && !_isDragging)
+            {
+                _progressionSlider.Value = _audioStreamPlayer.GetPlaybackPosition();
+            }
+        }
+
         private void LoadAudio(string path)
         {
             string fullPath = System.IO.Path.Combine(Constants.AppPath, path);
@@ -202,7 +209,6 @@ namespace Tabloulet.Scenes.Components.AudioNS
 
             // Normaliser le chemin (remplacer les backslashes par des slashes pour compatibilité)
             string normalizedPath = fullPath.Replace("\\", "/");
-            GD.Print("Chemin absolu normalisé : " + normalizedPath);
 
             // Ouvrir le fichier audio
             var file = FileAccess.Open(normalizedPath, FileAccess.ModeFlags.Read);
@@ -214,58 +220,46 @@ namespace Tabloulet.Scenes.Components.AudioNS
 
             // Obtenir l'extension
             string extension = System.IO.Path.GetExtension(normalizedPath)?.ToLower();
-            GD.Print("Extension : " + extension);
 
             AudioStream audioStream = null;
-
-            try
+            if (extension == ".mp3")
             {
-                switch (extension)
+                try
                 {
-                    case ".mp3":
-                        audioStream = new AudioStreamMP3
-                        {
-                            Data = file.GetBuffer((long)file.GetLength()),
-                        };
-                        GD.Print("Fichier MP3 chargé.");
-                        break;
-
-                    case ".wav":
-                        audioStream = new AudioStreamWav
-                        {
-                            Data = file.GetBuffer((long)file.GetLength()),
-                        };
-                        GD.Print("Fichier WAV chargé.");
-                        break;
-
-                    default:
-                        GD.PrintErr("Format audio non pris en charge.");
-                        return;
+                    byte[] myMp3Data = file.GetBuffer((long)file.GetLength());
+                    audioStream = new AudioStreamMP3 { Data = myMp3Data };
                 }
-            }
-            catch (System.Exception ex)
-            {
-                GD.PrintErr($"Erreur lors du chargement du fichier audio : {ex.Message}");
-                return;
-            }
-            finally
-            {
-                file.Close();
-            }
+                catch (System.Exception ex)
+                {
+                    GD.PrintErr($"Erreur lors du chargement du fichier audio : {ex.Message}");
+                    return;
+                }
+                finally
+                {
+                    file.Close();
+                }
 
-            // Assigner et jouer l'audio
-            if (audioStream != null)
-            {
-                SetAudio(audioStream);
+                // Assigner et jouer l'audio
+                if (audioStream != null)
+                {
+                    SetAudio(audioStream);
+                }
             }
         }
 
-        public override void _Process(double delta)
+        private void OnProgressionSliderGuiInput(InputEvent @event)
         {
-            // Mise à jour de la barre de progression pendant la lecture
-            if (_audioStreamPlayer.Playing)
+            if (@event is InputEventMouseButton mouseEvent)
             {
-                _progressionSlider.Value = _audioStreamPlayer.GetPlaybackPosition();
+                if (mouseEvent.Pressed && mouseEvent.ButtonIndex == MouseButton.Left)
+                {
+                    _isDragging = true; // L'utilisateur commence à manipuler
+                }
+                else if (!mouseEvent.Pressed && mouseEvent.ButtonIndex == MouseButton.Left)
+                {
+                    _isDragging = false; // L'utilisateur a terminé
+                    _audioStreamPlayer.Seek((float)_progressionSlider.Value);
+                }
             }
         }
 
@@ -304,8 +298,6 @@ namespace Tabloulet.Scenes.Components.AudioNS
             if (audioStream != null)
             {
                 float audioLength = (float)audioStream.GetLength(); // Durée totale en secondes
-
-                GD.Print($"Durée de l'audio : {audioLength} secondes.");
                 _maxPosition = audioLength;
 
                 // Vérifie si _progressionSlider est initialisé
@@ -343,7 +335,6 @@ namespace Tabloulet.Scenes.Components.AudioNS
             // Remet à zéro
             _audioStreamPlayer.Play();
             _isPlaying = true;
-            GD.Print("Restarted");
             if (_playPauseButton.Icon != _pauseIcon)
             {
                 _playPauseButton.Icon = _pauseIcon;
@@ -370,7 +361,6 @@ namespace Tabloulet.Scenes.Components.AudioNS
                 _playPauseButton.Icon = iconPause;
                 SetBtnIcon();
 
-                GD.Print("PlayingTRGRRGSS");
                 _isPlaying = true;
             }
             else if (!_audioStreamPlayer.StreamPaused)
@@ -378,7 +368,6 @@ namespace Tabloulet.Scenes.Components.AudioNS
                 _audioStreamPlayer.StreamPaused = true;
                 _playPauseButton.Icon = iconPlay;
                 SetBtnIcon();
-                GD.Print("Paused");
             }
             else
             {
@@ -386,8 +375,6 @@ namespace Tabloulet.Scenes.Components.AudioNS
                 _playPauseButton.Icon = iconPause;
                 SetBtnIcon();
                 _audioStreamPlayer.Seek(_targetPlaybackPosition); // Reprend à la position souhaitée
-                GD.Print("Playing", _isPlaying);
-                //_isPlaying = true;
             }
         }
 
@@ -427,15 +414,10 @@ namespace Tabloulet.Scenes.Components.AudioNS
             // Met à jour la position cible
             _targetPlaybackPosition = (float)value;
 
-            // Applique immédiatement la position dans le lecteur audio
-            _audioStreamPlayer.Seek(_targetPlaybackPosition);
-
             if (_targetPlaybackPosition < _maxPosition)
             {
                 _isEnded = false;
             }
-
-            GD.Print("Nouvelle position définie : " + _targetPlaybackPosition);
         }
 
         public void UpdateSizePositionRotationParameters(

@@ -567,7 +567,7 @@ namespace Tabloulet.Scenes.BuilderNS.ComponentPanelsNS
                 {
                     FileMode = FileDialog.FileModeEnum.OpenFile,
                     Access = FileDialog.AccessEnum.Filesystem,
-                    Filters = ["*.wav", "*.mp3"],
+                    Filters = ["*.mp3"],
                 };
 
             fileDialog.FileSelected += (string path) =>
