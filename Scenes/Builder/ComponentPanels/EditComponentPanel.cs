@@ -37,6 +37,7 @@ namespace Tabloulet.Scenes.BuilderNS.ComponentPanelsNS
 
         private MarginContainer _pageMarginContainer;
         private ColorPicker _pageColorPicker;
+        public LineEdit pageNameLineEdit;
 
         private MarginContainer _baseMarginContainer;
         private SpinBox _basePositionX;
@@ -81,6 +82,7 @@ namespace Tabloulet.Scenes.BuilderNS.ComponentPanelsNS
             _pageColorPicker = _pageMarginContainer.GetNode<ColorPicker>(
                 "VBoxContainer/ColorPicker"
             );
+            pageNameLineEdit = _pageMarginContainer.GetNode<LineEdit>("VBoxContainer/LineEdit");
 
             _isEditingPage = false;
             isBackgroundCallableSet = false;
@@ -119,7 +121,7 @@ namespace Tabloulet.Scenes.BuilderNS.ComponentPanelsNS
                 "DeleteMarginContainer/DeleteButton"
             );
             _deleteButton.Pressed += DeleteComponent;
-            _pages = new Dictionary<int, Guid>();
+            _pages = [];
         }
 
         public override void _Process(double delta)
@@ -150,6 +152,12 @@ namespace Tabloulet.Scenes.BuilderNS.ComponentPanelsNS
             _deleteButton.GetParent<Control>().Visible = false;
             ColorRect background = _currentPage.GetNode<ColorRect>("Background");
             _pageColorPicker.Color = background.Color;
+
+            if (pageNameLineEdit.Text == "")
+            {
+                Page firstPage = _database.GetById<Page>(Guid.Parse(_currentPage.Name.ToString()));
+                pageNameLineEdit.Text = firstPage.Name;
+            }
 
             if (!isBackgroundCallableSet)
             {
@@ -478,11 +486,27 @@ namespace Tabloulet.Scenes.BuilderNS.ComponentPanelsNS
             pageSelector.AddItem("Aucun", 0);
             foreach (Page page in query)
             {
-                if (page.Id != _builder.getCurrentPageId())
+                if (page.Id != _builder.GetCurrentPageId())
                 {
                     pageSelector.AddItem(page.Name, index);
                     this._pages.Add(index, page.Id);
                     index++;
+                }
+            }
+
+            if (button.LinkTo == null)
+            {
+                pageSelector.Select(0);
+            }
+            else
+            {
+                for (int i = 1; i < pageSelector.GetItemCount(); i++)
+                {
+                    if (this._pages[i] == button.LinkTo)
+                    {
+                        pageSelector.Select(i);
+                        break;
+                    }
                 }
             }
 

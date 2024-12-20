@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using DotNetEnv;
 using Godot;
 using Tabloulet.Helpers;
+using Tabloulet.Scenes.ViewerNS;
 
 namespace Tabloulet.Scenes.HomeNS.LoginPanelNS
 {
@@ -21,6 +22,7 @@ namespace Tabloulet.Scenes.HomeNS.LoginPanelNS
         Button quitButton;
         Timer timer;
         Guid passwordGuid;
+        public bool viewerMode = false;
 
         public override void _Ready()
         {
@@ -135,9 +137,17 @@ namespace Tabloulet.Scenes.HomeNS.LoginPanelNS
                 // Restaurer la couleur d'origine (par défaut)
                 loginError.AddThemeColorOverride("font_color", originalTextColor);
 
-                Visible = false;
-                var home = GetParent<Control>() as Home;
-                home.ChangeToAdmin();
+                if (viewerMode)
+                {
+                    var viewer = GetParent<Control>() as Viewer;
+                    viewer.ExitButtonPressed();
+                }
+                else
+                {
+                    Visible = false;
+                    var home = GetParent<Control>() as Home;
+                    home.ChangeToAdmin();
+                }
             }
             else
             {
@@ -165,6 +175,11 @@ namespace Tabloulet.Scenes.HomeNS.LoginPanelNS
         private void OnQuitButtonPressed()
         {
             Visible = false;
+            if (viewerMode)
+            {
+                var viewer = GetParent<Viewer>() as Viewer;
+                viewer.LoginCancelButtonPressed();
+            }
         }
 
         private void OnRFIDTimerTimeout()
@@ -180,9 +195,17 @@ namespace Tabloulet.Scenes.HomeNS.LoginPanelNS
 
                         if (task.Result == passwordGuid)
                         {
-                            Visible = false;
-                            var home = GetParent<Control>() as Home;
-                            home.ChangeToAdmin();
+                            if (viewerMode)
+                            {
+                                var viewer = GetParent<Control>() as Viewer;
+                                viewer.ExitButtonPressed();
+                            }
+                            else
+                            {
+                                Visible = false;
+                                var home = GetParent<Control>() as Home;
+                                home.ChangeToAdmin();
+                            }
                         }
                     },
                     TaskScheduler.FromCurrentSynchronizationContext()

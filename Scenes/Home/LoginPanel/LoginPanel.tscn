@@ -443,3 +443,4 @@ expand_icon = true
 language = "fr"
 
 [node name="RFIDTimer" type="Timer" parent="."]
+wait_time = 3.0
