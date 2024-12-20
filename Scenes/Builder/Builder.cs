@@ -7,7 +7,9 @@ using Tabloulet.DatabaseNS.Models;
 using Tabloulet.Helpers;
 using Tabloulet.Scenes.BuilderNS.ComponentPanelsNS;
 using Tabloulet.Scenes.BuilderNS.NavigationGraphNS;
+using Tabloulet.Scenes.Components.AudioNS;
 using Tabloulet.Scenes.HomeNS;
+using AudioModel = Tabloulet.DatabaseNS.Models.Audio;
 using Base = Tabloulet.Scenes.Components.BaseNS.Base;
 using Button = Godot.Button;
 using ButtonModel = Tabloulet.DatabaseNS.Models.Button;
@@ -31,6 +33,7 @@ namespace Tabloulet.Scenes.BuilderNS
         private Button _addTextButton;
         private Button _addImageButton;
         private Button _addButtonButton;
+        private Button _addAudioButton;
 
         private ScenarioLoader _scenarioLoader;
 
@@ -64,10 +67,14 @@ namespace Tabloulet.Scenes.BuilderNS
             _addButtonButton = createComponentPanel.GetNode<Button>(
                 "OpenPanel/VBoxContainer/ButtonMarginContainer/PanelContainer/GridContainer/MarginContainer/Button"
             );
+            _addAudioButton = createComponentPanel.GetNode<Button>(
+                "OpenPanel/VBoxContainer/AudioMarginContainer/PanelContainer/GridContainer/MarginContainer/Button"
+            );
 
             _addTextButton.Pressed += AddTextButtonPressed;
             _addImageButton.Pressed += AddImageButtonPressed;
             _addButtonButton.Pressed += AddButtonButtonPressed;
+            _addAudioButton.Pressed += AddAudioButtonPressed;
 
             _scenarioLoader = new ScenarioLoader(_database, this);
 
@@ -177,6 +184,28 @@ namespace Tabloulet.Scenes.BuilderNS
                 };
             _scenarioLoader.CreateButtonComponent(button);
             _database.Insert(button);
+        }
+
+        private void AddAudioButtonPressed()
+        {
+            AudioModel audio =
+                new()
+                {
+                    Id = Guid.NewGuid(),
+                    PageId = _currentPage,
+                    Path = "",
+                    ScaleX = 0.7f,
+                    ScaleY = 0.7f,
+                    SizeX = Components.AudioNS.Audio.MIN_X_SIZE,
+                    SizeY = Components.AudioNS.Audio.MIN_Y_SIZE,
+                    PositionX = GetRect().Size.X / 2,
+                    PositionY = GetRect().Size.Y / 2,
+                    Rotation = 0,
+                    ZIndex = 1,
+                    IsMovable = true,
+                };
+            _scenarioLoader.CreateAudioComponent(audio);
+            _database.Insert(audio);
         }
 
         public Control GetDisplayRoot()

@@ -5,6 +5,8 @@ using Tabloulet.DatabaseNS;
 using Tabloulet.DatabaseNS.Models;
 using Tabloulet.Scenes.BuilderNS;
 using Tabloulet.Scenes.ViewerNS;
+using AudioComponent = Tabloulet.Scenes.Components.AudioNS.Audio;
+using AudioModel = Tabloulet.DatabaseNS.Models.Audio;
 using BaseComponent = Tabloulet.Scenes.Components.BaseNS.Base;
 using ButtonComponent = Tabloulet.Scenes.Components.ButtonNS.Button;
 using ButtonModel = Tabloulet.DatabaseNS.Models.Button;
@@ -54,6 +56,7 @@ namespace Tabloulet.Scenes
             LoadComponents<TextModel>(page.Id);
             LoadComponents<ImageModel>(page.Id);
             LoadComponents<ButtonModel>(page.Id);
+            LoadComponents<AudioModel>(page.Id);
         }
 
         private void LoadComponents<T>(Guid pageId)
@@ -73,6 +76,9 @@ namespace Tabloulet.Scenes
                         break;
                     case ButtonModel bouton:
                         CreateButtonComponent(bouton);
+                        break;
+                    case AudioModel audio:
+                        CreateAudioComponent(audio);
                         break;
                 }
             }
@@ -147,6 +153,26 @@ namespace Tabloulet.Scenes
                 );
             BaseComponent boutonBase = CreateBase(boutonComponent, bouton.IsMovable, display);
             display.AddComponent(_currentPage, bouton.Id, boutonBase);
+        }
+
+        public void CreateAudioComponent(AudioModel audio)
+        {
+            PackedScene audioPacked = GD.Load<PackedScene>(
+                "res://Scenes/Components/Audio/Audio.tscn"
+            );
+            AudioComponent audioComponent = (AudioComponent)audioPacked.Instantiate();
+            BaseComponent audioBase = CreateBase(audioComponent, audio.IsMovable, display);
+            audioComponent.Path = audio.Path;
+            audioComponent.ScaleX = audio.ScaleX;
+            audioComponent.ScaleY = audio.ScaleY;
+            audioComponent.SizeX = audio.SizeX;
+            audioComponent.SizeY = audio.SizeY;
+            audioComponent.PositionX = audio.PositionX;
+            audioComponent.PositionY = audio.PositionY;
+            audioComponent.RotationDeg = audio.Rotation;
+            audioComponent.Index = audio.ZIndex;
+            display.AddComponent(_currentPage, audio.Id, audioBase);
+            audioComponent.IsMovable = audio.IsMovable;
         }
     }
 }
