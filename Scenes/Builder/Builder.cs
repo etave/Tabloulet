@@ -43,6 +43,12 @@ namespace Tabloulet.Scenes.BuilderNS
 
         private Button _navigationGraphButton;
 
+        private Button _createTemplateButton;
+        private Button _cancelTemplateButton;
+        private Button _newTemplateButton;
+
+        private Panel _newTemplatePopUpPanel;
+
         // Called when the node enters the scene tree for the first time.
         public override void _Ready()
         {
@@ -87,6 +93,22 @@ namespace Tabloulet.Scenes.BuilderNS
                 "NavigationGraphButtonPanel/MarginContainer/NavigationGraphButton"
             );
             _navigationGraphButton.Pressed += NavigationGraphButtonPressed;
+
+            _createTemplateButton = GetNode<Button>(
+                "NewTemplatePopUpPanel/VBoxContainer/ButtonsHBoxContainer/CreateButton"
+            );
+            _cancelTemplateButton = GetNode<Button>(
+                "NewTemplatePopUpPanel/VBoxContainer/ButtonsHBoxContainer/CancelButton"
+            );
+            _newTemplateButton = GetNode<Button>(
+                "NewTemplateButtonPanel/MarginContainer/NewTemplateButton"
+            );
+
+            _newTemplateButton.Pressed += () => _newTemplatePopUpPanel.Visible = true;
+            _cancelTemplateButton.Pressed += () => _newTemplatePopUpPanel.Visible = false;
+            _createTemplateButton.Pressed += CreateTemplateButtonPressed;
+
+            _newTemplatePopUpPanel = GetNode<Panel>("NewTemplatePopUpPanel");
         }
 
         public void Init(Guid idScenario)
@@ -287,6 +309,17 @@ namespace Tabloulet.Scenes.BuilderNS
         public Guid GetCurrentPageId()
         {
             return _currentPage;
+        }
+
+        private void CreateTemplateButtonPressed()
+        {
+            LineEdit lineEdit = _newTemplatePopUpPanel.GetNode<LineEdit>(
+                "VBoxContainer/MarginContainer/LineEdit"
+            );
+            String templateName = lineEdit.Text;
+            _database.SavePageAsTemplate(_currentPage, templateName);
+            lineEdit.Text = "Nouveau template";
+            _newTemplatePopUpPanel.Visible = false;
         }
     }
 }

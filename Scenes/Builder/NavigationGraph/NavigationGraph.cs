@@ -46,6 +46,9 @@ namespace Tabloulet.Scenes.BuilderNS.NavigationGraphNS
 
         private Timer rfidTimer;
 
+        private OptionButton _templateOptionButton;
+        private Dictionary<int, Guid> _templates;
+
         public override void _Ready()
         {
             base._Ready();
@@ -113,6 +116,20 @@ namespace Tabloulet.Scenes.BuilderNS.NavigationGraphNS
             rfidTimer = GetNode<Timer>("RFIDTimer");
             rfidTimer.Timeout += OnRFIDTimerTimeout;
             rfidTimer.Start();
+
+            _templates = new Dictionary<int, Guid>();
+            _templateOptionButton = GetNode<OptionButton>(
+                "NewPagePopupPanel/VBoxContainer/OptionButtonTemplate"
+            );
+            _templateOptionButton.AddItem("Aucun", 0);
+            List<Page> templates = _database.GetAllTemplates();
+            int index = 1;
+            foreach (Page template in templates)
+            {
+                _templateOptionButton.AddItem(template.Name, index);
+                _templates[index] = template.Id;
+                index++;
+            }
         }
 
         public void LoadGraph(Guid scenarioId)
@@ -337,25 +354,39 @@ namespace Tabloulet.Scenes.BuilderNS.NavigationGraphNS
 
         private void NewPageCreateButtonPressed()
         {
-            Page page =
-                new()
-                {
-                    Id = Guid.NewGuid(),
-                    Name = _newPageName.Text,
-                    BackgroundColor = "#FFFFFF",
-                };
-            _database.Insert(page);
-            ScenarioPage scenarioPage =
-                new()
-                {
-                    Id = Guid.NewGuid(),
-                    ScenarioId = _idScenario,
-                    PageId = page.Id,
-                };
-            _database.Insert(scenarioPage);
+            int templateIndex = _templateOptionButton.Selected;
+            if (templateIndex == 0)
+            {
+                Page page =
+                    new()
+                    {
+                        Id = Guid.NewGuid(),
+                        Name = _newPageName.Text,
+                        BackgroundColor = "#FFFFFF",
+                    };
+                _database.Insert(page);
+                ScenarioPage scenarioPage =
+                    new()
+                    {
+                        Id = Guid.NewGuid(),
+                        ScenarioId = _idScenario,
+                        PageId = page.Id,
+                    };
+                _database.Insert(scenarioPage);
+                AddNodeToGraph(page);
+            }
+            else
+            {
+                Guid templateId = _templates[templateIndex];
+                Guid newPageId = _database.GeneratePageByTemplate(
+                    templateId,
+                    _newPageName.Text,
+                    _idScenario
+                );
+                AddNodeToGraph(_database.GetById<Page>(newPageId));
+            }
             _newPagePopupPanel.Visible = false;
             _newPageName.Text = "Nouvelle Page";
-            AddNodeToGraph(page);
             ConnectSlots();
             ArrangeNodes();
         }
