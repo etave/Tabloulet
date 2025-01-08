@@ -25,6 +25,7 @@ grow_vertical = 2
 script = ExtResource("1_u72oc")
 
 [node name="ScanButtonPanel" type="Panel" parent="."]
+visible = false
 layout_mode = 1
 anchors_preset = 7
 anchor_left = 0.5

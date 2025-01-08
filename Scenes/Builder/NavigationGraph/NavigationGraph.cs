@@ -116,10 +116,6 @@ namespace Tabloulet.Scenes.BuilderNS.NavigationGraphNS
             _newRFIDCancelButton.Pressed += NewRFIDCancelButtonPressed;
             _newRFIDScanButton.Pressed += NewRFIDScanButtonPressed;
 
-            rfidTimer = GetNode<Timer>("RFIDTimer");
-            rfidTimer.Timeout += OnRFIDTimerTimeout;
-            rfidTimer.Start();
-
             _templates = new Dictionary<int, Guid>();
             _templateOptionButton = GetNode<OptionButton>(
                 "NewPagePopupPanel/VBoxContainer/OptionButtonTemplate"
