@@ -5,7 +5,12 @@ using SQLite;
 using Tabloulet.DatabaseNS;
 using Tabloulet.DatabaseNS.Models;
 using Tabloulet.Scenes.BuilderNS;
+using Tabloulet.Scenes.ViewerNS;
+using AudioComponent = Tabloulet.Scenes.Components.AudioNS.Audio;
+using AudioModel = Tabloulet.DatabaseNS.Models.Audio;
 using BaseComponent = Tabloulet.Scenes.Components.BaseNS.Base;
+using ButtonComponent = Tabloulet.Scenes.Components.ButtonNS.Button;
+using ButtonModel = Tabloulet.DatabaseNS.Models.Button;
 using ImageComponent = Tabloulet.Scenes.Components.ImageNS.Image;
 using ImageModel = Tabloulet.DatabaseNS.Models.Image;
 using TextComponent = Tabloulet.Scenes.Components.TextNS.Text;
@@ -54,6 +59,8 @@ namespace Tabloulet.Scenes
             LoadComponents<TextModel>(page.Id);
             LoadComponents<ImageModel>(page.Id);
             LoadComponents<VideoModel>(page.Id);
+            LoadComponents<ButtonModel>(page.Id);
+            LoadComponents<AudioModel>(page.Id);
         }
 
         private void LoadComponents<T>(Guid pageId)
@@ -74,6 +81,12 @@ namespace Tabloulet.Scenes
                     case VideoModel video:
                         CreateVideoComponent(video);
                         break;
+                    case ButtonModel bouton:
+                        CreateButtonComponent(bouton);
+                        break;
+                    case AudioModel audio:
+                        CreateAudioComponent(audio);
+                        break;
                 }
             }
         }
@@ -85,7 +98,7 @@ namespace Tabloulet.Scenes
                 return new BaseComponent(node, isMovable, true, display as Builder);
             }
 
-            return new BaseComponent(node, isMovable, false, null);
+            return new BaseComponent(node, isMovable, false, display as Viewer);
         }
 
         public void CreateTextComponent(TextModel text)
@@ -148,6 +161,47 @@ namespace Tabloulet.Scenes
             display.AddComponent(_currentPage, video.Id, videoBase);
             videoComponent.Path = video.Path;
             videoComponent.IsMovable = video.IsMovable;
+        }
+
+        public void CreateButtonComponent(ButtonModel bouton)
+        {
+            ButtonComponent boutonComponent =
+                new(
+                    bouton.LinkTo.ToString(),
+                    bouton.Content,
+                    bouton.Color,
+                    bouton.ScaleX,
+                    bouton.ScaleY,
+                    bouton.SizeX,
+                    bouton.SizeY,
+                    bouton.PositionX,
+                    bouton.PositionY,
+                    bouton.Rotation,
+                    bouton.ZIndex,
+                    bouton.IsMovable
+                );
+            BaseComponent boutonBase = CreateBase(boutonComponent, bouton.IsMovable, display);
+            display.AddComponent(_currentPage, bouton.Id, boutonBase);
+        }
+
+        public void CreateAudioComponent(AudioModel audio)
+        {
+            PackedScene audioPacked = GD.Load<PackedScene>(
+                "res://Scenes/Components/Audio/Audio.tscn"
+            );
+            AudioComponent audioComponent = (AudioComponent)audioPacked.Instantiate();
+            BaseComponent audioBase = CreateBase(audioComponent, audio.IsMovable, display);
+            audioComponent.Path = audio.Path;
+            audioComponent.ScaleX = audio.ScaleX;
+            audioComponent.ScaleY = audio.ScaleY;
+            audioComponent.SizeX = audio.SizeX;
+            audioComponent.SizeY = audio.SizeY;
+            audioComponent.PositionX = audio.PositionX;
+            audioComponent.PositionY = audio.PositionY;
+            audioComponent.RotationDeg = audio.Rotation;
+            audioComponent.Index = audio.ZIndex;
+            display.AddComponent(_currentPage, audio.Id, audioBase);
+            audioComponent.IsMovable = audio.IsMovable;
         }
     }
 }

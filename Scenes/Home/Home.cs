@@ -6,6 +6,7 @@ using Tabloulet.DatabaseNS;
 using Tabloulet.DatabaseNS.Models;
 using Tabloulet.Helpers;
 using Tabloulet.Scenes.BuilderNS;
+using Tabloulet.Scenes.ViewerNS;
 
 namespace Tabloulet.Scenes.HomeNS
 {
@@ -204,6 +205,11 @@ namespace Tabloulet.Scenes.HomeNS
 
             MarginContainer marginPopUp = GetNode<MarginContainer>("MarginPopUp");
             marginPopUp.Visible = true;
+
+            Godot.Button loadButton = GetNode<Godot.Button>(
+                "MarginPopUp/PanelPopUp/MarginInsidePopUp/VBoxPopUp/MarginButtonPopUp/HBoxPopUp/LoadButton"
+            );
+            loadButton.Pressed += () => SwitchToViewer(Guid.Parse(idScenario));
         }
 
         // Close the pop up with the scenario description
@@ -287,6 +293,15 @@ namespace Tabloulet.Scenes.HomeNS
             Builder builder = (Builder)builderScene.Instantiate();
             GetTree().Root.AddChild(builder);
             builder.Init(id);
+            QueueFree();
+        }
+
+        private void SwitchToViewer(Guid id)
+        {
+            PackedScene viewerScene = GD.Load<PackedScene>("res://Scenes/Viewer/Viewer.tscn");
+            Viewer viewer = (Viewer)viewerScene.Instantiate();
+            GetTree().Root.AddChild(viewer);
+            viewer.Init(id);
             QueueFree();
         }
 

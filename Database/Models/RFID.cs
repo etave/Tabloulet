@@ -4,13 +4,14 @@ using Tabloulet.Helpers;
 
 namespace Tabloulet.DatabaseNS.Models
 {
-    [Table(Constants.PageTable)]
-    public class Page : IDatabaseModel
+    [Table(Constants.RFIDTable)]
+    public class RFID : IDatabaseModel
     {
         [PrimaryKey]
         public Guid Id { get; set; }
+        public Guid PageId { get; set; }
+        public Guid RFIDTag { get; set; }
+        public Guid LinkTo { get; set; }
         public string Name { get; set; }
-        public string BackgroundColor { get; set; }
-        public bool IsTemplate { get; set; } = false;
     }
 }

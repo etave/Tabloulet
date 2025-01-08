@@ -54,6 +54,20 @@ namespace Tabloulet.DatabaseNS
             }
         }
 
+        public bool InsertComponent(IDatabaseModelComponent obj)
+        {
+            try
+            {
+                int result = _connection.Insert(obj);
+                return result > 0;
+            }
+            catch (SQLiteException e)
+            {
+                GD.PrintErr($"Error inserting object: {e.Message}");
+                return false;
+            }
+        }
+
         public bool Delete(IDatabaseModel obj)
         {
             try
@@ -143,8 +157,44 @@ namespace Tabloulet.DatabaseNS
                 .. _connection.Table<Models.Video>().Where(x => x.PageId == pageId),
                 .. _connection.Table<Models.Audio>().Where(x => x.PageId == pageId),
                 .. _connection.Table<Models.Model>().Where(x => x.PageId == pageId),
+                .. _connection.Table<Models.RFID>().Where(x => x.PageId == pageId),
             ];
             return elements;
+        }
+
+        public List<Models.Button> GetButtonsByScenario(Guid scenarioId)
+        {
+            TableQuery<ScenarioPage> scenarioPages = _connection
+                .Table<ScenarioPage>()
+                .Where(x => x.ScenarioId == scenarioId);
+            List<Models.Button> buttons = [];
+            foreach (var scenarioPage in scenarioPages)
+            {
+                buttons.AddRange(
+                    _connection.Table<Models.Button>().Where(x => x.PageId == scenarioPage.PageId)
+                );
+            }
+            return buttons;
+        }
+
+        public List<Models.RFID> GetRFIDsByScenario(Guid scenarioId)
+        {
+            TableQuery<ScenarioPage> scenarioPages = _connection
+                .Table<ScenarioPage>()
+                .Where(x => x.ScenarioId == scenarioId);
+            List<Models.RFID> rfids = [];
+            foreach (var scenarioPage in scenarioPages)
+            {
+                rfids.AddRange(
+                    _connection.Table<Models.RFID>().Where(x => x.PageId == scenarioPage.PageId)
+                );
+            }
+            return rfids;
+        }
+
+        public Models.RFID GetRFIDByTag(Guid tag)
+        {
+            return _connection.Table<Models.RFID>().FirstOrDefault(x => x.RFIDTag == tag);
         }
 
         public ScenarioPage GetScenarioPageByPage(Guid pageId)
@@ -182,6 +232,73 @@ namespace Tabloulet.DatabaseNS
             }
         }
 
+        public void SavePageAsTemplate(Guid pageId, String templateName)
+        {
+            var originalPage = GetById<Page>(pageId);
+            var newPage = new Page()
+            {
+                Id = Guid.NewGuid(),
+                Name = templateName,
+                BackgroundColor = originalPage.BackgroundColor,
+                IsTemplate = true,
+            };
+            Insert(newPage);
+
+            var elements = GetElementsByPage(pageId);
+            foreach (var element in elements)
+            {
+                if (element is IDatabaseModelComponent component)
+                {
+                    component.PageId = newPage.Id;
+                    component.Id = Guid.NewGuid();
+                    if (component is Models.Button button)
+                    {
+                        button.LinkTo = null;
+                    }
+                    InsertComponent(component);
+                }
+            }
+        }
+
+        public Guid GeneratePageByTemplate(Guid templateId, String pageName, Guid scenarioId)
+        {
+            var template = GetById<Page>(templateId);
+            var newPage = new Page()
+            {
+                Id = Guid.NewGuid(),
+                Name = pageName,
+                BackgroundColor = template.BackgroundColor,
+                IsTemplate = false,
+            };
+            Insert(newPage);
+
+            var scenarioPage = new ScenarioPage()
+            {
+                Id = Guid.NewGuid(),
+                ScenarioId = scenarioId,
+                PageId = newPage.Id,
+            };
+            Insert(scenarioPage);
+
+            var elements = GetElementsByPage(templateId);
+            foreach (var element in elements)
+            {
+                if (element is IDatabaseModelComponent component)
+                {
+                    component.PageId = newPage.Id;
+                    component.Id = Guid.NewGuid();
+                    InsertComponent(component);
+                }
+            }
+
+            return newPage.Id;
+        }
+
+        public List<Page> GetAllTemplates()
+        {
+            return _connection.Table<Page>().Where(x => x.IsTemplate).ToList();
+        }
+
         private void CreateTables()
         {
             var createTableStatements = new List<string>()
@@ -195,6 +312,7 @@ namespace Tabloulet.DatabaseNS
                 Constants.CreateAudioTable,
                 Constants.CreateModelTable,
                 Constants.CreateScenarioPageTable,
+                Constants.CreateRFIDTable,
             };
 
             foreach (var statement in createTableStatements)
