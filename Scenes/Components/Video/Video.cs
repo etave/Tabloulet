@@ -154,8 +154,7 @@ namespace Tabloulet.Scenes.Components.VideoNS
                 string fullPath = System
                     .IO.Path.Combine(Constants.AppPath, path)
                     .Replace("\\", "/");
-
-=                if (!System.IO.File.Exists(fullPath))
+                if (!System.IO.File.Exists(fullPath))
                 {
                     GD.PrintErr("File not found: " + fullPath);
                     return;
