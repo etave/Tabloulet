@@ -7,7 +7,6 @@ namespace Tabloulet.Scenes.Components.VideoNS
     public partial class Video() : VideoStreamPlayer, IComponent
     {
         private InputHandler _inputHandler;
-
         private HSlider _timerSlider;
         private Button _resetButton;
         private CompressedTexture2D _pauseIcon;
@@ -25,8 +24,11 @@ namespace Tabloulet.Scenes.Components.VideoNS
         private bool _isMovable;
         private bool _autoplay;
         private bool _loop;
+        private bool _isDragging = false;
         private bool _isPlaying = false;
-
+        private bool _isEnded = false;
+        private float _maxPosition = 0f;
+        private float _targetPlaybackPosition = 0f;
         private StyleBoxFlat _styleBoxPlayPauseBtnNormal;
         private StyleBoxFlat _styleBoxPlayPauseBtnHover;
         private StyleBoxFlat _styleBoxPlayPauseBtnPressed;
@@ -115,8 +117,13 @@ namespace Tabloulet.Scenes.Components.VideoNS
         public override void _Ready()
         {
             base._Ready();
-
             _timerSlider = GetNode<HSlider>("ControlMarginContainer/HBoxContainer/HSlider");
+            StreamPosition = (float)_timerSlider.Value;
+            _timerSlider.GuiInput += OnProgressionSliderGuiInput;
+
+
+
+
             _resetButton = GetNode<Button>("ControlMarginContainer/HBoxContainer/ResetButton");
             _playIcon = GD.Load<CompressedTexture2D>(
                 "res://Assets/Components/bouton-de-lecture.png"
@@ -124,23 +131,31 @@ namespace Tabloulet.Scenes.Components.VideoNS
             _playPauseButton = GetNode<Button>(
                 "ControlMarginContainer/HBoxContainer/PlayPauseButton"
             );
+            StreamPosition = (float)_timerSlider.Value;
+
             _inputHandler = GetNode<InputHandler>("/root/InputHandler");
             _pauseIcon = GD.Load<CompressedTexture2D>("res://Assets/Components/pause.png");
-
             Autoplay = _autoplay;
             Loop = _loop;
-
+            _resetButton.Pressed += () => OnRestartButtonPressed(_pauseIcon);
             _styleBoxPlayPauseBtnNormal =
                 _playPauseButton.GetThemeStylebox("normal") as StyleBoxFlat;
             _styleBoxPlayPauseBtnHover = _playPauseButton.GetThemeStylebox("hover") as StyleBoxFlat;
             _styleBoxPlayPauseBtnPressed =
                 _playPauseButton.GetThemeStylebox("pressed") as StyleBoxFlat;
 
+            _playPauseButton.Pressed += () => OnPlayPauseButtonPressed(_playIcon, _pauseIcon);
+
             Position = new Vector2(_positionX, _positionY);
             RotationDegrees = _rotationDeg;
             Size = new Vector2(_sizeX, _sizeY);
             ZIndex = _index;
             Scale = new Vector2(_scaleX, _scaleY);
+            if (!string.IsNullOrEmpty(_path))
+            {
+                LoadVideo(_path);
+            }
+
         }
 
         private void LoadVideo(string path)
@@ -168,6 +183,13 @@ namespace Tabloulet.Scenes.Components.VideoNS
                 _playPauseButton.Icon = _pauseIcon;
                 SetBtnIcon();
             }
+
+            if (_timerSlider != null && Stream != null)
+            {
+                _timerSlider.MinValue = 0;
+                _timerSlider.MaxValue = GetStreamLength();
+                _timerSlider.Step = 0.1;
+            }
         }
 
         public void SetBtnIcon()
@@ -185,6 +207,13 @@ namespace Tabloulet.Scenes.Components.VideoNS
                 _styleBoxPlayPauseBtnPressed.ContentMarginLeft = 3;
             }
         }
+        public override void _Process(double delta)
+        {
+            if (_timerSlider != null && !_isDragging && Stream != null && !Paused)
+            {
+                _timerSlider.Value = StreamPosition;
+            }
+        }
 
         private void OnRestartButtonPressed(CompressedTexture2D _pauseIcon)
         {
@@ -195,6 +224,29 @@ namespace Tabloulet.Scenes.Components.VideoNS
                 _playPauseButton.Icon = _pauseIcon;
                 SetBtnIcon();
             }
+        }
+
+        private void OnPlayPauseButtonPressed(
+            CompressedTexture2D iconPlay,
+            CompressedTexture2D iconPause
+        )
+        {
+            GD.Print("PlayPauseButton pressed");
+
+            if (_isPlaying)
+            {
+                Paused = true;
+                _isPlaying = false;
+                _playPauseButton.Icon = iconPlay;
+            }
+            else
+            {
+                Paused = false;
+                _isPlaying = true;
+                _playPauseButton.Icon = iconPause;
+            }
+
+            SetBtnIcon();
         }
 
         public void UpdateSizePositionRotationParameters(
@@ -218,6 +270,16 @@ namespace Tabloulet.Scenes.Components.VideoNS
             Index = index;
         }
 
+        private void OnProgressionSliderChanged(double value)
+        {
+            _targetPlaybackPosition = (float)value;
+
+            if (_targetPlaybackPosition < _maxPosition)
+            {
+                _isEnded = false;
+            }
+        }
+
         public override void _GuiInput(InputEvent @event)
         {
             base._GuiInput(@event);
@@ -234,6 +296,25 @@ namespace Tabloulet.Scenes.Components.VideoNS
         {
             var marginContainer = GetNode<MarginContainer>("ControlMarginContainer");
             marginContainer.Visible = false;
+        }
+
+        private void OnProgressionSliderGuiInput(InputEvent @event)
+        {
+            if (@event is InputEventMouseButton mouseEvent)
+            {
+                if (mouseEvent.ButtonIndex == MouseButton.Left)
+                {
+                    if (mouseEvent.Pressed)
+                    {
+                        _isDragging = true;
+                    }
+                    else
+                    {
+                        _isDragging = false;
+                        StreamPosition = (float)_timerSlider.Value;
+                    }
+                }
+            }
         }
     }
 }

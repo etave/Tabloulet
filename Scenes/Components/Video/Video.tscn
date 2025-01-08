@@ -1,8 +1,8 @@
 [gd_scene load_steps=7 format=3 uid="uid://di10o01c64oh"]
 
 [ext_resource type="Script" path="res://Scenes/Components/Video/Video.cs" id="1_26bqw"]
-[ext_resource type="Texture2D" uid="uid://dg1ptl4rriu62" path="res://Assets/Components/bouton-de-lecture.png" id="2_45jg0"]
-[ext_resource type="Texture2D" uid="uid://dbhlfmcoqwpee" path="res://Assets/Components/reset.png" id="3_io3gm"]
+[ext_resource type="Texture2D" uid="uid://mo5sk7td3l76" path="res://Assets/Components/bouton-de-lecture.png" id="2_45jg0"]
+[ext_resource type="Texture2D" uid="uid://b5k256cbhbcgv" path="res://Assets/Components/reset.png" id="3_io3gm"]
 
 [sub_resource type="FFmpegVideoStream" id="FFmpegVideoStream_r2icw"]
 
@@ -58,7 +58,7 @@ theme_override_constants/separation = 10
 theme_override_styles/separator = SubResource("StyleBoxEmpty_kpqtj")
 
 [node name="PlayPauseButton" type="Button" parent="ControlMarginContainer/HBoxContainer"]
-custom_minimum_size = Vector2(50, 50)
+custom_minimum_size = Vector2(20, 50)
 layout_mode = 2
 icon = ExtResource("2_45jg0")
 flat = true
