@@ -20,9 +20,11 @@ namespace Tabloulet.Scenes.HomeNS.LoginPanelNS
         List<Button> numberButtons = [];
         Color originalTextColor;
         Button quitButton;
-        Timer timer;
+
         Guid passwordGuid;
         public bool viewerMode = false;
+
+        private Button _scanLoginButton;
 
         public override void _Ready()
         {
@@ -80,10 +82,10 @@ namespace Tabloulet.Scenes.HomeNS.LoginPanelNS
             // Connecter le bouton "QUIT" à la méthode de gestion
             quitButton.Pressed += OnQuitButtonPressed;
 
-            // Timer pour la lecture de la carte RFID
-            timer = GetNode<Timer>("RFIDTimer");
-            timer.Timeout += OnRFIDTimerTimeout;
-            timer.Start();
+            _scanLoginButton = GetNode<Button>(
+                "Panel/VBoxContainer/HBoxContainer/VBoxContainer/ButtonScanLogin"
+            );
+            _scanLoginButton.Pressed += OnScanLoginButtonPressed;
         }
 
         public List<Button> GetMyButtons(GridContainer gridContainer)
@@ -182,7 +184,7 @@ namespace Tabloulet.Scenes.HomeNS.LoginPanelNS
             }
         }
 
-        private void OnRFIDTimerTimeout()
+        private void OnScanLoginButtonPressed()
         {
             RFID.GetUIDAsync()
                 .ContinueWith(
@@ -192,7 +194,6 @@ namespace Tabloulet.Scenes.HomeNS.LoginPanelNS
                         {
                             return;
                         }
-
                         if (task.Result == passwordGuid)
                         {
                             if (viewerMode)

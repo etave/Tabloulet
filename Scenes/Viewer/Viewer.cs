@@ -19,9 +19,9 @@ namespace Tabloulet.Scenes.ViewerNS
 
         private ScenarioLoader _scenarioLoader;
 
-        private Timer _rfidTimer;
-
         private LoginPanel _loginPanel;
+
+        private Panel _scanButtonPanel;
 
         public override void _Ready()
         {
@@ -31,13 +31,12 @@ namespace Tabloulet.Scenes.ViewerNS
 
             _scenarioLoader = new ScenarioLoader(_database, this);
 
-            _rfidTimer = GetNode<Timer>("RFIDTimer");
-            _rfidTimer.Timeout += OnRFIDTimerTimeout;
-            _rfidTimer.Start();
-
             _loginPanel = GetNode<LoginPanel>("LoginPanel");
             _loginPanel.SetProcess(false);
             _loginPanel.viewerMode = true;
+
+            _scanButtonPanel = GetNode<Panel>("ScanButtonPanel");
+            _scanButtonPanel.GetChild<Godot.Button>(0).Pressed += ScanButtonPressed;
         }
 
         public void Init(Guid idScenario)
@@ -80,6 +79,19 @@ namespace Tabloulet.Scenes.ViewerNS
             hBoxContainer.AddChild(buttonExit);
             hBoxContainer.AddChild(buttonReset);
             AddChild(hBoxContainer);
+
+            CreateViewerScanButton();
+        }
+
+        private void CreateViewerScanButton()
+        {
+            Panel scanButtonPanelCopy = (Panel)_scanButtonPanel.Duplicate();
+            scanButtonPanelCopy.ZIndex = 101;
+            scanButtonPanelCopy.Visible = true;
+            scanButtonPanelCopy.GetChild<Godot.Button>(0).Pressed += ScanButtonPressed;
+            scanButtonPanelCopy.GetChild<Godot.Button>(0).SetAnchorsPreset(LayoutPreset.FullRect);
+            scanButtonPanelCopy.SetAnchorsPreset(LayoutPreset.CenterBottom);
+            AddChild(scanButtonPanelCopy);
         }
 
         private void OnExitButtonPressed()
@@ -88,6 +100,7 @@ namespace Tabloulet.Scenes.ViewerNS
             page.Visible = false;
             _loginPanel.SetProcess(true);
             _loginPanel.Visible = true;
+            GetChild(GetChildCount() - 1).QueueFree(); // Remove scan button duplicate
         }
 
         private void ResetScenario()
@@ -96,6 +109,7 @@ namespace Tabloulet.Scenes.ViewerNS
             Guid firstPage = scenario.PageId;
             if (firstPage == _currentPage)
             {
+                _scenarioLoader.ResetPage();
                 return;
             }
             ChangePage(scenario.PageId);
@@ -135,6 +149,7 @@ namespace Tabloulet.Scenes.ViewerNS
             page.QueueFree();
             HBoxContainer buttons = GetFirstHBoxContainer();
             buttons.QueueFree();
+            GetChild(GetChildCount() - 1).QueueFree(); // Remove scan button duplicate
         }
 
         public void ChangePage(Guid idPage)
@@ -159,9 +174,10 @@ namespace Tabloulet.Scenes.ViewerNS
             page.Visible = true;
             _loginPanel.SetProcess(false);
             _loginPanel.Visible = false;
+            CreateViewerScanButton();
         }
 
-        private void OnRFIDTimerTimeout()
+        private void ScanButtonPressed()
         {
             Helpers
                 .RFID.GetUIDAsync(_idScenario)
@@ -176,11 +192,13 @@ namespace Tabloulet.Scenes.ViewerNS
                         {
                             return;
                         }
+
                         RFID rfid = _database.GetRFIDByTag(task.Result);
                         if (rfid == null)
                         {
                             return;
                         }
+
                         if (rfid.PageId == _currentPage)
                         {
                             ChangePage(rfid.LinkTo);

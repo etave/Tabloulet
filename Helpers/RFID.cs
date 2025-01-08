@@ -9,6 +9,8 @@ namespace Tabloulet.Helpers
 {
     public partial class RFID : Node
     {
+        private static readonly char[] separator = new[] { '\n', '\r' };
+
         public static async Task<Guid> GetUIDAsync(Guid idScenario = default)
         {
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
@@ -19,16 +21,17 @@ namespace Tabloulet.Helpers
 
             using var process = new Process();
             process.StartInfo.FileName = "bash";
-            process.StartInfo.Arguments =
-                "-c \"nfc-list | grep UID | cut -d':' -f2 | tr -d '[:space:]'\"";
+            process.StartInfo.Arguments = "-c \"nfc-list | grep UID | cut -d':' -f2 | tr -d ' '\"";
             process.StartInfo.UseShellExecute = false;
             process.StartInfo.RedirectStandardOutput = true;
             process.StartInfo.RedirectStandardError = true;
 
             process.Start();
-            string hexInput = await process.StandardOutput.ReadToEndAsync();
-            hexInput = hexInput.Trim();
-            GD.Print($"UID: {hexInput}");
+            string processOutput = await process.StandardOutput.ReadToEndAsync();
+            string[] uids = processOutput.Split(separator, StringSplitOptions.RemoveEmptyEntries);
+            Array.Sort(uids);
+
+            string hexInput = string.Join("", uids);
 
             hexInput = new string(
                 hexInput.Where(c => "0123456789abcdefABCDEF".Contains(c)).ToArray()
