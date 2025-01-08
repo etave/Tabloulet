@@ -4,6 +4,7 @@ using Tabloulet.Helpers;
 using Tabloulet.Scenes.Components.BaseNS;
 using ImageComponent = Tabloulet.Scenes.Components.ImageNS.Image;
 using TextComponent = Tabloulet.Scenes.Components.TextNS.Text;
+using VideoComponent = Tabloulet.Scenes.Components.VideoNS.Video;
 
 namespace Tabloulet.Scenes.BuilderNS.ComponentPanelsNS
 {
@@ -226,6 +227,12 @@ namespace Tabloulet.Scenes.BuilderNS.ComponentPanelsNS
             Control child = _currentComponent.GetChild<Control>(0);
             child.PivotOffset = child.Size / 2;
             child.Position = new Vector2((float)_basePositionX.Value, (float)_basePositionY.Value);
+
+            if (child is not VideoComponent)
+            {
+                child.Size = new Vector2((float)_baseSizeX.Value, (float)_baseSizeY.Value);
+            }
+
             child.Size = new Vector2((float)_baseSizeX.Value, (float)_baseSizeY.Value);
             child.ZIndex = (int)_baseZIndex.Value;
             child.RotationDegrees = (float)_baseRotation.Value;

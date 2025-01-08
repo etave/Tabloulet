@@ -1,4 +1,5 @@
 using System;
+using DotNetEnv;
 using Godot;
 using SQLite;
 using Tabloulet.DatabaseNS;
@@ -9,6 +10,8 @@ using ImageComponent = Tabloulet.Scenes.Components.ImageNS.Image;
 using ImageModel = Tabloulet.DatabaseNS.Models.Image;
 using TextComponent = Tabloulet.Scenes.Components.TextNS.Text;
 using TextModel = Tabloulet.DatabaseNS.Models.Text;
+using VideoComponent = Tabloulet.Scenes.Components.VideoNS.Video;
+using VideoModel = Tabloulet.DatabaseNS.Models.Video;
 
 namespace Tabloulet.Scenes
 {
@@ -50,6 +53,7 @@ namespace Tabloulet.Scenes
 
             LoadComponents<TextModel>(page.Id);
             LoadComponents<ImageModel>(page.Id);
+            LoadComponents<VideoModel>(page.Id);
         }
 
         private void LoadComponents<T>(Guid pageId)
@@ -66,6 +70,9 @@ namespace Tabloulet.Scenes
                         break;
                     case ImageModel image:
                         CreateImageComponent(image);
+                        break;
+                    case VideoModel video:
+                        CreateVideoComponent(video);
                         break;
                 }
             }
@@ -119,6 +126,28 @@ namespace Tabloulet.Scenes
                 );
             BaseComponent imageBase = CreateBase(imageComponent, image.IsMovable, display);
             display.AddComponent(_currentPage, image.Id, imageBase);
+        }
+
+        public void CreateVideoComponent(VideoModel video)
+        {
+            PackedScene videoPacked = GD.Load<PackedScene>(
+                "res://Scenes/Components/Video/Video.tscn"
+            );
+            VideoComponent videoComponent = (VideoComponent)videoPacked.Instantiate();
+            BaseComponent videoBase = CreateBase(videoComponent, video.IsMovable, display);
+            videoComponent.ScaleX = video.ScaleX;
+            videoComponent.ScaleY = video.ScaleY;
+            videoComponent.SizeX = video.SizeX;
+            videoComponent.SizeY = video.SizeY;
+            videoComponent.PositionX = video.PositionX;
+            videoComponent.PositionY = video.PositionY;
+            videoComponent.RotationDeg = video.Rotation;
+            videoComponent.Index = video.ZIndex;
+            videoComponent.AutoplayVideo = video.Autoplay;
+            videoComponent.LoopVideo = video.Loop;
+            display.AddComponent(_currentPage, video.Id, videoBase);
+            videoComponent.Path = video.Path;
+            videoComponent.IsMovable = video.IsMovable;
         }
     }
 }
