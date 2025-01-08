@@ -11,5 +11,6 @@ namespace Tabloulet.DatabaseNS.Models
         public Guid Id { get; set; }
         public string Name { get; set; }
         public string BackgroundColor { get; set; }
+        public bool IsTemplate { get; set; } = false;
     }
 }

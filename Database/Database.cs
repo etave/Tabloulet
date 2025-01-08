@@ -54,6 +54,20 @@ namespace Tabloulet.DatabaseNS
             }
         }
 
+        public bool InsertComponent(IDatabaseModelComponent obj)
+        {
+            try
+            {
+                int result = _connection.Insert(obj);
+                return result > 0;
+            }
+            catch (SQLiteException e)
+            {
+                GD.PrintErr($"Error inserting object: {e.Message}");
+                return false;
+            }
+        }
+
         public bool Delete(IDatabaseModel obj)
         {
             try
@@ -218,40 +232,71 @@ namespace Tabloulet.DatabaseNS
             }
         }
 
-        public void SavePageAsTemplate(Guid pageId)
+        public void SavePageAsTemplate(Guid pageId, String templateName)
         {
-            Page page = GetById<Page>(pageId);
-            Template template = new Template { Id = Guid.NewGuid(), Name = page.Name };
-            Insert(template);
+            var originalPage = GetById<Page>(pageId);
+            var newPage = new Page()
+            {
+                Id = Guid.NewGuid(),
+                Name = templateName,
+                BackgroundColor = originalPage.BackgroundColor,
+                IsTemplate = true,
+            };
+            Insert(newPage);
 
-            List<IDatabaseModel> elements = GetElementsByPage(pageId);
-            foreach (IDatabaseModel element in elements)
+            var elements = GetElementsByPage(pageId);
+            foreach (var element in elements)
             {
                 if (element is IDatabaseModelComponent component)
                 {
-                    component.PageId = template.Id;
-                    Insert((IDatabaseModel)component);
+                    component.PageId = newPage.Id;
+                    component.Id = Guid.NewGuid();
+                    if (component is Models.Button button)
+                    {
+                        button.LinkTo = null;
+                    }
+                    InsertComponent(component);
                 }
             }
         }
 
-        public Guid GeneratePageByTemplate(Guid templateId)
+        public Guid GeneratePageByTemplate(Guid templateId, String pageName, Guid scenarioId)
         {
-            Template template = GetById<Template>(templateId);
-            Page page = new Page { Id = Guid.NewGuid(), Name = template.Name };
-            Insert(page);
+            var template = GetById<Page>(templateId);
+            var newPage = new Page()
+            {
+                Id = Guid.NewGuid(),
+                Name = pageName,
+                BackgroundColor = template.BackgroundColor,
+                IsTemplate = false,
+            };
+            Insert(newPage);
 
-            List<IDatabaseModel> elements = GetElementsByPage(templateId);
-            foreach (IDatabaseModel element in elements)
+            var scenarioPage = new ScenarioPage()
+            {
+                Id = Guid.NewGuid(),
+                ScenarioId = scenarioId,
+                PageId = newPage.Id,
+            };
+            Insert(scenarioPage);
+
+            var elements = GetElementsByPage(templateId);
+            foreach (var element in elements)
             {
                 if (element is IDatabaseModelComponent component)
                 {
-                    component.PageId = page.Id;
-                    Insert((IDatabaseModel)component);
+                    component.PageId = newPage.Id;
+                    component.Id = Guid.NewGuid();
+                    InsertComponent(component);
                 }
             }
 
-            return page.Id;
+            return newPage.Id;
+        }
+
+        public List<Page> GetAllTemplates()
+        {
+            return _connection.Table<Page>().Where(x => x.IsTemplate).ToList();
         }
 
         private void CreateTables()
@@ -268,7 +313,6 @@ namespace Tabloulet.DatabaseNS
                 Constants.CreateModelTable,
                 Constants.CreateScenarioPageTable,
                 Constants.CreateRFIDTable,
-                Constants.CreateTemplateTable,
             };
 
             foreach (var statement in createTableStatements)

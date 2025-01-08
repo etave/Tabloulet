@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=3 uid="uid://cbs1mtrsi13dr"]
+[gd_scene load_steps=13 format=3 uid="uid://cbs1mtrsi13dr"]
 
 [ext_resource type="Script" path="res://Scenes/Builder/NavigationGraph/NavigationGraph.cs" id="1_n2iv6"]
 
@@ -40,6 +40,8 @@ corner_radius_bottom_right = 30
 corner_radius_bottom_left = 30
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_dy6de"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_4mi8v"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_t0mp5"]
 corner_radius_top_left = 15
@@ -167,7 +169,7 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = -250.0
-offset_top = -125.0
+offset_top = -220.0
 offset_right = 250.0
 offset_bottom = 95.0
 grow_horizontal = 2
@@ -212,10 +214,27 @@ theme_override_font_sizes/font_size = 20
 text = "Nouvelle Page"
 placeholder_text = "Nom de la page"
 
-[node name="HSeparator3" type="HSeparator" parent="NewPagePopupPanel/VBoxContainer"]
+[node name="HSeparator4" type="HSeparator" parent="NewPagePopupPanel/VBoxContainer"]
 layout_mode = 2
-theme_override_constants/separation = 30
-theme_override_styles/separator = SubResource("StyleBoxEmpty_dy6de")
+theme_override_constants/separation = 20
+theme_override_styles/separator = SubResource("StyleBoxEmpty_4mi8v")
+
+[node name="Label3" type="Label" parent="NewPagePopupPanel/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 18
+text = "Séléctionner un template ?"
+horizontal_alignment = 1
+
+[node name="OptionButtonTemplate" type="OptionButton" parent="NewPagePopupPanel/VBoxContainer"]
+custom_minimum_size = Vector2(300, 30)
+layout_mode = 2
+size_flags_horizontal = 4
+
+[node name="HSeparator6" type="HSeparator" parent="NewPagePopupPanel/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 20
+theme_override_styles/separator = SubResource("StyleBoxEmpty_4mi8v")
 
 [node name="ButtonsHBoxContainer" type="HBoxContainer" parent="NewPagePopupPanel/VBoxContainer"]
 layout_mode = 2
