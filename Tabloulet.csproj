@@ -1,27 +1,35 @@
 ﻿<Project Sdk="Godot.NET.Sdk/4.3.0">
-  <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
-    <TargetFramework Condition=" '$(GodotTargetPlatform)' == 'android' ">net7.0</TargetFramework>
-    <TargetFramework Condition=" '$(GodotTargetPlatform)' == 'ios' ">net8.0</TargetFramework>
-    <EnableDynamicLoading>true</EnableDynamicLoading>
-    <Configurations>Debug;ExportDebug;ExportRelease;Test</Configurations>
-  </PropertyGroup>
-  <ItemGroup>
-    <PackageReference Include="Lorem.Universal.Net" Version="4.0.80" />
-    <PackageReference Include="DotNetEnv" Version="3.1.1" />
-    <PackageReference Include="sqlite-net-pcl" Version="1.9.172" />
-    <PackageReference Include="SQLitePCLRaw.bundle_green" Version="2.1.10" />
-    <PackageReference Include="SQLitePCLRaw.core" Version="2.1.10" />
-    <PackageReference Include="SQLitePCLRaw.lib.e_sqlite3" Version="2.1.10" />
-    <PackageReference Include="SQLitePCLRaw.provider.e_sqlite3" Version="2.1.10" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Helpers\CustomInputEvents\" />
-    <Folder Include="Scenes\Components\Base\" />
-    <Folder Include="Scenes\Components\Image\" />
-    <Folder Include="Scenes\Home\" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include=".env" />
-  </ItemGroup>
+	<PropertyGroup>
+		<TargetFramework>net8.0</TargetFramework>
+		<TargetFramework Condition=" '$(GodotTargetPlatform)' == 'android' ">net7.0</TargetFramework>
+		<TargetFramework Condition=" '$(GodotTargetPlatform)' == 'ios' ">net8.0</TargetFramework>
+		<EnableDynamicLoading>true</EnableDynamicLoading>
+		<Configurations>Debug;ExportDebug;ExportRelease;Test</Configurations>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Lorem.Universal.Net" Version="4.0.80" />
+		<PackageReference Include="DotNetEnv" Version="3.1.1" />
+		<PackageReference Include="sqlite-net-pcl" Version="1.9.172" />
+		<PackageReference Include="SQLitePCLRaw.bundle_green" Version="2.1.10" />
+		<PackageReference Include="SQLitePCLRaw.core" Version="2.1.10" />
+		<PackageReference Include="SQLitePCLRaw.lib.e_sqlite3" Version="2.1.10" />
+		<PackageReference Include="SQLitePCLRaw.provider.e_sqlite3" Version="2.1.10" />
+
+		<!-- Ajout des références nécessaires pour NUnit -->
+		<PackageReference Include="NUnit" Version="3.13.3" />
+		<PackageReference Include="NUnit3TestAdapter" Version="4.3.0" />
+		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.6.3" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<Folder Include="Helpers\CustomInputEvents\" />
+		<Folder Include="Scenes\Components\Base\" />
+		<Folder Include="Scenes\Components\Image\" />
+		<Folder Include="Scenes\Home\" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<None Include=".env" />
+	</ItemGroup>
 </Project>
