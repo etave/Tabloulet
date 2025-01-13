@@ -231,7 +231,7 @@ namespace Tabloulet.Scenes.Components.ButtonNS
             this.QueueRedraw();
         }
 
-        private static bool IsColorDark(Color color)
+        public static bool IsColorDark(Color color)
         {
             float brightness = (0.299f * color.R) + (0.587f * color.G) + (0.114f * color.B);
             return brightness < 0.5f;
