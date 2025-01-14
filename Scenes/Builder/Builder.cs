@@ -192,7 +192,7 @@ namespace Tabloulet.Scenes.BuilderNS
                 {
                     Id = Guid.NewGuid(),
                     PageId = _currentPage,
-                    Content = "Button",
+                    Content = "Bouton",
                     Color = "#FFFFFF",
                     ScaleX = 1,
                     ScaleY = 1,

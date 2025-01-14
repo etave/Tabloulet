@@ -50,6 +50,18 @@ border_width_left = 2
 border_color = Color(0, 0, 0, 1)
 corner_radius_top_right = 30
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_6s8ns"]
+bg_color = Color(0.2, 0.745098, 0.2, 1)
+border_color = Color(0, 0, 0, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_x0bqw"]
+bg_color = Color(0.2, 0.745098, 0.2, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.905882, 0.92549, 0.929412, 1)
+
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_n4nv0"]
 bg_color = Color(0, 0, 0, 0.0980392)
 border_width_bottom = 2
@@ -97,18 +109,6 @@ bg_color = Color(0.156863, 0.156863, 0.156863, 1)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_dwr1c"]
 bg_color = Color(0.156863, 0.156863, 0.156863, 1)
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
-border_color = Color(0.905882, 0.92549, 0.929412, 1)
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_6s8ns"]
-bg_color = Color(0.2, 0.745098, 0.2, 1)
-border_color = Color(0, 0, 0, 1)
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_x0bqw"]
-bg_color = Color(0.2, 0.745098, 0.2, 1)
 border_width_left = 2
 border_width_top = 2
 border_width_right = 2
@@ -193,17 +193,34 @@ size_flags_horizontal = 4
 size_flags_vertical = 6
 theme_override_constants/separation = 120
 
-[node name="CenterContainerLogo" type="CenterContainer" parent="Panel/VBoxContainer/HBoxContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="Panel/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+
+[node name="CenterContainerLogo" type="CenterContainer" parent="Panel/VBoxContainer/HBoxContainer/VBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 10
 
-[node name="LogoNFC" type="TextureRect" parent="Panel/VBoxContainer/HBoxContainer/CenterContainerLogo"]
+[node name="LogoNFC" type="TextureRect" parent="Panel/VBoxContainer/HBoxContainer/VBoxContainer/CenterContainerLogo"]
 custom_minimum_size = Vector2(320, 420)
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 texture = ExtResource("2_lwjnw")
 expand_mode = 1
+
+[node name="ButtonScanLogin" type="Button" parent="Panel/VBoxContainer/HBoxContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 80)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 10
+focus_mode = 0
+theme_override_font_sizes/font_size = 30
+theme_override_styles/hover = SubResource("StyleBoxFlat_6s8ns")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_x0bqw")
+theme_override_styles/normal = SubResource("StyleBoxFlat_6s8ns")
+text = "SCANNER"
+expand_icon = true
+language = "fr"
 
 [node name="LogoCenter" type="VBoxContainer" parent="Panel/VBoxContainer/HBoxContainer"]
 layout_mode = 2
@@ -441,6 +458,3 @@ theme_override_styles/normal = SubResource("StyleBoxFlat_6s8ns")
 text = "VALIDER"
 expand_icon = true
 language = "fr"
-
-[node name="RFIDTimer" type="Timer" parent="."]
-wait_time = 3.0

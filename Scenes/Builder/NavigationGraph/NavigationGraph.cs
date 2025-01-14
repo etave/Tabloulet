@@ -41,10 +41,9 @@ namespace Tabloulet.Scenes.BuilderNS.NavigationGraphNS
         private OptionButton _newRFIDPageSource;
         private OptionButton _newRFIDPageTarget;
         private LineEdit _newRFIDTag;
+        private GDButton _newRFIDScanButton;
         private GDButton _newRFIDCreateButton;
         private GDButton _newRFIDCancelButton;
-
-        private Timer rfidTimer;
 
         private OptionButton _templateOptionButton;
         private Dictionary<int, Guid> _templates;
@@ -100,7 +99,10 @@ namespace Tabloulet.Scenes.BuilderNS.NavigationGraphNS
                 "VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer/OptionButton2"
             );
             _newRFIDTag = _newRFIDPopupPanel.GetNode<LineEdit>(
-                "VBoxContainer/MarginContainer3/LineEdit"
+                "VBoxContainer/MarginContainer3/VBoxContainer/LineEdit"
+            );
+            _newRFIDScanButton = _newRFIDPopupPanel.GetNode<GDButton>(
+                "VBoxContainer/MarginContainer3/VBoxContainer/MarginContainer/ButtonScan"
             );
             _newRFIDCreateButton = _newRFIDPopupPanel.GetNode<GDButton>(
                 "VBoxContainer/ButtonsHBoxContainer/CreateButton"
@@ -112,10 +114,7 @@ namespace Tabloulet.Scenes.BuilderNS.NavigationGraphNS
             _newRFIDButton.Pressed += NewRFIDButtonPressed;
             _newRFIDCreateButton.Pressed += NewRFIDCreateButtonPressed;
             _newRFIDCancelButton.Pressed += NewRFIDCancelButtonPressed;
-
-            rfidTimer = GetNode<Timer>("RFIDTimer");
-            rfidTimer.Timeout += OnRFIDTimerTimeout;
-            rfidTimer.Start();
+            _newRFIDScanButton.Pressed += NewRFIDScanButtonPressed;
 
             _templates = new Dictionary<int, Guid>();
             _templateOptionButton = GetNode<OptionButton>(
@@ -457,6 +456,11 @@ namespace Tabloulet.Scenes.BuilderNS.NavigationGraphNS
             }
             value.Add(rfid);
             UpdateNodeRFID(sourcePageId, targetPageId);
+
+            _newRFIDPageSource.Clear();
+            _newRFIDPageTarget.Clear();
+            _newRFIDName.Text = "Nouveau lien RFID";
+            _newRFIDTag.Text = Guid.Empty.ToString();
             _newRFIDPopupPanel.Visible = false;
         }
 
@@ -488,6 +492,7 @@ namespace Tabloulet.Scenes.BuilderNS.NavigationGraphNS
             if (
                 _newRFIDPageSource.Selected == _newRFIDPageTarget.Selected
                 || _newRFIDName.Text.Length == 0
+                || Guid.Parse(_newRFIDTag.Text) == Guid.Empty
             )
             {
                 _newRFIDCreateButton.Disabled = true;
@@ -498,7 +503,7 @@ namespace Tabloulet.Scenes.BuilderNS.NavigationGraphNS
             }
         }
 
-        private void OnRFIDTimerTimeout()
+        private void NewRFIDScanButtonPressed()
         {
             Helpers
                 .RFID.GetUIDAsync(_idScenario)
