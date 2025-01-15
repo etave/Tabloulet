@@ -175,6 +175,8 @@ namespace Tabloulet.Scenes.Components.ButtonNS
             Position = new Vector2(_positionX, _positionY);
             RotationDegrees = _rotationDeg;
             ZIndex = _index;
+            FocusMode = FocusModeEnum.None;
+            MouseFilter = MouseFilterEnum.Stop;
         }
 
         public void UpdateSizePositionRotationParameters(

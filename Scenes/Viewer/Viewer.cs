@@ -100,6 +100,8 @@ namespace Tabloulet.Scenes.ViewerNS
             page.Visible = false;
             _loginPanel.SetProcess(true);
             _loginPanel.Visible = true;
+            HBoxContainer buttons = GetFirstHBoxContainer();
+            buttons.Visible = false;
             GetChild(GetChildCount() - 1).QueueFree(); // Remove scan button duplicate
         }
 
@@ -174,6 +176,8 @@ namespace Tabloulet.Scenes.ViewerNS
             page.Visible = true;
             _loginPanel.SetProcess(false);
             _loginPanel.Visible = false;
+            HBoxContainer buttons = GetFirstHBoxContainer();
+            buttons.Visible = true;
             CreateViewerScanButton();
         }
 
