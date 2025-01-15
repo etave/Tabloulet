@@ -192,9 +192,9 @@ namespace Tabloulet.DatabaseNS
             return rfids;
         }
 
-        public Models.RFID GetRFIDByTag(Guid tag)
+        public Models.RFID GetRFIDByTag(Guid tag, Guid currentPage)
         {
-            return _connection.Table<Models.RFID>().FirstOrDefault(x => x.RFIDTag == tag);
+            return _connection.Table<Models.RFID>().FirstOrDefault(x => x.RFIDTag == tag && x.PageId == currentPage);
         }
 
         public ScenarioPage GetScenarioPageByPage(Guid pageId)

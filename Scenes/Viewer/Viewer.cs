@@ -193,7 +193,7 @@ namespace Tabloulet.Scenes.ViewerNS
                             return;
                         }
 
-                        RFID rfid = _database.GetRFIDByTag(task.Result);
+                        RFID rfid = _database.GetRFIDByTag(task.Result, _currentPage);
                         if (rfid == null)
                         {
                             return;
