@@ -238,8 +238,12 @@ namespace Tabloulet.Scenes.BuilderNS.NavigationGraphNS
                     if (touch.Pressed && touch.DoubleTap)
                     {
                         Builder builder = GetNode<Builder>("/root/Builder");
-                        builder.ChangePage(page.Id);
-                        QueueFree();
+
+                        if (builder.currentPage != page.Id)
+                        {
+                            builder.ChangePage(page.Id);
+                            QueueFree();
+                        }
                     }
                 }
             };

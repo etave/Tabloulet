@@ -23,7 +23,7 @@ namespace Tabloulet.Scenes.BuilderNS
         private Database _database;
 
         public Guid idScenario;
-        private Guid _currentPage;
+        public Guid currentPage;
 
         public Control _blueprint;
         public CreateComponentPanel createComponentPanel;
@@ -114,19 +114,19 @@ namespace Tabloulet.Scenes.BuilderNS
         public void Init(Guid idScenario)
         {
             this.idScenario = idScenario;
-            _currentPage = _scenarioLoader.LoadScenario(idScenario);
+            currentPage = _scenarioLoader.LoadScenario(idScenario);
             _saveTimer.Start();
-            editComponentPanel.SetCurrentPage(_blueprint.GetNode<Control>(_currentPage.ToString()));
+            editComponentPanel.SetCurrentPage(_blueprint.GetNode<Control>(currentPage.ToString()));
         }
 
         public void ChangePage(Guid idPage)
         {
             SaveCurrentPage();
             FreePage();
-            _currentPage = idPage;
+            currentPage = idPage;
             editComponentPanel.isBackgroundCallableSet = false;
-            _scenarioLoader.LoadPage(_database.GetById<Page>(_currentPage));
-            editComponentPanel.SetCurrentPage(_blueprint.GetNode<Control>(_currentPage.ToString()));
+            _scenarioLoader.LoadPage(_database.GetById<Page>(currentPage));
+            editComponentPanel.SetCurrentPage(_blueprint.GetNode<Control>(currentPage.ToString()));
         }
 
         private void NavigationGraphButtonPressed()
@@ -145,7 +145,7 @@ namespace Tabloulet.Scenes.BuilderNS
                 new()
                 {
                     Id = Guid.NewGuid(),
-                    PageId = _currentPage,
+                    PageId = currentPage,
                     Content = $"[color=#000000]{LoremNET.Lorem.Words(30, true)}[/color]",
                     Font = null,
                     FontSize = 20,
@@ -169,7 +169,7 @@ namespace Tabloulet.Scenes.BuilderNS
                 new()
                 {
                     Id = Guid.NewGuid(),
-                    PageId = _currentPage,
+                    PageId = currentPage,
                     Path = "",
                     ScaleX = 1,
                     ScaleY = 1,
@@ -191,7 +191,7 @@ namespace Tabloulet.Scenes.BuilderNS
                 new()
                 {
                     Id = Guid.NewGuid(),
-                    PageId = _currentPage,
+                    PageId = currentPage,
                     Content = "Bouton",
                     Color = "#FFFFFF",
                     ScaleX = 1,
@@ -214,7 +214,7 @@ namespace Tabloulet.Scenes.BuilderNS
                 new()
                 {
                     Id = Guid.NewGuid(),
-                    PageId = _currentPage,
+                    PageId = currentPage,
                     Path = "",
                     ScaleX = 0.7f,
                     ScaleY = 0.7f,
@@ -254,7 +254,7 @@ namespace Tabloulet.Scenes.BuilderNS
         public void FreePage()
         {
             editComponentPanel.pageNameLineEdit.Text = "";
-            Control page = _blueprint.GetNode<Control>(_currentPage.ToString());
+            Control page = _blueprint.GetNode<Control>(currentPage.ToString());
             foreach (Control component in page.GetChildren().Cast<Control>())
             {
                 component.QueueFree();
@@ -265,11 +265,11 @@ namespace Tabloulet.Scenes.BuilderNS
 
         private void SaveCurrentPage()
         {
-            Control blueprintPage = _blueprint.GetNode<Control>(_currentPage.ToString());
+            Control blueprintPage = _blueprint.GetNode<Control>(currentPage.ToString());
             _database.Update(
                 new Page()
                 {
-                    Id = _currentPage,
+                    Id = currentPage,
                     BackgroundColor = blueprintPage.GetNode<ColorRect>("Background").Color.ToHtml(),
                     Name = editComponentPanel.pageNameLineEdit.Text,
                 }
@@ -280,7 +280,7 @@ namespace Tabloulet.Scenes.BuilderNS
                     component.Key,
                     component.Value
                 );
-                model.PageId = _currentPage;
+                model.PageId = currentPage;
                 _database.Update(model);
             }
         }
@@ -308,7 +308,7 @@ namespace Tabloulet.Scenes.BuilderNS
 
         public Guid GetCurrentPageId()
         {
-            return _currentPage;
+            return currentPage;
         }
 
         private void CreateTemplateButtonPressed()
@@ -317,7 +317,7 @@ namespace Tabloulet.Scenes.BuilderNS
                 "VBoxContainer/MarginContainer/LineEdit"
             );
             String templateName = lineEdit.Text;
-            _database.SavePageAsTemplate(_currentPage, templateName);
+            _database.SavePageAsTemplate(currentPage, templateName);
             lineEdit.Text = "Nouveau template";
             _newTemplatePopUpPanel.Visible = false;
         }
