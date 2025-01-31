@@ -1,8 +1,10 @@
-[gd_scene load_steps=11 format=3 uid="uid://duy6rbl3spnb0"]
+[gd_scene load_steps=13 format=3 uid="uid://duy6rbl3spnb0"]
 
 [ext_resource type="Script" path="res://Scenes/Builder/Builder.cs" id="1_o7hen"]
 [ext_resource type="PackedScene" uid="uid://cydpdu71586wm" path="res://Scenes/Builder/ComponentPanels/CreateComponentPanel.tscn" id="2_hxg7v"]
 [ext_resource type="PackedScene" uid="uid://bmhr54bx5wrcy" path="res://Scenes/Builder/ComponentPanels/EditComponentPanel.tscn" id="3_xo4n6"]
+[ext_resource type="Texture2D" uid="uid://bd5hgg5u07s8s" path="res://Assets/Builder/Graph.png" id="4_0ec8d"]
+[ext_resource type="Texture2D" uid="uid://dvxnhndmroj7" path="res://Assets/Builder/Template.png" id="5_vicbf"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_w4sdb"]
 bg_color = Color(1, 1, 1, 1)
@@ -133,6 +135,7 @@ theme_override_constants/margin_bottom = 4
 
 [node name="Button" type="Button" parent="ExitPanel/MarginContainer"]
 layout_mode = 2
+tooltip_text = "Quitter"
 focus_mode = 0
 theme_override_colors/font_color = Color(1, 0, 0, 1)
 theme_override_font_sizes/font_size = 30
@@ -140,9 +143,10 @@ text = "🗙"
 flat = true
 
 [node name="SaveTimer" type="Timer" parent="."]
-wait_time = 5.0
+wait_time = 1.5
 
 [node name="PagePanelContainer" type="PanelContainer" parent="."]
+visible = false
 z_index = 100
 layout_mode = 0
 offset_left = 1520.0
@@ -169,6 +173,7 @@ theme_override_constants/modulate_arrow = 1
 flat = true
 
 [node name="NewPageButtonPanel" type="Panel" parent="."]
+visible = false
 z_index = 100
 layout_mode = 1
 anchors_preset = 2
@@ -197,13 +202,89 @@ grow_vertical = 2
 
 [node name="NewPageButton" type="Button" parent="NewPageButtonPanel/MarginContainer"]
 layout_mode = 2
+tooltip_text = "Nouvelle page"
 focus_mode = 0
 theme_override_colors/font_color = Color(0, 0.392157, 1, 1)
 theme_override_font_sizes/font_size = 50
 text = "+"
 flat = true
 
-[node name="NewPagePopupPanel" type="Panel" parent="."]
+[node name="NavigationGraphButtonPanel" type="Panel" parent="."]
+z_index = 100
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 1830.0
+offset_top = -90.0
+offset_right = 1900.0
+offset_bottom = -20.0
+grow_vertical = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_w4sdb")
+
+[node name="MarginContainer" type="MarginContainer" parent="NavigationGraphButtonPanel"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -25.0
+offset_right = 20.0
+offset_bottom = 25.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="NavigationGraphButton" type="Button" parent="NavigationGraphButtonPanel/MarginContainer"]
+layout_mode = 2
+tooltip_text = "Graphe de navigation"
+focus_mode = 0
+theme_override_colors/font_color = Color(0, 0.392157, 1, 1)
+theme_override_font_sizes/font_size = 50
+icon = ExtResource("4_0ec8d")
+flat = true
+icon_alignment = 1
+
+[node name="NewTemplateButtonPanel" type="Panel" parent="."]
+z_index = 100
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 1742.0
+offset_top = -91.0
+offset_right = 1812.0
+offset_bottom = -21.0
+grow_vertical = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_w4sdb")
+
+[node name="MarginContainer" type="MarginContainer" parent="NewTemplateButtonPanel"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -25.0
+offset_right = 20.0
+offset_bottom = 25.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="NewTemplateButton" type="Button" parent="NewTemplateButtonPanel/MarginContainer"]
+layout_mode = 2
+tooltip_text = "Nouvelle template"
+focus_mode = 0
+theme_override_colors/font_color = Color(0, 0.392157, 1, 1)
+theme_override_constants/icon_max_width = 45
+theme_override_font_sizes/font_size = 50
+icon = ExtResource("5_vicbf")
+flat = true
+icon_alignment = 1
+
+[node name="NewTemplatePopUpPanel" type="Panel" parent="."]
 visible = false
 z_index = 100
 layout_mode = 1
@@ -220,7 +301,7 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_40kyu")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="NewPagePopupPanel"]
+[node name="VBoxContainer" type="VBoxContainer" parent="NewTemplatePopUpPanel"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -228,46 +309,47 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="HSeparator" type="HSeparator" parent="NewPagePopupPanel/VBoxContainer"]
+[node name="HSeparator" type="HSeparator" parent="NewTemplatePopUpPanel/VBoxContainer"]
 layout_mode = 2
-theme_override_constants/separation = 30
+theme_override_constants/separation = 20
 theme_override_styles/separator = SubResource("StyleBoxEmpty_14845")
 
-[node name="Label" type="Label" parent="NewPagePopupPanel/VBoxContainer"]
+[node name="Label" type="Label" parent="NewTemplatePopUpPanel/VBoxContainer"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_font_sizes/font_size = 30
-text = "Créer une nouvelle page ?"
+text = "Sauvegarder en tant que
+template ?"
 horizontal_alignment = 1
 
-[node name="HSeparator2" type="HSeparator" parent="NewPagePopupPanel/VBoxContainer"]
+[node name="HSeparator2" type="HSeparator" parent="NewTemplatePopUpPanel/VBoxContainer"]
 layout_mode = 2
-theme_override_constants/separation = 30
+theme_override_constants/separation = 15
 theme_override_styles/separator = SubResource("StyleBoxEmpty_14845")
 
-[node name="MarginContainer" type="MarginContainer" parent="NewPagePopupPanel/VBoxContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="NewTemplatePopUpPanel/VBoxContainer"]
 layout_mode = 2
 theme_override_constants/margin_left = 40
 theme_override_constants/margin_right = 40
 
-[node name="LineEdit" type="LineEdit" parent="NewPagePopupPanel/VBoxContainer/MarginContainer"]
+[node name="LineEdit" type="LineEdit" parent="NewTemplatePopUpPanel/VBoxContainer/MarginContainer"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 20
-text = "Nouvelle Page"
-placeholder_text = "Nom de la page"
+text = "Nouveau template"
+placeholder_text = "Nouveau template"
 
-[node name="HSeparator3" type="HSeparator" parent="NewPagePopupPanel/VBoxContainer"]
+[node name="HSeparator3" type="HSeparator" parent="NewTemplatePopUpPanel/VBoxContainer"]
 layout_mode = 2
-theme_override_constants/separation = 30
+theme_override_constants/separation = 15
 theme_override_styles/separator = SubResource("StyleBoxEmpty_14845")
 
-[node name="ButtonsHBoxContainer" type="HBoxContainer" parent="NewPagePopupPanel/VBoxContainer"]
+[node name="ButtonsHBoxContainer" type="HBoxContainer" parent="NewTemplatePopUpPanel/VBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 theme_override_constants/separation = 80
 
-[node name="CreateButton" type="Button" parent="NewPagePopupPanel/VBoxContainer/ButtonsHBoxContainer"]
+[node name="CreateButton" type="Button" parent="NewTemplatePopUpPanel/VBoxContainer/ButtonsHBoxContainer"]
 custom_minimum_size = Vector2(100, 40)
 layout_mode = 2
 focus_mode = 0
@@ -278,7 +360,7 @@ theme_override_styles/pressed = SubResource("StyleBoxFlat_t1j7a")
 theme_override_styles/normal = SubResource("StyleBoxFlat_t1j7a")
 text = "Créer"
 
-[node name="CancelButton" type="Button" parent="NewPagePopupPanel/VBoxContainer/ButtonsHBoxContainer"]
+[node name="CancelButton" type="Button" parent="NewTemplatePopUpPanel/VBoxContainer/ButtonsHBoxContainer"]
 custom_minimum_size = Vector2(100, 40)
 layout_mode = 2
 focus_mode = 0

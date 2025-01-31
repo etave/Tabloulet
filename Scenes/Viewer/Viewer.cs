@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Godot;
 using Tabloulet.DatabaseNS;
 using Tabloulet.DatabaseNS.Models;
+using Tabloulet.Helpers;
 using Tabloulet.Scenes.HomeNS;
 using Tabloulet.Scenes.HomeNS.LoginPanelNS;
 using BaseComponent = Tabloulet.Scenes.Components.BaseNS.Base;
@@ -21,7 +22,9 @@ namespace Tabloulet.Scenes.ViewerNS
 
         private LoginPanel _loginPanel;
 
-        private Panel _scanButtonPanel;
+        private RFIDMonitor _rfidMonitor;
+
+        private bool _isScanning;
 
         public override void _Ready()
         {
@@ -35,8 +38,8 @@ namespace Tabloulet.Scenes.ViewerNS
             _loginPanel.SetProcess(false);
             _loginPanel.viewerMode = true;
 
-            _scanButtonPanel = GetNode<Panel>("ScanButtonPanel");
-            _scanButtonPanel.GetChild<Godot.Button>(0).Pressed += ScanButtonPressed;
+            _rfidMonitor = GetNode<RFIDMonitor>("/root/RFIDMonitor");
+            _isScanning = false;
         }
 
         public void Init(Guid idScenario)
@@ -79,30 +82,16 @@ namespace Tabloulet.Scenes.ViewerNS
             hBoxContainer.AddChild(buttonExit);
             hBoxContainer.AddChild(buttonReset);
             AddChild(hBoxContainer);
-
-            CreateViewerScanButton();
-        }
-
-        private void CreateViewerScanButton()
-        {
-            Panel scanButtonPanelCopy = (Panel)_scanButtonPanel.Duplicate();
-            scanButtonPanelCopy.ZIndex = 101;
-            scanButtonPanelCopy.Visible = true;
-            scanButtonPanelCopy.GetChild<Godot.Button>(0).Pressed += ScanButtonPressed;
-            scanButtonPanelCopy.GetChild<Godot.Button>(0).SetAnchorsPreset(LayoutPreset.FullRect);
-            scanButtonPanelCopy.SetAnchorsPreset(LayoutPreset.CenterBottom);
-            AddChild(scanButtonPanelCopy);
         }
 
         private void OnExitButtonPressed()
         {
-            Control page = GetChild(2) as Control;
+            Control page = GetChild(1) as Control;
             page.Visible = false;
             _loginPanel.SetProcess(true);
             _loginPanel.Visible = true;
             HBoxContainer buttons = GetFirstHBoxContainer();
             buttons.Visible = false;
-            GetChild(GetChildCount() - 1).QueueFree(); // Remove scan button duplicate
         }
 
         private void ResetScenario()
@@ -151,7 +140,6 @@ namespace Tabloulet.Scenes.ViewerNS
             page.QueueFree();
             HBoxContainer buttons = GetFirstHBoxContainer();
             buttons.QueueFree();
-            GetChild(GetChildCount() - 1).QueueFree(); // Remove scan button duplicate
         }
 
         public void ChangePage(Guid idPage)
@@ -172,44 +160,53 @@ namespace Tabloulet.Scenes.ViewerNS
 
         public void LoginCancelButtonPressed()
         {
-            Control page = GetChild(2) as Control;
+            Control page = GetChild(1) as Control;
             page.Visible = true;
             _loginPanel.SetProcess(false);
             _loginPanel.Visible = false;
             HBoxContainer buttons = GetFirstHBoxContainer();
             buttons.Visible = true;
-            CreateViewerScanButton();
         }
 
-        private void ScanButtonPressed()
+        private async void ScanRFID()
         {
-            Helpers
-                .RFID.GetUIDAsync(_idScenario)
-                .ContinueWith(
-                    task =>
-                    {
-                        if (
-                            task.IsFaulted
-                            || task.Result == Guid.Empty
-                            || task.Result == _idScenario
-                        )
-                        {
-                            return;
-                        }
+            if (_isScanning)
+            {
+                return;
+            }
 
-                        RFID rfid = _database.GetRFIDByTag(task.Result, _currentPage);
-                        if (rfid == null)
-                        {
-                            return;
-                        }
+            _isScanning = true;
 
-                        if (rfid.PageId == _currentPage)
-                        {
-                            ChangePage(rfid.LinkTo);
-                        }
-                    },
-                    TaskScheduler.FromCurrentSynchronizationContext()
-                );
+            try
+            {
+                Guid result = await _rfidMonitor.GetStableMonitoredGuid(_idScenario);
+
+                if (result == Guid.Empty)
+                {
+                    return;
+                }
+
+                RFID rfid = _database.GetRFIDByTag(result, _currentPage);
+                if (rfid == null)
+                {
+                    return;
+                }
+
+                if (rfid.PageId == _currentPage)
+                {
+                    ChangePage(rfid.LinkTo);
+                }
+            }
+            finally
+            {
+                _isScanning = false;
+            }
+        }
+
+        public override void _Process(double delta)
+        {
+            base._Process(delta);
+            ScanRFID();
         }
     }
 }
