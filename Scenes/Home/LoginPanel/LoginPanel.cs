@@ -26,6 +26,9 @@ namespace Tabloulet.Scenes.HomeNS.LoginPanelNS
 
         private Button _scanLoginButton;
 
+        private RFIDMonitor _rfidMonitor;
+        private bool _isScanning = false;
+
         public override void _Ready()
         {
             // Initialiser les éléments
@@ -82,10 +85,7 @@ namespace Tabloulet.Scenes.HomeNS.LoginPanelNS
             // Connecter le bouton "QUIT" à la méthode de gestion
             quitButton.Pressed += OnQuitButtonPressed;
 
-            _scanLoginButton = GetNode<Button>(
-                "Panel/VBoxContainer/HBoxContainer/VBoxContainer/ButtonScanLogin"
-            );
-            _scanLoginButton.Pressed += OnScanLoginButtonPressed;
+            _rfidMonitor = GetNode<RFIDMonitor>("/root/RFIDMonitor");
         }
 
         public List<Button> GetMyButtons(GridContainer gridContainer)
@@ -184,33 +184,44 @@ namespace Tabloulet.Scenes.HomeNS.LoginPanelNS
             }
         }
 
-        private void OnScanLoginButtonPressed()
+        public override void _Process(double delta)
         {
-            RFID.GetUIDAsync()
-                .ContinueWith(
-                    task =>
+            base._Process(delta);
+            ScanRFID();
+        }
+
+        private async void ScanRFID()
+        {
+            if (_isScanning)
+            {
+                return;
+            }
+
+            _isScanning = true;
+
+            try
+            {
+                Guid result = await _rfidMonitor.GetStableMonitoredGuid();
+
+                if (result != Guid.Empty && result == passwordGuid)
+                {
+                    if (viewerMode)
                     {
-                        if (task.IsFaulted || task.Result == Guid.Empty)
-                        {
-                            return;
-                        }
-                        if (task.Result == passwordGuid)
-                        {
-                            if (viewerMode)
-                            {
-                                var viewer = GetParent<Control>() as Viewer;
-                                viewer.ExitButtonPressed();
-                            }
-                            else
-                            {
-                                Visible = false;
-                                var home = GetParent<Control>() as Home;
-                                home.ChangeToAdmin();
-                            }
-                        }
-                    },
-                    TaskScheduler.FromCurrentSynchronizationContext()
-                );
+                        var viewer = GetParent<Control>() as Viewer;
+                        viewer.ExitButtonPressed();
+                    }
+                    else
+                    {
+                        Visible = false;
+                        var home = GetParent<Control>() as Home;
+                        home.ChangeToAdmin();
+                    }
+                }
+            }
+            finally
+            {
+                _isScanning = false;
+            }
         }
     }
 }

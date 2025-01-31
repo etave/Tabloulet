@@ -135,6 +135,7 @@ theme_override_constants/margin_bottom = 4
 
 [node name="Button" type="Button" parent="ExitPanel/MarginContainer"]
 layout_mode = 2
+tooltip_text = "Quitter"
 focus_mode = 0
 theme_override_colors/font_color = Color(1, 0, 0, 1)
 theme_override_font_sizes/font_size = 30
@@ -237,7 +238,7 @@ grow_vertical = 2
 
 [node name="NavigationGraphButton" type="Button" parent="NavigationGraphButtonPanel/MarginContainer"]
 layout_mode = 2
-tooltip_text = "Nouvelle page"
+tooltip_text = "Graphe de navigation"
 focus_mode = 0
 theme_override_colors/font_color = Color(0, 0.392157, 1, 1)
 theme_override_font_sizes/font_size = 50
@@ -274,7 +275,7 @@ grow_vertical = 2
 
 [node name="NewTemplateButton" type="Button" parent="NewTemplateButtonPanel/MarginContainer"]
 layout_mode = 2
-tooltip_text = "Nouvelle page"
+tooltip_text = "Nouvelle template"
 focus_mode = 0
 theme_override_colors/font_color = Color(0, 0.392157, 1, 1)
 theme_override_constants/icon_max_width = 45

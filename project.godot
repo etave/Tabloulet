@@ -19,6 +19,7 @@ config/icon="res://icon.svg"
 
 Database="*res://Database/Database.cs"
 InputHandler="*res://Helpers/InputHandler.cs"
+RFIDMonitor="*res://Helpers/RFIDMonitor.cs"
 
 [display]
 
