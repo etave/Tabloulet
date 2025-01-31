@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://duy6rbl3spnb0"]
+[gd_scene load_steps=12 format=3 uid="uid://duy6rbl3spnb0"]
 
 [ext_resource type="Script" path="res://Scenes/Builder/Builder.cs" id="1_o7hen"]
 [ext_resource type="PackedScene" uid="uid://cydpdu71586wm" path="res://Scenes/Builder/ComponentPanels/CreateComponentPanel.tscn" id="2_hxg7v"]
@@ -8,18 +8,6 @@
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_w4sdb"]
 bg_color = Color(1, 1, 1, 1)
-border_width_left = 3
-border_width_top = 3
-border_width_right = 3
-border_width_bottom = 3
-border_color = Color(0, 0, 0, 1)
-corner_radius_top_left = 30
-corner_radius_top_right = 30
-corner_radius_bottom_right = 30
-corner_radius_bottom_left = 30
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ybhlk"]
-bg_color = Color(1, 1, 1, 0.784314)
 border_width_left = 3
 border_width_top = 3
 border_width_right = 3
@@ -144,70 +132,6 @@ flat = true
 
 [node name="SaveTimer" type="Timer" parent="."]
 wait_time = 1.5
-
-[node name="PagePanelContainer" type="PanelContainer" parent="."]
-visible = false
-z_index = 100
-layout_mode = 0
-offset_left = 1520.0
-offset_top = 990.0
-offset_right = 1770.0
-offset_bottom = 1060.0
-theme_override_styles/panel = SubResource("StyleBoxFlat_ybhlk")
-
-[node name="MarginContainer" type="MarginContainer" parent="PagePanelContainer"]
-layout_mode = 2
-theme_override_constants/margin_left = 10
-
-[node name="PageOptionButton" type="OptionButton" parent="PagePanelContainer/MarginContainer"]
-z_index = 100
-layout_mode = 2
-size_flags_horizontal = 3
-focus_mode = 0
-theme_override_colors/font_hover_pressed_color = Color(0, 0, 0, 1)
-theme_override_colors/font_hover_color = Color(0, 0, 0, 1)
-theme_override_colors/font_pressed_color = Color(0, 0, 0, 1)
-theme_override_colors/font_focus_color = Color(0, 0, 0, 1)
-theme_override_colors/font_color = Color(0, 0, 0, 1)
-theme_override_constants/modulate_arrow = 1
-flat = true
-
-[node name="NewPageButtonPanel" type="Panel" parent="."]
-visible = false
-z_index = 100
-layout_mode = 1
-anchors_preset = 2
-anchor_top = 1.0
-anchor_bottom = 1.0
-offset_left = 1830.0
-offset_top = -90.0
-offset_right = 1900.0
-offset_bottom = -20.0
-grow_vertical = 0
-theme_override_styles/panel = SubResource("StyleBoxFlat_w4sdb")
-
-[node name="MarginContainer" type="MarginContainer" parent="NewPageButtonPanel"]
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -20.0
-offset_top = -25.0
-offset_right = 20.0
-offset_bottom = 25.0
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="NewPageButton" type="Button" parent="NewPageButtonPanel/MarginContainer"]
-layout_mode = 2
-tooltip_text = "Nouvelle page"
-focus_mode = 0
-theme_override_colors/font_color = Color(0, 0.392157, 1, 1)
-theme_override_font_sizes/font_size = 50
-text = "+"
-flat = true
 
 [node name="NavigationGraphButtonPanel" type="Panel" parent="."]
 z_index = 100
