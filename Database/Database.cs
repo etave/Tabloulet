@@ -194,7 +194,9 @@ namespace Tabloulet.DatabaseNS
 
         public Models.RFID GetRFIDByTag(Guid tag, Guid currentPage)
         {
-            return _connection.Table<Models.RFID>().FirstOrDefault(x => x.RFIDTag == tag && x.PageId == currentPage);
+            return _connection
+                .Table<Models.RFID>()
+                .FirstOrDefault(x => x.RFIDTag == tag && x.PageId == currentPage);
         }
 
         public ScenarioPage GetScenarioPageByPage(Guid pageId)
@@ -292,6 +294,67 @@ namespace Tabloulet.DatabaseNS
             }
 
             return newPage.Id;
+        }
+
+        public bool DeletePage(Guid pageId)
+        {
+            var page = GetById<Page>(pageId);
+            var scenarioPages = _connection
+                .Table<ScenarioPage>()
+                .Where(x => x.PageId == pageId)
+                .ToList();
+
+            var elements = GetElementsByPage(pageId);
+            foreach (var element in elements)
+            {
+                if (element is IDatabaseModelComponent component)
+                {
+                    Delete(component);
+                }
+            }
+            var scenarioPage = _connection
+                .Table<ScenarioPage>()
+                .FirstOrDefault(x => x.PageId == pageId);
+            Delete(scenarioPage);
+            // Delete RFIDs
+            var rfids = _connection
+                .Table<Models.RFID>()
+                .Where(x => x.LinkTo == pageId || x.PageId == pageId)
+                .ToList();
+            foreach (var rfid in rfids)
+            {
+                Delete(rfid);
+            }
+            // change linkTo to null in buttons
+            var buttons = _connection
+                .Table<Models.Button>()
+                .Where(x => x.LinkTo == pageId)
+                .ToList();
+            foreach (var button in buttons)
+            {
+                //button.LinkTo = null;
+                //Update(button as IDatabaseModel);
+                Delete(button as IDatabaseModel);
+            }
+            Delete(page);
+            return true;
+        }
+
+        public List<Page> GetPagesByScenarioIDWithoutHome(Guid scenarioID)
+        {
+            var scenario = GetById<Scenario>(scenarioID);
+
+            var scenarioPages = _connection
+                .Table<ScenarioPage>()
+                .Where(x => x.ScenarioId == scenarioID && x.PageId != scenario.PageId)
+                .ToList();
+            var pages = new List<Page>();
+            foreach (var scenarioPage in scenarioPages)
+            {
+                var page = GetById<Page>(scenarioPage.PageId);
+                pages.Add(page);
+            }
+            return pages;
         }
 
         public List<Page> GetAllTemplates()

@@ -48,6 +48,10 @@ namespace Tabloulet.Scenes.BuilderNS.NavigationGraphNS
         private OptionButton _templateOptionButton;
         private Dictionary<int, Guid> _templates;
 
+        private GDButton _deletePageButton;
+        private Panel _deletePagePanel;
+        private Dictionary<int, Guid> _dicPageDelete;
+
         public override void _Ready()
         {
             base._Ready();
@@ -129,6 +133,17 @@ namespace Tabloulet.Scenes.BuilderNS.NavigationGraphNS
                 _templates[index] = template.Id;
                 index++;
             }
+
+            _deletePageButton = GetNode<GDButton>(
+                "DeletePageButtonPanel/MarginContainer/DeletePageButton"
+            );
+            _deletePageButton.Pressed += OnDeletePageButtonPressed;
+            _deletePagePanel = GetNode<Panel>("DeletePagePanel");
+            _deletePagePanel
+                .GetNode<GDButton>("VBoxContainer/HBoxContainer/ValidateButton")
+                .Pressed += OnValidationDeletePageButtonPressed;
+
+            _dicPageDelete = new Dictionary<int, Guid>();
         }
 
         public void LoadGraph(Guid scenarioId)
@@ -526,6 +541,48 @@ namespace Tabloulet.Scenes.BuilderNS.NavigationGraphNS
                     },
                     TaskScheduler.FromCurrentSynchronizationContext()
                 );
+        }
+
+        private void OnDeletePageButtonPressed()
+        {
+            List<Page> pagesDelete = _database.GetPagesByScenarioIDWithoutHome(_idScenario);
+            OptionButton optionButton = _deletePagePanel.GetNode<OptionButton>(
+                "VBoxContainer/OptionButton"
+            );
+            _dicPageDelete.Clear();
+            optionButton.Clear();
+            int index = 0;
+            foreach (Page page in pagesDelete)
+            {
+                optionButton.AddItem(page.Name, index);
+                _dicPageDelete[index] = page.Id;
+                index++;
+            }
+
+            _deletePagePanel.Visible = true;
+        }
+
+        private void OnValidationDeletePageButtonPressed()
+        {
+            OptionButton optionButton = _deletePagePanel.GetNode<OptionButton>(
+                "VBoxContainer/OptionButton"
+            );
+            int index = optionButton.Selected;
+            if (_dicPageDelete.TryGetValue(index, out Guid pageId))
+            {
+                _database.DeletePage(pageId);
+                Builder builder = GetNode<Builder>("/root/Builder");
+                if (pageId == builder.currentPage)
+                {
+                    Scenario scenario = _database.GetById<Scenario>(_idScenario);
+                    builder.ChangePage(scenario.PageId);
+                }
+                else
+                {
+                    builder.CreateNavigationGraph();
+                }
+                QueueFree();
+            }
         }
     }
 }
