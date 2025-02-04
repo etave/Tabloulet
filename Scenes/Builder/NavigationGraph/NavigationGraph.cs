@@ -143,6 +143,10 @@ namespace Tabloulet.Scenes.BuilderNS.NavigationGraphNS
             );
             _deletePageButton.Pressed += OnDeletePageButtonPressed;
             _deletePagePanel = GetNode<Panel>("DeletePagePanel");
+            _deletePagePanel.GetNode<GDButton>("Button").Pressed += () =>
+            {
+                _deletePagePanel.Visible = false;
+            };
             _deletePagePanel
                 .GetNode<GDButton>("VBoxContainer/HBoxContainer/ValidateButton")
                 .Pressed += OnValidationDeletePageButtonPressed;
@@ -154,6 +158,10 @@ namespace Tabloulet.Scenes.BuilderNS.NavigationGraphNS
             );
             _deleteRFIDButton.Pressed += OnDeleteRFIDButtonPressed;
             _deletRFIDPanel = GetNode<Panel>("DeleteRFIDPanel");
+            _deletRFIDPanel.GetNode<GDButton>("Button").Pressed += () =>
+            {
+                _deletRFIDPanel.Visible = false;
+            };
             _deletRFIDPanel
                 .GetNode<GDButton>("VBoxContainer/HBoxContainer/ValidateButton")
                 .Pressed += OnValidationDeleteRFIDButtonPressed;

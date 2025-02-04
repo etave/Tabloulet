@@ -84,6 +84,10 @@ border_width_top = 3
 border_width_right = 3
 border_width_bottom = 3
 border_color = Color(0, 0, 0, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_14sen"]
 bg_color = Color(0.823529, 0.172549, 0.176471, 1)
@@ -598,7 +602,7 @@ wait_time = 3.0
 
 [node name="DeletePagePanel" type="Panel" parent="."]
 visible = false
-custom_minimum_size = Vector2(400, 220)
+custom_minimum_size = Vector2(430, 200)
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -626,6 +630,7 @@ theme_override_constants/separation = 20
 
 [node name="HSeparator" type="HSeparator" parent="DeletePagePanel/VBoxContainer"]
 layout_mode = 2
+theme_override_constants/separation = 0
 
 [node name="Label" type="Label" parent="DeletePagePanel/VBoxContainer"]
 layout_mode = 2
@@ -653,9 +658,24 @@ theme_override_styles/pressed = SubResource("StyleBoxFlat_8abxk")
 theme_override_styles/normal = SubResource("StyleBoxFlat_o52mj")
 text = "Supprimer"
 
+[node name="Button" type="Button" parent="DeletePagePanel"]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -38.0
+offset_bottom = 50.0
+grow_horizontal = 0
+size_flags_horizontal = 8
+focus_mode = 0
+theme_override_colors/font_color = Color(1, 0, 0, 1)
+theme_override_font_sizes/font_size = 30
+text = "🗙"
+flat = true
+
 [node name="DeleteRFIDPanel" type="Panel" parent="."]
 visible = false
-custom_minimum_size = Vector2(420, 220)
+custom_minimum_size = Vector2(450, 200)
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -709,3 +729,18 @@ theme_override_styles/hover = SubResource("StyleBoxFlat_14sen")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_8abxk")
 theme_override_styles/normal = SubResource("StyleBoxFlat_o52mj")
 text = "Supprimer"
+
+[node name="Button" type="Button" parent="DeleteRFIDPanel"]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -38.0
+offset_bottom = 50.0
+grow_horizontal = 0
+size_flags_horizontal = 8
+focus_mode = 0
+theme_override_colors/font_color = Color(1, 0, 0, 1)
+theme_override_font_sizes/font_size = 30
+text = "🗙"
+flat = true
