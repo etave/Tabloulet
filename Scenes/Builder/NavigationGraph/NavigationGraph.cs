@@ -47,6 +47,13 @@ namespace Tabloulet.Scenes.BuilderNS.NavigationGraphNS
         private OptionButton _templateOptionButton;
         private Dictionary<int, Guid> _templates;
 
+        private GDButton _deletePageButton;
+        private Panel _deletePagePanel;
+        private Dictionary<int, Guid> _dicPageDelete;
+
+        private GDButton _deleteRFIDButton;
+        private Panel _deletRFIDPanel;
+        private Dictionary<int, Guid> _dicRFIDDelete;
         private RFIDMonitor _rfidMonitor;
         private bool _isScanning;
 
@@ -127,6 +134,35 @@ namespace Tabloulet.Scenes.BuilderNS.NavigationGraphNS
                 _templates[index] = template.Id;
                 index++;
             }
+
+            _deletePageButton = GetNode<GDButton>(
+                "DeletePageButtonPanel/MarginContainer/DeletePageButton"
+            );
+            _deletePageButton.Pressed += OnDeletePageButtonPressed;
+            _deletePagePanel = GetNode<Panel>("DeletePagePanel");
+            _deletePagePanel.GetNode<GDButton>("Button").Pressed += () =>
+            {
+                _deletePagePanel.Visible = false;
+            };
+            _deletePagePanel
+                .GetNode<GDButton>("VBoxContainer/HBoxContainer/ValidateButton")
+                .Pressed += OnValidationDeletePageButtonPressed;
+
+            _dicPageDelete = new Dictionary<int, Guid>();
+
+            _deleteRFIDButton = GetNode<GDButton>(
+                "DeleteRFIDButtonPanel/MarginContainer/DeleteRFIDButton"
+            );
+            _deleteRFIDButton.Pressed += OnDeleteRFIDButtonPressed;
+            _deletRFIDPanel = GetNode<Panel>("DeleteRFIDPanel");
+            _deletRFIDPanel.GetNode<GDButton>("Button").Pressed += () =>
+            {
+                _deletRFIDPanel.Visible = false;
+            };
+            _deletRFIDPanel
+                .GetNode<GDButton>("VBoxContainer/HBoxContainer/ValidateButton")
+                .Pressed += OnValidationDeleteRFIDButtonPressed;
+            _dicRFIDDelete = new Dictionary<int, Guid>();
 
             _rfidMonitor = GetNode<RFIDMonitor>("/root/RFIDMonitor");
         }
@@ -534,6 +570,82 @@ namespace Tabloulet.Scenes.BuilderNS.NavigationGraphNS
             {
                 _isScanning = false;
             }
+        }
+
+        private void OnDeletePageButtonPressed()
+        {
+            List<Page> pagesDelete = _database.GetPagesByScenarioIDWithoutHome(_idScenario);
+            OptionButton optionButton = _deletePagePanel.GetNode<OptionButton>(
+                "VBoxContainer/OptionButton"
+            );
+            _dicPageDelete.Clear();
+            optionButton.Clear();
+            int index = 0;
+            foreach (Page page in pagesDelete)
+            {
+                optionButton.AddItem(page.Name, index);
+                _dicPageDelete[index] = page.Id;
+                index++;
+            }
+
+            _deletePagePanel.Visible = true;
+        }
+
+        private void OnValidationDeletePageButtonPressed()
+        {
+            OptionButton optionButton = _deletePagePanel.GetNode<OptionButton>(
+                "VBoxContainer/OptionButton"
+            );
+            int index = optionButton.Selected;
+            if (_dicPageDelete.TryGetValue(index, out Guid pageId))
+            {
+                _database.DeletePage(pageId);
+                Builder builder = GetNode<Builder>("/root/Builder");
+                if (pageId == builder.currentPage)
+                {
+                    Scenario scenario = _database.GetById<Scenario>(_idScenario);
+                    builder.ChangePage(scenario.PageId);
+                }
+                else
+                {
+                    builder.CreateNavigationGraph();
+                }
+                QueueFree();
+            }
+        }
+
+        private void OnValidationDeleteRFIDButtonPressed()
+        {
+            OptionButton optionButton = _deletRFIDPanel.GetNode<OptionButton>(
+                "VBoxContainer/OptionButton"
+            );
+            int index = optionButton.Selected;
+            if (_dicRFIDDelete.TryGetValue(index, out Guid rfidId))
+            {
+                _database.DeleteRFID(rfidId);
+                Builder builder = GetNode<Builder>("/root/Builder");
+                builder.CreateNavigationGraph();
+                QueueFree();
+            }
+        }
+
+        private void OnDeleteRFIDButtonPressed()
+        {
+            List<RFIDModel> rfids = _database.GetRFIDsByScenario(_idScenario);
+            OptionButton optionButton = _deletRFIDPanel.GetNode<OptionButton>(
+                "VBoxContainer/OptionButton"
+            );
+            _dicRFIDDelete.Clear();
+            optionButton.Clear();
+            int index = 0;
+            foreach (RFIDModel rfid in rfids)
+            {
+                optionButton.AddItem(rfid.Name, index);
+                _dicRFIDDelete[index] = rfid.Id;
+                index++;
+            }
+
+            _deletRFIDPanel.Visible = true;
         }
     }
 }

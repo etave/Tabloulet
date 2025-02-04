@@ -131,6 +131,11 @@ namespace Tabloulet.Scenes.BuilderNS
 
         private void NavigationGraphButtonPressed()
         {
+            CreateNavigationGraph();
+        }
+
+        public void CreateNavigationGraph()
+        {
             PackedScene navigationGraphScene = GD.Load<PackedScene>(
                 "res://Scenes/Builder/NavigationGraph/NavigationGraph.tscn"
             );
