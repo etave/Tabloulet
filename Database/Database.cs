@@ -362,6 +362,12 @@ namespace Tabloulet.DatabaseNS
             return _connection.Table<Page>().Where(x => x.IsTemplate).ToList();
         }
 
+        public void DeleteRFID(Guid rfidId)
+        {
+            var rfid = GetById<Models.RFID>(rfidId);
+            Delete(rfid);
+        }
+
         private void CreateTables()
         {
             var createTableStatements = new List<string>()
