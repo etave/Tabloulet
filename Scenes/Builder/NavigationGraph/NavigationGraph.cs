@@ -41,7 +41,6 @@ namespace Tabloulet.Scenes.BuilderNS.NavigationGraphNS
         private OptionButton _newRFIDPageSource;
         private OptionButton _newRFIDPageTarget;
         private LineEdit _newRFIDTag;
-        private GDButton _newRFIDScanButton;
         private GDButton _newRFIDCreateButton;
         private GDButton _newRFIDCancelButton;
 
@@ -55,6 +54,8 @@ namespace Tabloulet.Scenes.BuilderNS.NavigationGraphNS
         private GDButton _deleteRFIDButton;
         private Panel _deletRFIDPanel;
         private Dictionary<int, Guid> _dicRFIDDelete;
+        private RFIDMonitor _rfidMonitor;
+        private bool _isScanning;
 
         public override void _Ready()
         {
@@ -109,9 +110,6 @@ namespace Tabloulet.Scenes.BuilderNS.NavigationGraphNS
             _newRFIDTag = _newRFIDPopupPanel.GetNode<LineEdit>(
                 "VBoxContainer/MarginContainer3/VBoxContainer/LineEdit"
             );
-            _newRFIDScanButton = _newRFIDPopupPanel.GetNode<GDButton>(
-                "VBoxContainer/MarginContainer3/VBoxContainer/MarginContainer/ButtonScan"
-            );
             _newRFIDCreateButton = _newRFIDPopupPanel.GetNode<GDButton>(
                 "VBoxContainer/ButtonsHBoxContainer/CreateButton"
             );
@@ -122,7 +120,6 @@ namespace Tabloulet.Scenes.BuilderNS.NavigationGraphNS
             _newRFIDButton.Pressed += NewRFIDButtonPressed;
             _newRFIDCreateButton.Pressed += NewRFIDCreateButtonPressed;
             _newRFIDCancelButton.Pressed += NewRFIDCancelButtonPressed;
-            _newRFIDScanButton.Pressed += NewRFIDScanButtonPressed;
 
             _templates = new Dictionary<int, Guid>();
             _templateOptionButton = GetNode<OptionButton>(
@@ -166,6 +163,8 @@ namespace Tabloulet.Scenes.BuilderNS.NavigationGraphNS
                 .GetNode<GDButton>("VBoxContainer/HBoxContainer/ValidateButton")
                 .Pressed += OnValidationDeleteRFIDButtonPressed;
             _dicRFIDDelete = new Dictionary<int, Guid>();
+
+            _rfidMonitor = GetNode<RFIDMonitor>("/root/RFIDMonitor");
         }
 
         public void LoadGraph(Guid scenarioId)
@@ -520,6 +519,8 @@ namespace Tabloulet.Scenes.BuilderNS.NavigationGraphNS
                 return;
             }
 
+            ScanRFID();
+
             try
             {
                 Guid.Parse(_newRFIDTag.Text);
@@ -544,25 +545,31 @@ namespace Tabloulet.Scenes.BuilderNS.NavigationGraphNS
             }
         }
 
-        private void NewRFIDScanButtonPressed()
+        private async void ScanRFID()
         {
-            Helpers
-                .RFID.GetUIDAsync(_idScenario)
-                .ContinueWith(
-                    task =>
-                    {
-                        if (
-                            task.IsFaulted
-                            || task.Result == Guid.Empty
-                            || task.Result == _idScenario
-                        )
-                        {
-                            return;
-                        }
-                        _newRFIDTag.Text = task.Result.ToString();
-                    },
-                    TaskScheduler.FromCurrentSynchronizationContext()
-                );
+            if (_isScanning)
+            {
+                return;
+            }
+
+            _isScanning = true;
+
+            try
+            {
+                Guid result = await _rfidMonitor.GetStableMonitoredGuid(_idScenario);
+                if (result != Guid.Empty)
+                {
+                    _newRFIDTag.Text = result.ToString();
+                }
+                else
+                {
+                    _newRFIDTag.Text = "Aucun tag d\u00e9tect\u00e9";
+                }
+            }
+            finally
+            {
+                _isScanning = false;
+            }
         }
 
         private void OnDeletePageButtonPressed()
