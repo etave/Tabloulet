@@ -245,7 +245,6 @@ namespace Tabloulet.Scenes.BuilderNS
 
         private void AddModelButtonPressed()
         {
-            Console.WriteLine("Test");
             Model model =
                 new()
                 {

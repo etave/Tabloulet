@@ -130,6 +130,7 @@ namespace Tabloulet.Scenes
 
         public void CreateModelComponent(Model3DModel model)
         {
+            GD.Print("OUI");
             Model3DComponent modelComponent =
                 new(
                     model.Path,
@@ -143,6 +144,7 @@ namespace Tabloulet.Scenes
                     model.ZIndex,
                     model.IsMovable
                 );
+            GD.Print(modelComponent.PositionX);
             BaseComponent modelBase = CreateBase(modelComponent, model.IsMovable, display);
             display.AddComponent(_currentPage, model.Id, modelBase);
         }
