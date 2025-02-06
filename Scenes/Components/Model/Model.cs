@@ -17,6 +17,8 @@ namespace Tabloulet.Scenes.Components.Model3DNS
         private SubViewport _subViewport;
         private Camera3D _camera;
         private bool _hasModel;
+        private Node3D _model;
+
 
 
 
@@ -208,6 +210,8 @@ namespace Tabloulet.Scenes.Components.Model3DNS
                 return;
             }
 
+            _model = model;
+
             _subViewport.AddChild(model);
             _hasModel = true;
 
@@ -264,8 +268,19 @@ namespace Tabloulet.Scenes.Components.Model3DNS
             }
 
             
+
+
         }
 
+        public override void _Process(double delta)
+        {
+            if (_model != null)
+            {
+                // Ici, rotationSpeed est en radians par seconde.
+                float rotationSpeed = 1.0f;
+                _model.RotateY(rotationSpeed * (float)delta);
+            }
+        }
 
 
 
