@@ -118,10 +118,11 @@ namespace Tabloulet.Scenes.Components.Model3DNS
             _inputHandler = GetNode<InputHandler>("/root/InputHandler");
 
 
-/*            _subViewport = new SubViewport
+            _subViewport = new SubViewport
             {
                 TransparentBg = true,
-                Size = new Vector2I((int)_sizeX, (int)_sizeY)
+                Size = new Vector2I((int)_sizeX, (int)_sizeY),
+                OwnWorld3D = true,
             };
             AddChild(_subViewport);
 
@@ -129,7 +130,7 @@ namespace Tabloulet.Scenes.Components.Model3DNS
             // Creation de la camera 3D
             _camera = new Camera3D
             {
-                Position = new Vector3(0, 1, 3),
+                Position = new Vector3(0, 2, 5),
                 Current = true
             };
 
@@ -140,7 +141,7 @@ namespace Tabloulet.Scenes.Components.Model3DNS
             DirectionalLight3D directionalLight3D = new DirectionalLight3D();
             _subViewport.AddChild(directionalLight3D);
             Texture = _subViewport.GetTexture();
-*/
+
             _camera = new Camera3D
             {
                 Position = new Vector3(0, 1, 3),
@@ -207,12 +208,66 @@ namespace Tabloulet.Scenes.Components.Model3DNS
                 return;
             }
 
-            //_subViewport.AddChild(model);
-            AddChild(model);
+            _subViewport.AddChild(model);
             _hasModel = true;
+
+            AdjustModelView(model);
 
             GD.Print($"Model loaded: {path}");
         }
+
+        private void AdjustModelView(Node3D model)
+        {
+            Aabb boundingBox = new Aabb();
+            
+            bool hasMesh = false;
+
+            foreach (Node child in model.GetChildren())
+            {
+                if (child is MeshInstance3D meshInstance)
+                {
+                    if (!hasMesh)
+                    {
+                        boundingBox = meshInstance.GetAabb();
+                        hasMesh = true;
+                    }
+                    else
+                    {
+                        boundingBox = boundingBox.Merge(meshInstance.GetAabb());
+                    }
+                }
+            }
+
+            if (!hasMesh)
+            {
+                GD.PrintErr("No MeshInstance3D found in the model.");
+                return;
+            }
+
+            Vector3 modelSize = boundingBox.Size;
+            float maxSize = Mathf.Max(modelSize.X, modelSize.Y);
+            maxSize = Mathf.Max(maxSize, modelSize.Z);
+
+            // Vérifier si le modèle est trop grand
+            if (maxSize > 2.0f) // Seuil arbitraire (peut être ajusté)
+            {
+                // Reculer la caméra proportionnellement à la taille
+                float distance = maxSize * 1.5f;
+                _camera.Position = new Vector3(0, maxSize / 2.0f, distance);
+                _camera.LookAt(Vector3.Zero);
+            }
+            else if (maxSize < 1.0f)
+            {
+                // Si le modèle est trop petit, on l'agrandit
+                float scaleFactor = 2.0f / maxSize;
+                model.Scale = new Vector3(scaleFactor, scaleFactor, scaleFactor);
+            }
+
+            
+        }
+
+
+
 
 
         public void UpdateSizePositionRotationParameters(
