@@ -32,12 +32,17 @@ jobs:
         run: |
           mkdir -v -p ~/.local/share/godot/export_templates/
           mv /root/.local/share/godot/export_templates/${GODOT_VERSION}.stable.mono ~/.local/share/godot/export_templates/${GODOT_VERSION}.stable.mono
-      - name: Linux and Windows Export
+      - name: First Export Attempt
         run: |
           mkdir -v -p build/linux
           mkdir -v -p build/windows
           EXPORT_DIR_LINUX="$(readlink -f build)"
           EXPORT_DIR_WINDOWS="$(readlink -f build)"
+          cd $PROJECT_PATH
+          godot --headless --verbose --import --export-release "Linux" "$EXPORT_DIR_LINUX/linux/$EXPORT_NAME.x86_64" || true
+          godot --headless --verbose --import --export-release "Windows" "$EXPORT_DIR_WINDOWS/windows/$EXPORT_NAME.exe" || true
+      - name: Second Export Attempt
+        run: |
           cd $PROJECT_PATH
           godot --headless --verbose --import --export-release "Linux" "$EXPORT_DIR_LINUX/linux/$EXPORT_NAME.x86_64"
           godot --headless --verbose --import --export-release "Windows" "$EXPORT_DIR_WINDOWS/windows/$EXPORT_NAME.exe"
