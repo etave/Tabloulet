@@ -15,6 +15,7 @@ namespace Tabloulet.Scenes.HomeNS
         private Database _database;
         private List<Godot.Button> _buttons = [];
         private Action deleteAction;
+        public Label labelRFID;
 
         public override void _Ready()
         {
@@ -47,6 +48,8 @@ namespace Tabloulet.Scenes.HomeNS
 
             Godot.Button adminButton = GetNode<Godot.Button>("MarginAdmin/HBoxAdmin/AdminButton");
             adminButton.Pressed += DisplayAdmin;
+
+            labelRFID = GetNode<Label>("HBoxContainerRFID/LabelRFID");
         }
 
         // Add the scenario buttons to the list

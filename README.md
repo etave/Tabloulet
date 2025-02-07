@@ -8,49 +8,41 @@ Logiciel de création **et** de visualisation de contenus interactifs pour dispo
 - [.NET 8.0 SDK](https://dotnet.microsoft.com/download/dotnet/8.0)
 - [Visual Studio](https://visualstudio.microsoft.com/fr/downloads/) (pratique pour ouvrir la solution `.sln` et développer)
 
-## Dépendances
+## Dépendance
 
-Pour utiliser le logiciel, vous aurez besoin du package `libnfc-bin` pour la communication avec les lecteurs RFID.
+Il est possible que vous ayez besoin d'installer les drivers PC/SC pour que le lecteur RFID fonctionne.
 
 ## Utilisation
 
-Pour utiliser le logiciel, téléchargez le fichier `tabloulet.x86_64` (Linux) dans la section [Releases](https://github.com/etave/Tabloulet/releases).
+Pour utiliser le logiciel, téléchargez le fichier `tabloulet.x86_64` (Linux) ou `tabloulet.exe` (Windows) dans la section [Releases](https://github.com/etave/Tabloulet/releases).
+
 L'application nécessite de définir deux mots de passe pour accéder à l'administration et à l'application. Pour cela, le plus simple est de créer un fichier `.env` à côté de l'exécutable avec le contenu suivant :
-*
 ```env
 // Le mot de passe doit être composé uniquement de chiffres de 0 à 9
 PASSWORD=<mot de passe>
 // Si vous avez un lecteur RFID, vous pouvez définir un mot de passe RFID.
-// Si vous êtes sur Windows ou si vous n'avez pas de lecteur RFID, mettez 00000000-0000-0000-0000-000000000000.
 PASSWORD_RFID=<mot de passe>
 ```
 
-Le mot de passe RFID se base sur l'UID de la carte RFID, pour le récupérer, placez la carte sur le lecteur et lancez la commande suivante :
-```bash
-sudo nfc-list
-
-// Exemple de sortie
-NFC reader: pn532_uart:/dev/ttyS0 opened
-1 ISO14443A passive target(s) found:
-ISO/IEC 14443A (106 kbps) target:
-    ATQA (SENS_RES): 00  04
-    UID (NFCID1): 3e 39 ab 7d // UID de la carte
-    SAK (SEL_RES): 08
-```
+Le mot de passe RFID se base sur l'UID de la carte RFID, pour le récupérer, définissez PASSWORD_RFID à 00000000-0000-0000-0000-000000000000, puis lancez l'application. Lorsque vous passez une carte RFID, l'UID s'affichera en bsa à gauche de l'écran. C'est cet UID que vous devrez mettre dans le fichier `.env` pour définir le mot de passe RFID.
 
 Avec cette sortie, le mot de passe RFID sera `3e39ab7d`, soit `3e39ab7d-0000-0000-0000-000000000000` dans le fichier `.env`.
 
 
 ## Compilation
 
-Cette commande ne produit qu’un build pour Linux. Si Godot n’est pas dans votre PATH, téléchargez l’exécutable (https://godotengine.org/download) puis utilisez-le ainsi :
+Si Godot n’est pas dans votre PATH, téléchargez l’exécutable (https://godotengine.org/download) puis utilisez-le ainsi depuis la racine du projet :
 
 ```bash
 // Windows
-C:/chemin/vers/Godot_v4.3.exe --headless --verbose --export-release "Linux" tabloulet.x86_64
+C:/chemin/vers/Godot_v4.3.exe --headless --verbose --import --export-release "Linux" ./tabloulet.x86_64
+
+C:/chemin/vers/Godot_v4.3.exe --headless --verbose --import --export-release "Windows" ./tabloulet.exe
 
 // Linux
-/path/to/Godot_v4.3 --headless --verbose --export-release "Linux" tabloulet.x86_64
+/path/to/Godot_v4.3 --headless --verbose --import --export-release "Linux" ./tabloulet.x86_64
+
+/path/to/Godot_v4.3 --headless --verbose --import --export-release "Windows" ./tabloulet.exe
 ```
 
 ## Développement
