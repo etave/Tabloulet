@@ -11,6 +11,8 @@ using TextComponent = Tabloulet.Scenes.Components.TextNS.Text;
 using TextModel = Tabloulet.DatabaseNS.Models.Text;
 using VideoComponent = Tabloulet.Scenes.Components.VideoNS.Video;
 using VideoModel = Tabloulet.DatabaseNS.Models.Video;
+using Model3DComponent = Tabloulet.Scenes.Components.Model3DNS.Model3D;
+using Model3DModel = Tabloulet.DatabaseNS.Models.Model;
 
 namespace Tabloulet.Helpers
 {
@@ -25,6 +27,7 @@ namespace Tabloulet.Helpers
                 VideoComponent video => CreateVideoModel(id, video),
                 ButtonComponent button => CreateButtonModel(id, button),
                 AudioComponent audio => CreateAudioModel(id, audio),
+                Model3DComponent model3D => CreateModel3DModel(id, model3D),
                 _ => null,
             };
         }
@@ -110,6 +113,24 @@ namespace Tabloulet.Helpers
         private static AudioModel CreateAudioModel(Guid id, AudioComponent component)
         {
             return new AudioModel()
+            {
+                Id = id,
+                Path = component.Path,
+                ScaleX = component.ScaleX,
+                ScaleY = component.ScaleY,
+                SizeX = component.SizeX,
+                SizeY = component.SizeY,
+                PositionX = component.PositionX,
+                PositionY = component.PositionY,
+                Rotation = component.RotationDeg,
+                ZIndex = component.Index,
+                IsMovable = component.IsMovable,
+            };
+        }
+
+        private static Model3DModel CreateModel3DModel(Guid id, Model3DComponent component)
+        {
+            return new Model3DModel()
             {
                 Id = id,
                 Path = component.Path,

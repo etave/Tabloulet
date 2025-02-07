@@ -12,6 +12,7 @@ using GodotButton = Godot.Button;
 using ImageComponent = Tabloulet.Scenes.Components.ImageNS.Image;
 using TextComponent = Tabloulet.Scenes.Components.TextNS.Text;
 using VideoComponent = Tabloulet.Scenes.Components.VideoNS.Video;
+using ModeleCompenent = Tabloulet.Scenes.Components.Model3DNS.Model3D;
 
 namespace Tabloulet.Scenes.BuilderNS.ComponentPanelsNS
 {
@@ -246,6 +247,9 @@ namespace Tabloulet.Scenes.BuilderNS.ComponentPanelsNS
                     break;
                 case VideoComponent video:
                     CreatVideoComponentEdit(video);
+                    break;
+                case ModeleCompenent model:
+                    CreateModel3DComponentEdit(model);
                     break;
                 default:
                     break;
@@ -696,6 +700,65 @@ namespace Tabloulet.Scenes.BuilderNS.ComponentPanelsNS
             loopCheckBox.AddThemeColorOverride("font_pressed_color", new Color(0, 0, 0));
 
             vBoxContainer.AddChild(loopCheckBox);
+            _componentMarginContainer.AddChild(vBoxContainer);
+        }
+
+        private void CreateModel3DComponentEdit(ModeleCompenent model)
+        {
+            ResetComponentMarginContainer();
+
+            VBoxContainer vBoxContainer = new() { Name = "Model3DComponentEdit" };
+            Label label =
+                new()
+                {
+                    Text = "Chemin du modèle 3D",
+                    HorizontalAlignment = HorizontalAlignment.Center,
+                };
+            label.AddThemeFontSizeOverride("font_size", 20);
+            label.AddThemeColorOverride("font_color", new Color(0, 0, 0));
+            LineEdit lineEdit =
+                new()
+                {
+                    Text = !string.IsNullOrEmpty(model.Path)
+                        ? Path.Combine(Constants.AppPath, model.Path)
+                        : "",
+                    Editable = false,
+                    SizeFlagsHorizontal = SizeFlags.ExpandFill,
+                };
+            lineEdit.AddThemeColorOverride("font_uneditable_color", new Color(0, 0, 0));
+            FileDialog fileDialog =
+                new()
+                {
+                    FileMode = FileDialog.FileModeEnum.OpenFile,
+                    Access = FileDialog.AccessEnum.Filesystem,
+                    Filters = ["*.glb", "*.gltf"],
+                };
+
+            fileDialog.FileSelected += (string path) =>
+            {
+                lineEdit.Text = path;
+                string directoryPath = Path.Combine(
+                    Constants.AppPath,
+                    _builder.idScenario.ToString()
+                );
+                string newFilePath = Path.Combine(directoryPath, Path.GetFileName(path));
+                File.Copy(path, newFilePath, true);
+                model.Path = Path.Combine(_builder.idScenario.ToString(), Path.GetFileName(path));
+            };
+
+            GodotButton openDialogButton =
+                new() { Text = "📂", SizeFlagsHorizontal = SizeFlags.ShrinkCenter };
+            openDialogButton.Pressed += () => fileDialog.PopupCenteredRatio();
+
+            HBoxContainer hBoxContainer = new();
+
+            hBoxContainer.AddChild(lineEdit);
+            hBoxContainer.AddChild(openDialogButton);
+            hBoxContainer.AddChild(fileDialog);
+
+            vBoxContainer.AddChild(label);
+            vBoxContainer.AddChild(hBoxContainer);
+
             _componentMarginContainer.AddChild(vBoxContainer);
         }
 

@@ -17,6 +17,8 @@ using TextComponent = Tabloulet.Scenes.Components.TextNS.Text;
 using TextModel = Tabloulet.DatabaseNS.Models.Text;
 using VideoComponent = Tabloulet.Scenes.Components.VideoNS.Video;
 using VideoModel = Tabloulet.DatabaseNS.Models.Video;
+using Model3DComponent = Tabloulet.Scenes.Components.Model3DNS.Model3D;
+using Model3DModel = Tabloulet.DatabaseNS.Models.Model;
 
 namespace Tabloulet.Scenes
 {
@@ -80,6 +82,7 @@ namespace Tabloulet.Scenes
             LoadComponents<ButtonModel>(idPage);
             LoadComponents<AudioModel>(idPage);
             LoadComponents<VideoModel>(idPage);
+            LoadComponents<Model3DModel>(idPage);
         }
 
         private void LoadComponents<T>(Guid pageId)
@@ -105,6 +108,9 @@ namespace Tabloulet.Scenes
                         break;
                     case AudioModel audio:
                         CreateAudioComponent(audio);
+                        break;
+                    case Model3DModel model:
+                        CreateModelComponent(model);
                         break;
                 }
             }
@@ -221,6 +227,25 @@ namespace Tabloulet.Scenes
             audioComponent.Index = audio.ZIndex;
             display.AddComponent(_currentPage, audio.Id, audioBase);
             audioComponent.IsMovable = audio.IsMovable;
+        }
+
+        public void CreateModelComponent(Model3DModel model)
+        {
+            Model3DComponent modelComponent =
+                new(
+                    model.Path,
+                    model.ScaleX,
+                    model.ScaleY,
+                    model.SizeX,
+                    model.SizeY,
+                    model.PositionX,
+                    model.PositionY,
+                    model.Rotation,
+                    model.ZIndex,
+                    model.IsMovable
+                );
+            BaseComponent modelBase = CreateBase(modelComponent, model.IsMovable, display);
+            display.AddComponent(_currentPage, model.Id, modelBase);
         }
     }
 }
