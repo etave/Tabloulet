@@ -202,7 +202,7 @@ namespace Tabloulet.Scenes.BuilderNS
                 new()
                 {
                     Id = Guid.NewGuid(),
-                    PageId = _currentPage,
+                    PageId = currentPage,
                     Path = "res://Assets/Components/Placeholder.mp4",
                     ScaleX = 1,
                     ScaleY = 1,
