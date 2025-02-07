@@ -17,3 +17,6 @@ mono_crash.*.json
 .vs
 *.user
 Properties/
+*Backup.csproj
+.env
+*.tmp

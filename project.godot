@@ -11,9 +11,27 @@ config_version=5
 [application]
 
 config/name="Tabloulet"
+run/main_scene="res://Scenes/Home/Home.tscn"
 config/features=PackedStringArray("4.3", "C#", "Forward Plus")
 config/icon="res://icon.svg"
+
+[autoload]
+
+Database="*res://Database/Database.cs"
+InputHandler="*res://Helpers/InputHandler.cs"
+RFIDMonitor="*res://Helpers/RFIDMonitor.cs"
+
+[display]
+
+window/size/viewport_width=1920
+window/size/viewport_height=1080
+window/stretch/mode="viewport"
 
 [dotnet]
 
 project/assembly_name="Tabloulet"
+
+[input_devices]
+
+pointing/emulate_touch_from_mouse=true
+pointing/android/enable_pan_and_scale_gestures=true

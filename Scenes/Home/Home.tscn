@@ -1,0 +1,481 @@
+[gd_scene load_steps=24 format=3 uid="uid://dxqo13a3yn4q4"]
+
+[ext_resource type="Script" path="res://Scenes/Home/Home.cs" id="1_q6al0"]
+[ext_resource type="Texture2D" uid="uid://cc3njq7jqs73n" path="res://Assets/Home/AdminLogo.png" id="2_cmbqb"]
+[ext_resource type="Texture2D" uid="uid://byb1e76h7ghm8" path="res://Assets/Home/AddLogo.png" id="3_y7qdc"]
+[ext_resource type="PackedScene" uid="uid://enai0nx8jrw8" path="res://Scenes/Home/LoginPanel/LoginPanel.tscn" id="4_yfxbf"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_y3ak2"]
+font_size = 100
+font_color = Color(0, 0, 0, 1)
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_h3ddw"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_rfq0p"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ys0e4"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_iauh8"]
+bg_color = Color(1, 1, 1, 1)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.101859, 0.242759, 0.352618, 1)
+corner_radius_top_left = 30
+corner_radius_top_right = 30
+corner_radius_bottom_right = 30
+corner_radius_bottom_left = 30
+
+[sub_resource type="LabelSettings" id="LabelSettings_j8b8u"]
+font_size = 60
+font_color = Color(0, 0, 0, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_7rywj"]
+font_size = 20
+font_color = Color(0, 0, 0, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_t1j7a"]
+bg_color = Color(0.291549, 0.691349, 0.469682, 1)
+corner_radius_top_left = 15
+corner_radius_top_right = 15
+corner_radius_bottom_right = 15
+corner_radius_bottom_left = 15
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_i8pvt"]
+bg_color = Color(0.291549, 0.691349, 0.469682, 1)
+corner_radius_top_left = 15
+corner_radius_top_right = 15
+corner_radius_bottom_right = 15
+corner_radius_bottom_left = 15
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5eekt"]
+bg_color = Color(0.291549, 0.691349, 0.469682, 1)
+corner_radius_top_left = 15
+corner_radius_top_right = 15
+corner_radius_bottom_right = 15
+corner_radius_bottom_left = 15
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_f7hgk"]
+bg_color = Color(0.823529, 0.172549, 0.176471, 1)
+corner_radius_top_left = 15
+corner_radius_top_right = 15
+corner_radius_bottom_right = 15
+corner_radius_bottom_left = 15
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_oyxs1"]
+bg_color = Color(0.823529, 0.172549, 0.176471, 1)
+corner_radius_top_left = 15
+corner_radius_top_right = 15
+corner_radius_bottom_right = 15
+corner_radius_bottom_left = 15
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_uhh7q"]
+bg_color = Color(0.823529, 0.172549, 0.176471, 1)
+corner_radius_top_left = 15
+corner_radius_top_right = 15
+corner_radius_bottom_right = 15
+corner_radius_bottom_left = 15
+
+[sub_resource type="LabelSettings" id="LabelSettings_l2d7v"]
+font_size = 30
+font_color = Color(0, 0, 0, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_kg7yk"]
+bg_color = Color(0.894922, 0.894922, 0.894922, 1)
+border_width_left = 5
+border_width_top = 5
+border_width_right = 5
+border_width_bottom = 5
+border_color = Color(0.101961, 0.243137, 0.352941, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+
+[sub_resource type="LabelSettings" id="LabelSettings_e5egb"]
+font_size = 30
+font_color = Color(0, 0, 0, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_mefha"]
+bg_color = Color(0.894922, 0.894922, 0.894922, 1)
+border_width_left = 5
+border_width_top = 5
+border_width_right = 5
+border_width_bottom = 5
+border_color = Color(0.101961, 0.243137, 0.352941, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+
+[sub_resource type="LabelSettings" id="LabelSettings_uq8yb"]
+font_size = 20
+font_color = Color(0.807151, 0, 0.0549888, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_2tk5k"]
+line_spacing = 40.0
+font_size = 40
+font_color = Color(0, 0, 0, 1)
+
+[node name="Home" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_q6al0")
+
+[node name="Background" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(1, 0.964706, 0.968627, 1)
+
+[node name="MarginTitle" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_top = 40
+
+[node name="Title" type="Label" parent="MarginTitle"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 0
+text = "TABLOULET"
+label_settings = SubResource("LabelSettings_y3ak2")
+
+[node name="MarginList" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_top = 280
+theme_override_constants/margin_bottom = 80
+
+[node name="ScrollList" type="ScrollContainer" parent="MarginList"]
+custom_minimum_size = Vector2(1400, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+
+[node name="MarginScroll" type="MarginContainer" parent="MarginList/ScrollList"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/margin_left = 15
+theme_override_constants/margin_right = 15
+
+[node name="ListScenario" type="VBoxContainer" parent="MarginList/ScrollList/MarginScroll"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 20
+
+[node name="MarginAdmin" type="MarginContainer" parent="."]
+layout_mode = 1
+offset_right = 89.0
+offset_bottom = 80.0
+theme_override_constants/margin_left = 40
+theme_override_constants/margin_top = 40
+
+[node name="HBoxAdmin" type="HBoxContainer" parent="MarginAdmin"]
+layout_mode = 2
+theme_override_constants/separation = 1550
+
+[node name="AdminButton" type="Button" parent="MarginAdmin/HBoxAdmin"]
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+focus_mode = 0
+theme_override_constants/icon_max_width = 140
+theme_override_styles/hover = SubResource("StyleBoxEmpty_h3ddw")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_rfq0p")
+theme_override_styles/normal = SubResource("StyleBoxEmpty_ys0e4")
+icon = ExtResource("2_cmbqb")
+
+[node name="CreateButton" type="Button" parent="MarginAdmin/HBoxAdmin"]
+visible = false
+custom_minimum_size = Vector2(90, 90)
+layout_mode = 2
+focus_mode = 0
+theme_override_constants/icon_max_width = 140
+theme_override_styles/hover = SubResource("StyleBoxEmpty_h3ddw")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_h3ddw")
+theme_override_styles/normal = SubResource("StyleBoxEmpty_h3ddw")
+icon = ExtResource("3_y7qdc")
+
+[node name="MarginPopUp" type="MarginContainer" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="PanelPopUp" type="Panel" parent="MarginPopUp"]
+custom_minimum_size = Vector2(1000, 600)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_styles/panel = SubResource("StyleBoxFlat_iauh8")
+
+[node name="TitlePopUp" type="Label" parent="MarginPopUp/PanelPopUp"]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 148.0
+grow_horizontal = 2
+theme_override_font_sizes/font_size = 108
+label_settings = SubResource("LabelSettings_j8b8u")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="MarginInsidePopUp" type="MarginContainer" parent="MarginPopUp/PanelPopUp"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_top = 150
+
+[node name="VBoxPopUp" type="VBoxContainer" parent="MarginPopUp/PanelPopUp/MarginInsidePopUp"]
+layout_mode = 2
+
+[node name="DescriptionPopUp" type="Label" parent="MarginPopUp/PanelPopUp/MarginInsidePopUp/VBoxPopUp"]
+custom_minimum_size = Vector2(850, 300)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 0
+label_settings = SubResource("LabelSettings_7rywj")
+autowrap_mode = 2
+clip_text = true
+
+[node name="MarginButtonPopUp" type="MarginContainer" parent="MarginPopUp/PanelPopUp/MarginInsidePopUp/VBoxPopUp"]
+layout_mode = 2
+theme_override_constants/margin_top = 30
+
+[node name="HBoxPopUp" type="HBoxContainer" parent="MarginPopUp/PanelPopUp/MarginInsidePopUp/VBoxPopUp/MarginButtonPopUp"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_constants/separation = 300
+
+[node name="LoadButton" type="Button" parent="MarginPopUp/PanelPopUp/MarginInsidePopUp/VBoxPopUp/MarginButtonPopUp/HBoxPopUp"]
+custom_minimum_size = Vector2(180, 60)
+layout_mode = 2
+focus_mode = 0
+theme_override_font_sizes/font_size = 30
+theme_override_styles/hover = SubResource("StyleBoxFlat_t1j7a")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_i8pvt")
+theme_override_styles/normal = SubResource("StyleBoxFlat_5eekt")
+text = "Lancer"
+
+[node name="CancelButton" type="Button" parent="MarginPopUp/PanelPopUp/MarginInsidePopUp/VBoxPopUp/MarginButtonPopUp/HBoxPopUp"]
+custom_minimum_size = Vector2(180, 60)
+layout_mode = 2
+focus_mode = 0
+theme_override_font_sizes/font_size = 30
+theme_override_styles/hover = SubResource("StyleBoxFlat_f7hgk")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_oyxs1")
+theme_override_styles/normal = SubResource("StyleBoxFlat_uhh7q")
+text = "Annnuler"
+
+[node name="MarginCreate" type="MarginContainer" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="PanelCreate" type="Panel" parent="MarginCreate"]
+custom_minimum_size = Vector2(800, 900)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_styles/panel = SubResource("StyleBoxFlat_iauh8")
+
+[node name="TitlePopUp" type="Label" parent="MarginCreate/PanelCreate"]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 148.0
+grow_horizontal = 2
+theme_override_font_sizes/font_size = 108
+text = "Création d'un scénario"
+label_settings = SubResource("LabelSettings_j8b8u")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="MarginInsideCreate" type="MarginContainer" parent="MarginCreate/PanelCreate"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 30
+theme_override_constants/margin_top = 140
+theme_override_constants/margin_right = 30
+
+[node name="VBoxCreate" type="VBoxContainer" parent="MarginCreate/PanelCreate/MarginInsideCreate"]
+layout_mode = 2
+theme_override_constants/separation = 22
+
+[node name="NameCreate" type="Label" parent="MarginCreate/PanelCreate/MarginInsideCreate/VBoxCreate"]
+layout_mode = 2
+text = "Nom :"
+label_settings = SubResource("LabelSettings_l2d7v")
+
+[node name="TextEditName" type="TextEdit" parent="MarginCreate/PanelCreate/MarginInsideCreate/VBoxCreate"]
+custom_minimum_size = Vector2(600, 50)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 30
+theme_override_styles/normal = SubResource("StyleBoxFlat_kg7yk")
+
+[node name="DescriptionCreate" type="Label" parent="MarginCreate/PanelCreate/MarginInsideCreate/VBoxCreate"]
+layout_mode = 2
+text = "Description : "
+label_settings = SubResource("LabelSettings_e5egb")
+
+[node name="TextEditDescription" type="TextEdit" parent="MarginCreate/PanelCreate/MarginInsideCreate/VBoxCreate"]
+custom_minimum_size = Vector2(600, 400)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 30
+theme_override_styles/normal = SubResource("StyleBoxFlat_mefha")
+wrap_mode = 1
+
+[node name="ErrorCreate" type="Label" parent="MarginCreate/PanelCreate/MarginInsideCreate/VBoxCreate"]
+visible = false
+layout_mode = 2
+text = "Le nom et la description sont nécessaires. "
+label_settings = SubResource("LabelSettings_uq8yb")
+horizontal_alignment = 1
+
+[node name="HBoxCreate" type="HBoxContainer" parent="MarginCreate/PanelCreate/MarginInsideCreate/VBoxCreate"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_constants/separation = 300
+
+[node name="ValidateCreationButton" type="Button" parent="MarginCreate/PanelCreate/MarginInsideCreate/VBoxCreate/HBoxCreate"]
+custom_minimum_size = Vector2(180, 60)
+layout_mode = 2
+focus_mode = 0
+theme_override_font_sizes/font_size = 30
+theme_override_styles/hover = SubResource("StyleBoxFlat_t1j7a")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_i8pvt")
+theme_override_styles/normal = SubResource("StyleBoxFlat_5eekt")
+text = "Valider
+"
+
+[node name="CancelCreationButton" type="Button" parent="MarginCreate/PanelCreate/MarginInsideCreate/VBoxCreate/HBoxCreate"]
+custom_minimum_size = Vector2(180, 60)
+layout_mode = 2
+focus_mode = 0
+theme_override_font_sizes/font_size = 30
+theme_override_styles/hover = SubResource("StyleBoxFlat_f7hgk")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_oyxs1")
+theme_override_styles/normal = SubResource("StyleBoxFlat_uhh7q")
+text = "Annnuler"
+
+[node name="MarginDelete" type="MarginContainer" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="PanelDelete" type="Panel" parent="MarginDelete"]
+custom_minimum_size = Vector2(1000, 250)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_styles/panel = SubResource("StyleBoxFlat_iauh8")
+
+[node name="MarginInsideDelete" type="MarginContainer" parent="MarginDelete/PanelDelete"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_top = 40
+
+[node name="VBoxDelete" type="VBoxContainer" parent="MarginDelete/PanelDelete/MarginInsideDelete"]
+layout_mode = 2
+theme_override_constants/separation = 45
+
+[node name="TitleDelete" type="Label" parent="MarginDelete/PanelDelete/MarginInsideDelete/VBoxDelete"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 0
+text = "Voulez-vous vraiment supprimer le scénario ? "
+label_settings = SubResource("LabelSettings_2tk5k")
+
+[node name="HBoxDelete" type="HBoxContainer" parent="MarginDelete/PanelDelete/MarginInsideDelete/VBoxDelete"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_constants/separation = 300
+
+[node name="ValidateDeleteButton" type="Button" parent="MarginDelete/PanelDelete/MarginInsideDelete/VBoxDelete/HBoxDelete"]
+custom_minimum_size = Vector2(180, 60)
+layout_mode = 2
+theme_override_font_sizes/font_size = 30
+theme_override_styles/hover = SubResource("StyleBoxFlat_t1j7a")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_i8pvt")
+theme_override_styles/normal = SubResource("StyleBoxFlat_5eekt")
+text = "Oui
+"
+
+[node name="CancelDeleteButton" type="Button" parent="MarginDelete/PanelDelete/MarginInsideDelete/VBoxDelete/HBoxDelete"]
+custom_minimum_size = Vector2(180, 60)
+layout_mode = 2
+theme_override_font_sizes/font_size = 30
+theme_override_styles/hover = SubResource("StyleBoxFlat_f7hgk")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_oyxs1")
+theme_override_styles/normal = SubResource("StyleBoxFlat_uhh7q")
+text = "Non"
+
+[node name="LoginPanel" parent="." instance=ExtResource("4_yfxbf")]
+visible = false
+layout_mode = 1
+
+[node name="HBoxContainerRFID" type="HBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -40.0
+offset_right = 201.0
+grow_vertical = 0
+
+[node name="Label" type="Label" parent="HBoxContainerRFID"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+text = "RFID en cours de lecture :"
+
+[node name="LabelRFID" type="Label" parent="HBoxContainerRFID"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
