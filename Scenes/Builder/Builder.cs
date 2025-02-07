@@ -36,6 +36,7 @@ namespace Tabloulet.Scenes.BuilderNS
         private Button _addVideoButton;
         private Button _addButtonButton;
         private Button _addAudioButton;
+        private Button _addModelButton;
 
         private ScenarioLoader _scenarioLoader;
 
@@ -82,11 +83,15 @@ namespace Tabloulet.Scenes.BuilderNS
             _addVideoButton = createComponentPanel.GetNode<Button>(
                 "OpenPanel/VBoxContainer/VideoMarginContainer/PanelContainer/GridContainer/MarginContainer/Button"
             );
+            _addModelButton = createComponentPanel.GetNode<Button>(
+                "OpenPanel/VBoxContainer/ModelMarginContainer/PanelContainer/GridContainer/MarginContainer/Button"
+            );
             _addTextButton.Pressed += AddTextButtonPressed;
             _addImageButton.Pressed += AddImageButtonPressed;
             _addVideoButton.Pressed += AddVideoButtonPressed;
             _addButtonButton.Pressed += AddButtonButtonPressed;
             _addAudioButton.Pressed += AddAudioButtonPressed;
+            _addModelButton.Pressed += AddModelButtonPressed;
 
             _scenarioLoader = new ScenarioLoader(_database, this);
 
@@ -263,6 +268,29 @@ namespace Tabloulet.Scenes.BuilderNS
                 };
             _scenarioLoader.CreateAudioComponent(audio);
             _database.Insert(audio);
+        }
+
+        private void AddModelButtonPressed()
+        {
+            Model model =
+                new()
+                {
+                    Id = Guid.NewGuid(),
+                    PageId = currentPage,
+                    Path = "",
+                    ScaleX = 1,
+                    ScaleY = 1,
+                    SizeX = 500,
+                    SizeY = 500,
+                    PositionX = GetRect().Size.X / 2,
+                    PositionY = GetRect().Size.Y / 2,
+                    Rotation = 0,
+                    ZIndex = 1,
+                    IsMovable = true,
+                };
+            _scenarioLoader.CreateModelComponent(model);
+            _database.Insert(model);
+            
         }
 
         public Control GetDisplayRoot()
