@@ -15,6 +15,7 @@ using Button = Godot.Button;
 using ButtonModel = Tabloulet.DatabaseNS.Models.Button;
 using ImageModel = Tabloulet.DatabaseNS.Models.Image;
 using TextModel = Tabloulet.DatabaseNS.Models.Text;
+using VideoModel = Tabloulet.DatabaseNS.Models.Video;
 
 namespace Tabloulet.Scenes.BuilderNS
 {
@@ -32,6 +33,7 @@ namespace Tabloulet.Scenes.BuilderNS
 
         private Button _addTextButton;
         private Button _addImageButton;
+        private Button _addVideoButton;
         private Button _addButtonButton;
         private Button _addAudioButton;
 
@@ -77,8 +79,12 @@ namespace Tabloulet.Scenes.BuilderNS
                 "OpenPanel/VBoxContainer/AudioMarginContainer/PanelContainer/GridContainer/MarginContainer/Button"
             );
 
+            _addVideoButton = createComponentPanel.GetNode<Button>(
+                "OpenPanel/VBoxContainer/VideoMarginContainer/PanelContainer/GridContainer/MarginContainer/Button"
+            );
             _addTextButton.Pressed += AddTextButtonPressed;
             _addImageButton.Pressed += AddImageButtonPressed;
+            _addVideoButton.Pressed += AddVideoButtonPressed;
             _addButtonButton.Pressed += AddButtonButtonPressed;
             _addAudioButton.Pressed += AddAudioButtonPressed;
 
@@ -188,6 +194,30 @@ namespace Tabloulet.Scenes.BuilderNS
                 };
             _scenarioLoader.CreateImageComponent(image);
             _database.Insert(image);
+        }
+
+        private void AddVideoButtonPressed()
+        {
+            VideoModel video =
+                new()
+                {
+                    Id = Guid.NewGuid(),
+                    PageId = currentPage,
+                    Path = "res://Assets/Components/Placeholder.mp4",
+                    ScaleX = 1,
+                    ScaleY = 1,
+                    SizeX = 0,
+                    SizeY = 0,
+                    PositionX = GetRect().Size.X / 2,
+                    PositionY = GetRect().Size.Y / 2,
+                    Rotation = 0,
+                    ZIndex = 1,
+                    IsMovable = true,
+                    Autoplay = true,
+                    Loop = true,
+                };
+            _scenarioLoader.CreateVideoComponent(video);
+            _database.Insert(video);
         }
 
         private void AddButtonButtonPressed()

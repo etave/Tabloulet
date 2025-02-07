@@ -1,0 +1,89 @@
+[gd_scene load_steps=7 format=3 uid="uid://di10o01c64oh"]
+
+[ext_resource type="Script" path="res://Scenes/Components/Video/Video.cs" id="1_26bqw"]
+[ext_resource type="Texture2D" uid="uid://mo5sk7td3l76" path="res://Assets/Components/bouton-de-lecture.png" id="2_45jg0"]
+[ext_resource type="Texture2D" uid="uid://b5k256cbhbcgv" path="res://Assets/Components/reset.png" id="3_io3gm"]
+
+[sub_resource type="FFmpegVideoStream" id="FFmpegVideoStream_r2icw"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_i3h43"]
+bg_color = Color(1, 1, 1, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0, 0, 0, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_kpqtj"]
+
+[node name="Video" type="VideoStreamPlayer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+stream = SubResource("FFmpegVideoStream_r2icw")
+script = ExtResource("1_26bqw")
+
+[node name="ControlMarginContainer" type="MarginContainer" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -80.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_constants/margin_left = 30
+theme_override_constants/margin_right = 30
+theme_override_constants/margin_bottom = 30
+
+[node name="Panel" type="Panel" parent="ControlMarginContainer"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_i3h43")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="ControlMarginContainer"]
+layout_mode = 2
+
+[node name="VSeparator" type="VSeparator" parent="ControlMarginContainer/HBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 10
+theme_override_styles/separator = SubResource("StyleBoxEmpty_kpqtj")
+
+[node name="PlayPauseButton" type="Button" parent="ControlMarginContainer/HBoxContainer"]
+custom_minimum_size = Vector2(20, 50)
+layout_mode = 2
+icon = ExtResource("2_45jg0")
+flat = true
+icon_alignment = 1
+expand_icon = true
+
+[node name="ResetButton" type="Button" parent="ControlMarginContainer/HBoxContainer"]
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 2
+icon = ExtResource("3_io3gm")
+flat = true
+icon_alignment = 1
+expand_icon = true
+
+[node name="VSeparator2" type="VSeparator" parent="ControlMarginContainer/HBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 10
+theme_override_styles/separator = SubResource("StyleBoxEmpty_kpqtj")
+
+[node name="HSlider" type="HSlider" parent="ControlMarginContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 1
+
+[node name="VSeparator3" type="VSeparator" parent="ControlMarginContainer/HBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 10
+theme_override_styles/separator = SubResource("StyleBoxEmpty_kpqtj")

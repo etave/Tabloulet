@@ -7,5 +7,7 @@ namespace Tabloulet.DatabaseNS.Models
     public class Video : Base
     {
         public string Path { get; set; }
+        public bool Autoplay { get; set; }
+        public bool Loop { get; set; }
     }
 }

@@ -11,6 +11,7 @@ using ButtonComponent = Tabloulet.Scenes.Components.ButtonNS.Button;
 using GodotButton = Godot.Button;
 using ImageComponent = Tabloulet.Scenes.Components.ImageNS.Image;
 using TextComponent = Tabloulet.Scenes.Components.TextNS.Text;
+using VideoComponent = Tabloulet.Scenes.Components.VideoNS.Video;
 
 namespace Tabloulet.Scenes.BuilderNS.ComponentPanelsNS
 {
@@ -243,6 +244,9 @@ namespace Tabloulet.Scenes.BuilderNS.ComponentPanelsNS
                 case AudioComponent audio:
                     CreateAudioComponentEdit(audio);
                     break;
+                case VideoComponent video:
+                    CreatVideoComponentEdit(video);
+                    break;
                 default:
                     break;
             }
@@ -254,11 +258,10 @@ namespace Tabloulet.Scenes.BuilderNS.ComponentPanelsNS
             child.PivotOffset = child.Size / 2;
             child.Position = new Vector2((float)_basePositionX.Value, (float)_basePositionY.Value);
 
-            if (child is not AudioComponent)
+            if (child is not AudioComponent && child is not VideoComponent)
             {
                 child.Size = new Vector2((float)_baseSizeX.Value, (float)_baseSizeY.Value);
             }
-
             child.ZIndex = (int)_baseZIndex.Value;
             child.RotationDegrees = (float)_baseRotation.Value;
             _currentComponent.IsMovable = _baseIsMovable.ButtonPressed;
@@ -619,6 +622,80 @@ namespace Tabloulet.Scenes.BuilderNS.ComponentPanelsNS
             vBoxContainer.AddChild(label);
             vBoxContainer.AddChild(hBoxContainer);
 
+            _componentMarginContainer.AddChild(vBoxContainer);
+        }
+
+        private void CreatVideoComponentEdit(VideoComponent video)
+        {
+            ResetComponentMarginContainer();
+            ShrinkingOpenPanel();
+            VBoxContainer vBoxContainer = new() { Name = "VideoComponentEdit" };
+            Label label =
+                new()
+                {
+                    Text = "Chemin de la vidéo",
+                    HorizontalAlignment = HorizontalAlignment.Center,
+                };
+            label.AddThemeFontSizeOverride("font_size", 20);
+            label.AddThemeColorOverride("font_color", new Color(0, 0, 0));
+            LineEdit lineEdit =
+                new()
+                {
+                    Text = !string.IsNullOrEmpty(video.Path)
+                        ? Path.Combine(Constants.AppPath, video.Path)
+                        : "",
+                    Editable = false,
+                    SizeFlagsHorizontal = SizeFlags.ExpandFill,
+                };
+            lineEdit.AddThemeColorOverride("font_uneditable_color", new Color(0, 0, 0));
+            FileDialog fileDialog =
+                new()
+                {
+                    FileMode = FileDialog.FileModeEnum.OpenFile,
+                    Access = FileDialog.AccessEnum.Filesystem,
+                    Filters = ["*.mp4"],
+                };
+            fileDialog.FileSelected += (string path) =>
+            {
+                lineEdit.Text = path;
+                string directoryPath = Path.Combine(
+                    Constants.AppPath,
+                    _builder.idScenario.ToString()
+                );
+                string newFilePath = Path.Combine(directoryPath, Path.GetFileName(path));
+                File.Copy(path, newFilePath, true);
+                video.Path = Path.Combine(_builder.idScenario.ToString(), Path.GetFileName(path));
+            };
+
+
+
+            GodotButton openDialogButton =
+                new() { Text = "📂", SizeFlagsHorizontal = SizeFlags.ShrinkCenter };
+            openDialogButton.Pressed += () => fileDialog.PopupCenteredRatio();
+            HBoxContainer hBoxContainer = new();
+            hBoxContainer.AddChild(lineEdit);
+            hBoxContainer.AddChild(openDialogButton);
+            hBoxContainer.AddChild(fileDialog);
+            vBoxContainer.AddChild(label);
+            vBoxContainer.AddChild(hBoxContainer);
+
+            CheckBox loopCheckBox = new()
+            {
+                Text = "Lecture en boucle",
+                ButtonPressed = video.Loop
+            };
+
+            loopCheckBox.Toggled += (bool pressed) =>
+            {
+                video.Loop = pressed;
+            };
+
+            // couleur du text en noire même quant le checkbox est coché
+            loopCheckBox.AddThemeColorOverride("font_color", new Color(0, 0, 0));
+            loopCheckBox.AddThemeColorOverride("font_hover_color", new Color(0, 0, 0));
+            loopCheckBox.AddThemeColorOverride("font_pressed_color", new Color(0, 0, 0));
+
+            vBoxContainer.AddChild(loopCheckBox);
             _componentMarginContainer.AddChild(vBoxContainer);
         }
 
