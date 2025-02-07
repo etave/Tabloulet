@@ -186,6 +186,16 @@ namespace Tabloulet.Scenes.Components.AudioNS
             Size = new Vector2(_sizeX, _sizeY); // Taille de l'élément
             Scale = new Vector2(_scaleX, _scaleY); // Échelle de l'élément
             ZIndex = _index; // Ordre d'affichage
+
+            // Cloner les styles avant de modifier les marges
+            _styleBoxPlayPauseBtnNormal = _styleBoxPlayPauseBtnNormal.Duplicate() as StyleBoxFlat;
+            _styleBoxPlayPauseBtnHover = _styleBoxPlayPauseBtnHover.Duplicate() as StyleBoxFlat;
+            _styleBoxPlayPauseBtnPressed = _styleBoxPlayPauseBtnPressed.Duplicate() as StyleBoxFlat;
+
+            // Appliquer les styles clonés au bouton
+            _playPauseButton.AddThemeStyleboxOverride("normal", _styleBoxPlayPauseBtnNormal);
+            _playPauseButton.AddThemeStyleboxOverride("hover", _styleBoxPlayPauseBtnHover);
+            _playPauseButton.AddThemeStyleboxOverride("pressed", _styleBoxPlayPauseBtnPressed);
         }
 
         public override void _Process(double delta)
@@ -306,6 +316,8 @@ namespace Tabloulet.Scenes.Components.AudioNS
                     _progressionSlider.MinValue = 0;
                     _progressionSlider.MaxValue = audioLength; // Définit la durée de l'audio
                     _progressionSlider.Value = 0; // Réinitialise la progression
+                    _audioStreamPlayer.Play(); // Joue l'audio
+                    _audioStreamPlayer.StreamPaused = true; // Met en pause au démarrage
                 }
                 else
                 {

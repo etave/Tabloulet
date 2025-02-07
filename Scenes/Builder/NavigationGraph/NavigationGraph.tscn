@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://cbs1mtrsi13dr"]
+[gd_scene load_steps=17 format=3 uid="uid://cbs1mtrsi13dr"]
 
 [ext_resource type="Script" path="res://Scenes/Builder/NavigationGraph/NavigationGraph.cs" id="1_n2iv6"]
 
@@ -76,6 +76,39 @@ corner_radius_top_left = 30
 corner_radius_top_right = 30
 corner_radius_bottom_right = 30
 corner_radius_bottom_left = 30
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ggxen"]
+bg_color = Color(1, 1, 1, 1)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0, 0, 0, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_14sen"]
+bg_color = Color(0.823529, 0.172549, 0.176471, 1)
+corner_radius_top_left = 15
+corner_radius_top_right = 15
+corner_radius_bottom_right = 15
+corner_radius_bottom_left = 15
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_8abxk"]
+bg_color = Color(0.823529, 0.172549, 0.176471, 1)
+corner_radius_top_left = 15
+corner_radius_top_right = 15
+corner_radius_bottom_right = 15
+corner_radius_bottom_left = 15
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_o52mj"]
+bg_color = Color(0.823529, 0.172549, 0.176471, 1)
+corner_radius_top_left = 15
+corner_radius_top_right = 15
+corner_radius_bottom_right = 15
+corner_radius_bottom_left = 15
 
 [node name="NavigationGraph" type="Control"]
 z_index = 100
@@ -313,6 +346,7 @@ horizontal_alignment = 1
 layout_mode = 2
 theme_override_constants/margin_left = 40
 theme_override_constants/margin_right = 40
+theme_override_constants/margin_bottom = 5
 
 [node name="LineEdit" type="LineEdit" parent="NewRFIDPopupPanel/VBoxContainer/MarginContainer"]
 layout_mode = 2
@@ -374,17 +408,19 @@ horizontal_alignment = 1
 layout_mode = 2
 theme_override_constants/margin_left = 40
 theme_override_constants/margin_right = 40
+theme_override_constants/margin_bottom = 30
 
-[node name="LineEdit" type="LineEdit" parent="NewRFIDPopupPanel/VBoxContainer/MarginContainer3"]
+[node name="VBoxContainer" type="VBoxContainer" parent="NewRFIDPopupPanel/VBoxContainer/MarginContainer3"]
 layout_mode = 2
+
+[node name="LineEdit" type="LineEdit" parent="NewRFIDPopupPanel/VBoxContainer/MarginContainer3/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_uneditable_color = Color(0, 0, 0, 1)
+theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_font_sizes/font_size = 20
-text = "00000000-0000-0000-0000-000000000000"
-placeholder_text = "00000000-0000-0000-0000-000000000000"
-
-[node name="HSeparator3" type="HSeparator" parent="NewRFIDPopupPanel/VBoxContainer"]
-layout_mode = 2
-theme_override_constants/separation = 30
-theme_override_styles/separator = SubResource("StyleBoxEmpty_dy6de")
+text = "Aucun tag détecté"
+alignment = 1
+editable = false
 
 [node name="ButtonsHBoxContainer" type="HBoxContainer" parent="NewRFIDPopupPanel/VBoxContainer"]
 layout_mode = 2
@@ -485,5 +521,222 @@ theme_override_font_sizes/font_size = 30
 text = "Créer lien RFID"
 flat = true
 
+[node name="DeletePageButtonPanel" type="Panel" parent="."]
+z_index = 101
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 588.0
+offset_top = -148.0
+offset_right = 915.0
+offset_bottom = -78.0
+grow_vertical = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_yppxf")
+
+[node name="MarginContainer" type="MarginContainer" parent="DeletePageButtonPanel"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -25.0
+offset_right = 20.0
+offset_bottom = 25.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="DeletePageButton" type="Button" parent="DeletePageButtonPanel/MarginContainer"]
+layout_mode = 2
+tooltip_text = "Nouveau lien RFID"
+focus_mode = 0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 30
+text = "Supprimer une page"
+flat = true
+
+[node name="DeleteRFIDButtonPanel" type="Panel" parent="."]
+z_index = 101
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 926.0
+offset_top = -148.0
+offset_right = 1285.0
+offset_bottom = -78.0
+grow_vertical = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_yppxf")
+
+[node name="MarginContainer" type="MarginContainer" parent="DeleteRFIDButtonPanel"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -25.0
+offset_right = 20.0
+offset_bottom = 25.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="DeleteRFIDButton" type="Button" parent="DeleteRFIDButtonPanel/MarginContainer"]
+layout_mode = 2
+tooltip_text = "Nouveau lien RFID"
+focus_mode = 0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 30
+text = "Supprimer un lien RFID"
+flat = true
+
 [node name="RFIDTimer" type="Timer" parent="."]
 wait_time = 3.0
+
+[node name="DeletePagePanel" type="Panel" parent="."]
+visible = false
+custom_minimum_size = Vector2(430, 200)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -50.0
+offset_top = -1.52002
+offset_right = 50.0
+offset_bottom = 1.52002
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_ggxen")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="DeletePagePanel"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -171.5
+offset_right = 171.5
+offset_bottom = 49.0
+grow_horizontal = 2
+theme_override_constants/separation = 20
+
+[node name="HSeparator" type="HSeparator" parent="DeletePagePanel/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="Label" type="Label" parent="DeletePagePanel/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 35
+text = "Supprimer une page"
+
+[node name="OptionButton" type="OptionButton" parent="DeletePagePanel/VBoxContainer"]
+custom_minimum_size = Vector2(0, 25)
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="DeletePagePanel/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+
+[node name="ValidateButton" type="Button" parent="DeletePagePanel/VBoxContainer/HBoxContainer"]
+custom_minimum_size = Vector2(140, 45)
+layout_mode = 2
+size_flags_horizontal = 4
+focus_mode = 0
+theme_override_font_sizes/font_size = 25
+theme_override_styles/hover = SubResource("StyleBoxFlat_14sen")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_8abxk")
+theme_override_styles/normal = SubResource("StyleBoxFlat_o52mj")
+text = "Supprimer"
+
+[node name="Button" type="Button" parent="DeletePagePanel"]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -38.0
+offset_bottom = 50.0
+grow_horizontal = 0
+size_flags_horizontal = 8
+focus_mode = 0
+theme_override_colors/font_color = Color(1, 0, 0, 1)
+theme_override_font_sizes/font_size = 30
+text = "🗙"
+flat = true
+
+[node name="DeleteRFIDPanel" type="Panel" parent="."]
+visible = false
+custom_minimum_size = Vector2(450, 200)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -50.0
+offset_top = -1.52002
+offset_right = 50.0
+offset_bottom = 1.52002
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_ggxen")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="DeleteRFIDPanel"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -171.5
+offset_right = 171.5
+offset_bottom = 49.0
+grow_horizontal = 2
+theme_override_constants/separation = 20
+
+[node name="HSeparator" type="HSeparator" parent="DeleteRFIDPanel/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="DeleteRFIDPanel/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 35
+text = "Supprimer un lien RFID"
+
+[node name="OptionButton" type="OptionButton" parent="DeleteRFIDPanel/VBoxContainer"]
+custom_minimum_size = Vector2(0, 25)
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="DeleteRFIDPanel/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+
+[node name="ValidateButton" type="Button" parent="DeleteRFIDPanel/VBoxContainer/HBoxContainer"]
+custom_minimum_size = Vector2(140, 45)
+layout_mode = 2
+size_flags_horizontal = 4
+focus_mode = 0
+theme_override_font_sizes/font_size = 25
+theme_override_styles/hover = SubResource("StyleBoxFlat_14sen")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_8abxk")
+theme_override_styles/normal = SubResource("StyleBoxFlat_o52mj")
+text = "Supprimer"
+
+[node name="Button" type="Button" parent="DeleteRFIDPanel"]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -38.0
+offset_bottom = 50.0
+grow_horizontal = 0
+size_flags_horizontal = 8
+focus_mode = 0
+theme_override_colors/font_color = Color(1, 0, 0, 1)
+theme_override_font_sizes/font_size = 30
+text = "🗙"
+flat = true

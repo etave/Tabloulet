@@ -175,6 +175,8 @@ namespace Tabloulet.Scenes.Components.ButtonNS
             Position = new Vector2(_positionX, _positionY);
             RotationDegrees = _rotationDeg;
             ZIndex = _index;
+            FocusMode = FocusModeEnum.None;
+            MouseFilter = MouseFilterEnum.Stop;
         }
 
         public void UpdateSizePositionRotationParameters(
@@ -231,7 +233,7 @@ namespace Tabloulet.Scenes.Components.ButtonNS
             this.QueueRedraw();
         }
 
-        private static bool IsColorDark(Color color)
+        public static bool IsColorDark(Color color)
         {
             float brightness = (0.299f * color.R) + (0.587f * color.G) + (0.114f * color.B);
             return brightness < 0.5f;

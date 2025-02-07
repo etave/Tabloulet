@@ -12,14 +12,7 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_u72oc")
 
-[node name="RFIDTimer" type="Timer" parent="."]
-wait_time = 3.0
-
 [node name="LoginPanel" parent="." instance=ExtResource("2_ipd5q")]
 visible = false
 z_index = 101
 layout_mode = 1
-offset_left = -13.0
-offset_top = -17.0
-offset_right = -13.0
-offset_bottom = -17.0

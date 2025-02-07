@@ -20,9 +20,14 @@ namespace Tabloulet.Scenes.HomeNS.LoginPanelNS
         List<Button> numberButtons = [];
         Color originalTextColor;
         Button quitButton;
-        Timer timer;
+
         Guid passwordGuid;
         public bool viewerMode = false;
+
+        private Button _scanLoginButton;
+
+        private RFIDMonitor _rfidMonitor;
+        private bool _isScanning = false;
 
         public override void _Ready()
         {
@@ -80,10 +85,7 @@ namespace Tabloulet.Scenes.HomeNS.LoginPanelNS
             // Connecter le bouton "QUIT" à la méthode de gestion
             quitButton.Pressed += OnQuitButtonPressed;
 
-            // Timer pour la lecture de la carte RFID
-            timer = GetNode<Timer>("RFIDTimer");
-            timer.Timeout += OnRFIDTimerTimeout;
-            timer.Start();
+            _rfidMonitor = GetNode<RFIDMonitor>("/root/RFIDMonitor");
         }
 
         public List<Button> GetMyButtons(GridContainer gridContainer)
@@ -182,34 +184,44 @@ namespace Tabloulet.Scenes.HomeNS.LoginPanelNS
             }
         }
 
-        private void OnRFIDTimerTimeout()
+        public override void _Process(double delta)
         {
-            RFID.GetUIDAsync()
-                .ContinueWith(
-                    task =>
-                    {
-                        if (task.IsFaulted || task.Result == Guid.Empty)
-                        {
-                            return;
-                        }
+            base._Process(delta);
+            ScanRFID();
+        }
 
-                        if (task.Result == passwordGuid)
-                        {
-                            if (viewerMode)
-                            {
-                                var viewer = GetParent<Control>() as Viewer;
-                                viewer.ExitButtonPressed();
-                            }
-                            else
-                            {
-                                Visible = false;
-                                var home = GetParent<Control>() as Home;
-                                home.ChangeToAdmin();
-                            }
-                        }
-                    },
-                    TaskScheduler.FromCurrentSynchronizationContext()
-                );
+        private async void ScanRFID()
+        {
+            if (_isScanning)
+            {
+                return;
+            }
+
+            _isScanning = true;
+
+            try
+            {
+                Guid result = await _rfidMonitor.GetStableMonitoredGuid();
+
+                if (result != Guid.Empty && result == passwordGuid)
+                {
+                    if (viewerMode)
+                    {
+                        var viewer = GetParent<Control>() as Viewer;
+                        viewer.ExitButtonPressed();
+                    }
+                    else
+                    {
+                        Visible = false;
+                        var home = GetParent<Control>() as Home;
+                        home.ChangeToAdmin();
+                    }
+                }
+            }
+            finally
+            {
+                _isScanning = false;
+            }
         }
     }
 }

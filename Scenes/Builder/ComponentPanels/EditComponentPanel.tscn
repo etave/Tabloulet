@@ -58,6 +58,7 @@ offset_bottom = -280.0
 grow_horizontal = 2
 grow_vertical = 2
 pivot_offset = Vector2(-360, 437)
+mouse_filter = 2
 script = ExtResource("1_w5y7o")
 
 [node name="OpenPanel" type="Panel" parent="."]

@@ -55,12 +55,31 @@ namespace Tabloulet.Scenes
             }
             pageControl.AddChild(background);
             display.AddPage(pageControl);
+            LoadAllComponents(page.Id);
+        }
 
-            LoadComponents<TextModel>(page.Id);
-            LoadComponents<ImageModel>(page.Id);
-            LoadComponents<VideoModel>(page.Id);
-            LoadComponents<ButtonModel>(page.Id);
-            LoadComponents<AudioModel>(page.Id);
+        public void ResetPage()
+        {
+            Control page = display.GetDisplayRoot().GetNode<Control>(_currentPage.ToString());
+            foreach (Node child in page.GetChildren())
+            {
+                if (child.Name == "Background")
+                {
+                    continue;
+                }
+                child.QueueFree();
+            }
+
+            LoadAllComponents(_currentPage);
+        }
+
+        private void LoadAllComponents(Guid idPage)
+        {
+            LoadComponents<TextModel>(idPage);
+            LoadComponents<ImageModel>(idPage);
+            LoadComponents<ButtonModel>(idPage);
+            LoadComponents<AudioModel>(idPage);
+            LoadComponents<VideoModel>(idPage);
         }
 
         private void LoadComponents<T>(Guid pageId)
