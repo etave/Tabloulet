@@ -127,29 +127,29 @@ namespace Tabloulet.Scenes.Components.Model3DNS
             };
             AddChild(_subViewport);
 
-            // Création de la caméra 3D
+            // Crï¿½ation de la camï¿½ra 3D
             _camera = new Camera3D
             {
                 Position = new Vector3(0, 2, 5),
                 Current = true
             };
 
-            // Ajout de la caméra au SubViewport
+            // Ajout de la camï¿½ra au SubViewport
             _subViewport.AddChild(_camera);
 
-            // Ajout des lumières directionnelles autour du modèle
+            // Ajout des lumiï¿½res directionnelles autour du modï¿½le
             AddDirectionalLight(new Vector3(0, 2, 0), new Vector3(-Mathf.Pi / 4, 0, 0), 1.0f); // Haut
             AddDirectionalLight(new Vector3(0, -2, 0), new Vector3(Mathf.Pi / 4, 0, 0), 1.0f); // Bas
             AddDirectionalLight(new Vector3(2, 0, 0), new Vector3(0, -Mathf.Pi / 4, 0), 1.0f); // Droite
             AddDirectionalLight(new Vector3(-2, 0, 0), new Vector3(0, Mathf.Pi / 4, 0), 1.0f); // Gauche
             AddDirectionalLight(new Vector3(0, 0, 2), new Vector3(0, 0, -Mathf.Pi / 4), 1.0f); // Devant
-            AddDirectionalLight(new Vector3(0, 0, -2), new Vector3(0, 0, Mathf.Pi / 4), 1.0f); // Derrière
+            AddDirectionalLight(new Vector3(0, 0, -2), new Vector3(0, 0, Mathf.Pi / 4), 1.0f); // Derriï¿½re
 
             Texture = _subViewport.GetTexture();
 
             LoadModel(_path);
 
-            // Paramètres d'affichage
+            // Paramï¿½tres d'affichage
             Position = new Vector2(_positionX, _positionY);
             PivotOffset = Size / 2;
             RotationDegrees = _rotationDeg;
@@ -163,7 +163,7 @@ namespace Tabloulet.Scenes.Components.Model3DNS
             {
                 Position = position,
                 Rotation = rotation,
-                LightEnergy = intensity // Ajuster l'intensité de la lumière
+                LightEnergy = intensity // Ajuster l'intensitï¿½ de la lumiï¿½re
             };
             _subViewport.AddChild(light);
         }
@@ -178,7 +178,7 @@ namespace Tabloulet.Scenes.Components.Model3DNS
 
             if (string.IsNullOrEmpty(path))
             {
-                path = "res://Assets/Components/Box.glb";
+                path = "./Box.glb";
             }
             else
             {
@@ -255,23 +255,23 @@ namespace Tabloulet.Scenes.Components.Model3DNS
             float maxSize = Mathf.Max(modelSize.X, modelSize.Y);
             maxSize = Mathf.Max(maxSize, modelSize.Z);
 
-            // Vérifier si le modèle est trop grand
-            if (maxSize > 2.0f) // Seuil arbitraire (peut être ajusté)
+            // Vï¿½rifier si le modï¿½le est trop grand
+            if (maxSize > 2.0f) // Seuil arbitraire (peut ï¿½tre ajustï¿½)
             {
-                // Reculer la caméra proportionnellement à la taille
+                // Reculer la camï¿½ra proportionnellement ï¿½ la taille
                 float distance = maxSize * 1.5f;
                 _camera.Position = new Vector3(0, maxSize / 2.0f, distance);
                 _camera.LookAt(Vector3.Zero);
             }
             else if (maxSize < 1.0f)
             {
-                // Si le modèle est trop petit, on l'agrandit
+                // Si le modï¿½le est trop petit, on l'agrandit
                 float scaleFactor = 2.0f / maxSize;
                 model.Scale = new Vector3(scaleFactor, scaleFactor, scaleFactor);
             }
             else
             {
-                // Ajuster la caméra pour que le modèle soit bien cadré
+                // Ajuster la camï¿½ra pour que le modï¿½le soit bien cadrï¿½
                 float distance = maxSize * 1.5f;
                 _camera.Position = new Vector3(0, maxSize / 2.0f, distance);
                 _camera.LookAt(Vector3.Zero);
