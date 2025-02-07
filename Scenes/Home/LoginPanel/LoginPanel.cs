@@ -202,7 +202,15 @@ namespace Tabloulet.Scenes.HomeNS.LoginPanelNS
             try
             {
                 Guid result = await _rfidMonitor.GetStableMonitoredGuid();
-
+                var home = GetParent<Control>() as Home;
+                if (home != null && result != Guid.Empty)
+                {
+                    home.labelRFID.Text = result.ToString();
+                }
+                else
+                {
+                    home.labelRFID.Text = "Aucun RFID trouvé";
+                }
                 if (result != Guid.Empty && result == passwordGuid)
                 {
                     if (viewerMode)
@@ -213,7 +221,6 @@ namespace Tabloulet.Scenes.HomeNS.LoginPanelNS
                     else
                     {
                         Visible = false;
-                        var home = GetParent<Control>() as Home;
                         home.ChangeToAdmin();
                     }
                 }
