@@ -253,9 +253,26 @@ namespace Tabloulet.DatabaseNS
                 {
                     component.PageId = newPage.Id;
                     component.Id = Guid.NewGuid();
-                    if (component is Models.Button button)
+                    switch (component)
                     {
-                        button.LinkTo = null;
+                        case Models.Button button:
+                            button.LinkTo = null;
+                            break;
+                        case Models.Image image:
+                            image.Path = "";
+                            break;
+                        case Models.Video video:
+                            video.Path = null;
+                            break;
+                        case Models.Audio audio:
+                            audio.Path = "";
+                            break;
+                        case Models.Model model:
+                            model.Path = null;
+                            break;
+                        case Models.Text text:
+                            text.Font = null;
+                            break;
                     }
                     InsertComponent(component);
                 }
